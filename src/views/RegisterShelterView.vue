@@ -3,8 +3,10 @@
     <div class="mx-auto">
       <Vueform size="lg">
         <StaticElement name="head">
-          <h1 class="text-2xl font-bold">Register as a shelter</h1>
-          <p class="font-medium text-md">Register yourself as a licensed shelter.</p>
+          <h1 class="text-2xl font-bold font-splieSans text-secondary">Register as a shelter</h1>
+          <p class="font-medium text-md text-onBackground font-generalSans">
+            Register yourself as a licensed shelter.
+          </p>
         </StaticElement>
         <TextElement input-type="email" name="email" label="Email" />
         <TextElement input-type="password" name="password" label="Password" />

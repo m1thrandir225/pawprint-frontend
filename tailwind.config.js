@@ -14,7 +14,7 @@ export default {
     extend: {
       colors: {
         background: 'var(--background)',
-        onBackground: 'var(--onBackground)',
+        onBackground: 'var(--on-background)',
         main: 'var(--main)',
         onMain: 'var(--on-main)',
         secondary: 'var(--secondary)',
@@ -34,6 +34,21 @@ export default {
         generalSans: 'var(--generalsans-font)',
         splieSans: 'var(--spline-font)',
       },
+      form: (theme) => ({
+        primary: 'var(--main)',
+        primaryDarker: 'var(--main)66', // defaults to 10% darker primary
+
+        danger: 'var(--error)',
+        dangerLighter: 'var(--error)66',
+
+        success: 'var(--teritary)',
+        successLighter: 'var(--teritary)66',
+
+        ringColor: 'var(--secondary)66', // defaults to primary with `ringOpacity` alpha
+        textColors: {
+          onPrimary: 'var(--on-main)',
+        },
+      }),
     },
   },
   plugins: [typography, daisyui, vueForms],

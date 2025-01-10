@@ -57,6 +57,7 @@
 html,
 body {
   @apply bg-background;
+  color: var(--on-background);
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }

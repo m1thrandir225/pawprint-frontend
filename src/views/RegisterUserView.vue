@@ -3,8 +3,10 @@
     <div class="mx-auto">
       <Vueform size="lg">
         <StaticElement name="head">
-          <h1 class="text-2xl font-bold">Register as an Adopter</h1>
-          <p class="font-medium text-md">Are you ready to adopt your new pet?</p>
+          <h1 class="text-2xl font-bold font-splieSans text-secondary">Register as an Adopter</h1>
+          <p class="font-medium text-md text-onBackground font-generalSans">
+            Are you ready to adopt your new pet?
+          </p>
         </StaticElement>
         <GroupElement name="group">
           <TextElement
