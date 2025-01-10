@@ -11,7 +11,30 @@ export default {
     './node_modules/.pnpm/@vueform+vueform@*/node_modules/@vueform/vueform/themes/tailwind/**/*.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: 'var(--background)',
+        onBackground: 'var(--onBackground)',
+        main: 'var(--main)',
+        onMain: 'var(--on-main)',
+        secondary: 'var(--secondary)',
+        onSecondary: 'var(--on-secondary)',
+        tertiary: 'var(--tertiary)',
+        onTertiary: 'var(--on-tertiary)',
+        mainContainer: 'var(--main-container)',
+        onMainContainer: 'var(--on-main-container)',
+        secondaryContainer: 'var(--secondary-container)',
+        onSecondaryContainer: 'var(--on-secondary-container)',
+        teritaryContainer: 'var(--teritary-container)',
+        onTertiaryContainer: 'var(--on-tertiary-container)',
+        outline: 'var(--outline)',
+        error: 'var(--error)',
+      },
+      fontFamily: {
+        generalSans: 'var(--generalsans-font)',
+        splieSans: 'var(--spline-font)',
+      },
+    },
   },
   plugins: [typography, daisyui, vueForms],
   daisyui: {

@@ -2,9 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: SplineSans;
+  src: url('./fonts/SplineSans-Variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: GeneralSans;
+  src: url('./fonts/SplineSans-Variable.ttf') format('truetype');
+}
+
+:root {
+  --spline-font: 'SplineSans';
+  --generalsans-font: 'GeneralSans';
+  --background: #fbfaed;
+  --on-background: #1b1c15;
+  --main: #556423;
+  --on-main: #ffffff;
+  --secondary: #5b6146;
+  --on-secondary: #ffffff;
+  --teritary: #6d5d2e;
+  --on-teritary: #ffffff;
+  --main-container: #d8eb9a;
+  --on-main-container: #161e00;
+  --secondary-container: #e0e6c4;
+  --on-secondary-container: #161e00;
+  --teritary-container: #3a665e;
+  --on-teritary-container: #ffffff;
+  --outline: #76786b;
+  --error: #ba1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #13140d;
+    --on-background: #e4e3d7;
+    --main: #bccf81;
+    --on-main: #293500;
+    --secondary: #c4caa9;
+    --on-secondary: #2d331c;
+    --teritary: #a1d0c6;
+    --on-teritary: #033730;
+    --main-container: #3e4c0c;
+    --on-main-container: #d8eb9a;
+    --secondary-container: #434930;
+    --on-secondary-container: #e0e6c4;
+    --teritary-container: #204e47;
+    --on-teritary-container: #bcece2;
+    --outline: #909284;
+    --error: #ffb4ab;
+  }
+}
+
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-background;
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
