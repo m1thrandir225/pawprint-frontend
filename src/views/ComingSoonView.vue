@@ -1,8 +1,7 @@
-<script setup lang="ts">
-</script>
 <template>
-  <div class="h-screen w-screen flex flex-col items-center justify-center gap-4">
-    <h1 class="text-7xl font-bold"> PawPrint </h1>
-    <h1> Coming Soon </h1>
+  <div class="w-screen h-screen flex flex-col items-center justify-center gap-4">
+    <h1 class="text-6xl font-bold"> PawPrint </h1>
+    <h2> Coming Soon </h2>
   </div>
+
 </template>

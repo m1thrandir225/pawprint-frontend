@@ -1,17 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+
+import daisyui from 'daisyui';
+import typography from '@tailwindcss/typography'
 export default {
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: "media", // or 'media' or 'class'
+  content: ['./src/**/*.{vue,js,ts}'],
   theme: {
-    extend: {
-      colors: {
-        background: "var(--background)"
-      }
-    },
-  },
-  variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [typography, daisyui],
+  daisyui: {
+    themes: ["fantasy"]
+  }
 }
-
