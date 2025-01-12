@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@formkit/addons": "^1.6.9",
+    "@formkit/core": "^1.6.9",
     "@formkit/icons": "^1.6.9",
     "@formkit/vue": "^1.6.9",
     "axios": "^1.7.9",
