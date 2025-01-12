@@ -1,50 +1,104 @@
-<template>
-  <div class="flex flex-col items-center justify-center w-screen h-screen">
-    <div class="mx-auto">
-      <Vueform size="lg">
-        <StaticElement name="head">
-          <h1 class="text-2xl font-bold font-splieSans text-secondary">Register as an Adopter</h1>
-          <p class="font-medium text-md text-onBackground font-generalSans">
-            Are you ready to adopt your new pet?
-          </p>
-        </StaticElement>
-        <GroupElement name="group">
-          <TextElement
-            input-type="text"
-            name="firstName"
-            label="First Name"
-            :columns="{
-              default: 12,
-              sm: 6,
-            }"
-          />
-          <TextElement
-            input-type="text"
-            name="lastName"
-            label="Last Name"
-            :columns="{
-              default: 12,
-              sm: 6,
-            }"
-          />
-        </GroupElement>
-        <TextElement input-type="email" name="email" label="Email" />
-        <TextElement input-type="password" name="password" label="Password" />
+<script setup lang="ts">
+import DefaultSubtitle from '@/components/ui/DefaultSubtitle.vue'
+import DefaultParagraph from '@/components/ui/DefaultParagraph.vue'
+import DefaultContainer from '@/components/ui/DefaultContainer.vue'
+import { ref } from 'vue'
 
-        <SelectElement
-          name="homeType"
-          label="Home Type"
-          :native="false"
-          :items="['Flat', 'House']"
+const firstName = ref()
+const lastName = ref()
+const email = ref()
+const password = ref()
+const homeType = ref()
+const hasChildren = ref(false)
+const hasOtherPets = ref(false)
+
+async function register(credentials: {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  homeType: string
+  hasChildren: boolean
+  hasOtherPets: boolean
+}) {
+  alert(JSON.stringify(credentials))
+}
+</script>
+
+<template>
+  <DefaultContainer additional-class="flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center justify-center h-full min-h-[650px] p-8 w-full">
+      <FormKit type="form" submit-label="Login" @submit="register">
+        <DefaultSubtitle text="Register as an adopter" />
+        <DefaultParagraph text="Are you ready to adopt your new pet?" />
+        <FormKit
+          v-model="firstName"
+          type="text"
+          name="firstName"
+          label="Your First Name"
+          placeholder="James"
+          help="What is your first name?"
+          validation="required"
+        />
+        <FormKit
+          v-model="lastName"
+          type="text"
+          name="lastName"
+          label="Your Last Name"
+          placeholder="Doe"
+          help="What is your last name?"
+          validation="required"
+        />
+        <FormKit
+          v-model="email"
+          type="text"
+          name="email"
+          label="Your Email"
+          placeholder="james.doe@gmail.com"
+          help="What is your email?"
+          prefix-icon="email"
+          validation="required|email"
+          class=""
+        />
+        <FormKit
+          v-model="password"
+          type="password"
+          name="password"
+          label="Your Password"
+          placeholder="se****"
+          prefix-icon="password"
+          validation="required|length:9|matches:/[^a-zA-Z]/"
         />
 
-        <ToggleElement name="hasChildren"> Do you have children ? </ToggleElement>
-        <ToggleElement name="hasOtherPets"> Do you have other pets ? </ToggleElement>
+        <FormKit
+          v-model="homeType"
+          type="select"
+          label="Home Type"
+          name="homeType"
+          select-icon="down"
+          defauklt
+          :options="['', 'Flat', 'House']"
+        />
 
-        <ButtonElement name="button" submits> Submit </ButtonElement>
-      </Vueform>
+        <FormKit
+          v-if="homeType"
+          v-model="hasChildren"
+          type="checkbox"
+          label="Do you have children ? "
+          name="hasChildren"
+          :value="false"
+          decorator-icon="check"
+        />
+        <FormKit
+          v-if="homeType"
+          v-model="hasOtherPets"
+          type="checkbox"
+          label="Do you have any other pets ?"
+          name="hasOtherPets"
+          :value="false"
+          decorator-icon="check"
+        />
+      </FormKit>
     </div>
-  </div>
+  </DefaultContainer>
 </template>
-
-<script setup lang="ts"></script>

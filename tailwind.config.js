@@ -1,15 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-
-import daisyui from 'daisyui'
 import typography from '@tailwindcss/typography'
-import vueForms from '@vueform/vueform/tailwind'
 export default {
-  content: [
-    './src/**/*.{vue,js,ts}',
-    './vueform.config.js', // or where `vueform.config.js` is located. Change `.js` to `.ts` if required.
-    './node_modules/.pnpm/@vueform+vueform@*/node_modules/@vueform/vueform/themes/tailwind/**/*.vue',
-    './node_modules/.pnpm/@vueform+vueform@*/node_modules/@vueform/vueform/themes/tailwind/**/*.js',
-  ],
+  content: ['./src/**/*.{vue,js,ts}', './formkit.theme.ts'],
   theme: {
     extend: {
       colors: {
@@ -34,25 +26,7 @@ export default {
         generalSans: 'var(--generalsans-font)',
         splieSans: 'var(--spline-font)',
       },
-      form: (theme) => ({
-        primary: 'var(--main)',
-        primaryDarker: 'var(--main)66', // defaults to 10% darker primary
-
-        danger: 'var(--error)',
-        dangerLighter: 'var(--error)66',
-
-        success: 'var(--teritary)',
-        successLighter: 'var(--teritary)66',
-
-        ringColor: 'var(--secondary)66', // defaults to primary with `ringOpacity` alpha
-        textColors: {
-          onPrimary: 'var(--on-main)',
-        },
-      }),
     },
   },
-  plugins: [typography, daisyui, vueForms],
-  daisyui: {
-    themes: ['fantasy'],
-  },
+  plugins: [typography],
 }
