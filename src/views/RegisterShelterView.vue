@@ -29,7 +29,7 @@ async function register(credentials: {
 <template>
   <DefaultContainer additional-class="flex flex-col items-center justify-center">
     <div class="flex flex-col items-center justify-center h-full min-h-[650px] p-8 w-full">
-      <FormKit type="form" submit-label="Login" @submit="register">
+      <FormKit type="form" submit-label="Register" @submit="register">
         <DefaultSubtitle text="Register as a shelter" />
         <DefaultParagraph text="Reigster yourself as a licensed shelter" />
         <FormKit

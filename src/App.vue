@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import DefaultHeader from '@/components/ui/DefaultHeader.vue'
 </script>
 
 <template>
   <div class="w-full min-h-dvh">
-    <DefaultHeader />
-    <RouterView />
+    <RouterView v-slot="{ Component, route }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" :key="route.path" />
+      </transition>
+    </RouterView>
   </div>
 </template>
