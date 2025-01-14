@@ -1,6 +1,6 @@
 <template>
   <h1
-    class="font-bold font-splieSans text-main"
+    class="font-bold font-splieSans text-primary"
     :style="{ 'font-size': (fontSize != undefined ? fontSize : 28) + 'px' }"
   >
     {{ text }}

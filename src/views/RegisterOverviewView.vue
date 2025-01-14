@@ -1,36 +1,28 @@
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen gap-6">
     <div class="flex flex-col items-center justify-center gap-4">
-      <h1 class="text-4xl font-bold text-main font-splieSans">Register</h1>
-      <p class="font-generalSans text-onBackground">
-        Please select the description that fits you most.
-      </p>
+      <DefaultTitle text="Register" />
+      <DefaultParagraph text="Please select the description that fits you most." />
     </div>
     <div class="container grid w-full grid-cols-2 gap-6 mx-auto">
-      <RouterLink to="/register/user">
-        <div
-          class="w-full h-[400px] p-8 transition-all ease-in-out border border-main bg-mainContainer hover:opacity-75 rounded-2xl flex flex-col items-center justify-center gap-4"
-        >
-          <h1 class="text-2xl font-semibold font-splieSans text-onMainContainer">As an Adopter</h1>
-          <p class="text-lg text-center font-generalSans">
-            You are looking to introduce a new pet into your family
-          </p>
-        </div>
-      </RouterLink>
-      <RouterLink to="/register/shelter">
-        <div
-          class="w-full h-[400px] p-8 transition-all ease-in-out border border-primary bg-primary hover:opacity-75 rounded-2xl flex flex-col items-center justify-center gap-4"
-        >
-          <h1 class="text-2xl font-semibold font-splieSans text-primary-foreground">
-            As a Shelter
-          </h1>
-          <p class="text-lg text-center font-generalSans text-primary-foreground">
-            You are a shelter that likes to give pets a chance to find their new home.
-          </p>
-        </div>
-      </RouterLink>
+      <RegisterCard
+        to="/register/user"
+        title="As an Adopter"
+        description="You are looking to introduce a new pet into your family."
+        card="adopter"
+      />
+      <RegisterCard
+        to="/register/shelter"
+        title="As a Shelter"
+        description="You are looking to introduce a new pet into your family."
+        card="shelter"
+      />
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import DefaultParagraph from '@/components/Global/DefaultParagraph.vue'
+import DefaultTitle from '@/components/Global/DefaultTitle.vue'
+import RegisterCard from '@/components/Register/RegisterCard.vue'
+</script>

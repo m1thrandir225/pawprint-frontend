@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^12.4.0",
     "axios": "^1.7.9",
@@ -46,6 +47,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.6.3",
     "vite": "^6.0.5",
+    "vite-plugin-vsharp": "^1.8.1",
     "vite-plugin-vue-devtools": "^7.6.8",
     "vue-tsc": "^2.1.10"
   }

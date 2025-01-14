@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DefaultContainer from '@/components/ui/DefaultContainer.vue'
-import DefaultHeader from '@/components/ui/DefaultHeader.vue'
+import DefaultContainer from '@/components/Global/DefaultContainer.vue'
+import DefaultHeader from '@/components/Global/DefaultHeader.vue'
 </script>
 
 <template>

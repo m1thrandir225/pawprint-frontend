@@ -1,6 +1,6 @@
 <template>
   <p
-    class="prose font-generalSans text-onBackground"
+    class="prose font-generalSans text-foreground"
     :style="{ 'font-size': (fontSize != undefined ? fontSize : 14) + 'px' }"
   >
     {{ text }}

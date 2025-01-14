@@ -17,80 +17,89 @@
     --spline-font: 'SplineSans';
     --generalsans-font: 'GeneralSans';
 
-    --background: 55.71, 63.64%, 95.69%;
-    --foreground: 68.57, 14.29%, 9.61%;
+    --background: 55.71 63.64% 95.69%;
+    --foreground: 68.57 14.29% 9.61%;
 
-    --muted: 63.53, 23.94%, 86.08%;
-    --muted-foreground: 70, 9.09%, 25.88%;
+    --muted: 63.53 23.94% 86.08%;
+    --muted-foreground: 70 9.09% 25.88%;
 
-    --popover: 55.71, 63.64%, 95.69%;
-    --popover-foreground: 68.57, 14.29%, 9.61%;
+    --popover: 55.71 63.64% 95.69%;
+    --popover-foreground: 68.57 14.29% 9.61%;
 
-    --card: 55.71, 63.64%, 95.69%;
-    --card-foreground: 68.57, 14.29%, 9.61%;
+    --card: 55.71 63.64% 95.69%;
+    --card-foreground: 68.57 14.29% 9.61%;
 
-    --border: 169.09, 27.5%, 31.37%; /* secondary */
-    --input: 169.09, 27.5%, 31.37%; /* secondary */
+    --border: var(--primary); /* secondary */
+    --input: var(--ring); /* secondary */
+    --primary: 73.85 48.15% 26.47%;
+    --primary-foreground: 0 0% 100%;
+    --primary-container: 74.07 66.94% 76.27%;
+    --primary-container-foreground: 76 100% 5.88%;
 
-    --primary: 73.85, 48.15%, 26.47%;
-    --primary-foreground: 0, 0%, 100%;
-    --primary-container: 74.07, 66.94%, 76.27%;
-    --primary-container-foreground: 76, 100%, 5.88%;
+    --secondary: 73.33 16.17% 32.75%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-container: 70.59 40.48% 83.53%;
+    --secondary-container-foreground: 76.36 57.89% 7.45%;
 
-    --secondary: 73.33, 16.17%, 32.75%;
-    --secondary-foreground: 0, 0%, 100%;
-    --secondary-container: 70.59, 40.48%, 83.53%;
-    --secondary-container-foreground: 76.36, 57.89%, 7.45%;
+    --accent: 169.09 27.5% 31.37%;
+    --accent-foreground: 0 0% 100%;
+    --accent-container: 167.5 55.81% 83.14%;
+    --accent-container-foreground: 172.5 100% 6.27%;
 
-    --accent: 169.09, 27.5%, 31.37%;
-    --accent-foreground: 0, 0%, 100%;
-    --accent-container: 167.5, 55.81%, 83.14%;
-    --accent-container-foreground: 172.5, 100%, 6.27%;
+    --destructive: 0 75.47% 41.57%;
+    --destructive-foreground: 0 0% 100%;
 
-    --destructive: 0, 75.47%, 41.57%;
-    --destructive-foreground: 0, 0%, 100%;
-
-    --ring: 69.23, 5.73%, 44.51%;
+    --ring: 69.23 5.73% 44.51%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 69, 21%, 6%;
-    --foreground: 55, 19%, 87%;
+    --background: 69 21% 6%;
+    --foreground: 55 19% 87%;
 
-    --muted: 70, 9.09%, 25.88%;
-    --muted-foreground: 63.75, 12.7%, 75.29%;
+    --muted: 70 9.09% 25.88%;
+    --muted-foreground: 63.75 12.7% 75.29%;
 
-    --popover: 69, 21%, 6%;
-    --popover-foreground: 55, 19%, 87%;
+    --popover: 69 21% 6%;
+    --popover-foreground: 55 19% 87%;
 
-    --card: 69, 21%, 6%;
-    --card-foreground: 55, 19%, 87%;
+    --card: 69 21% 6%;
+    --card-foreground: 55 19% 87%;
 
-    --border: 167, 33%, 72%; /* secondary */
-    --input: 167, 33%, 72%; /* secondary */
+    --border: 167 33% 72%; /* secondary */
+    --input: 167 33% 72%; /* secondary */
 
-    --primary: 75, 45%, 66%;
+    --primary: 75 45% 66%;
     --primary-foreground: 24 9.8% 10%;
-    --primary-container: 73.13, 72.73%, 17.25%;
-    --primary-container-foreground: 74.07, 66.94%, 76.27%;
+    --primary-container: 73.13 72.73% 17.25%;
+    --primary-container-foreground: 74.07 66.94% 76.27%;
 
-    --secondary: 71, 24%, 73%;
-    --secondary-foreground: 76, 29%, 15%;
-    --secondary-container: 74.4, 20.66%, 23.73%;
-    --secondary-container-foreground: 70.59, 40.48%, 83.53%;
+    --secondary: 71 24% 73%;
+    --secondary-foreground: 76 29% 15%;
+    --secondary-container: 74.4 20.66% 23.73%;
+    --secondary-container-foreground: 70.59 40.48% 83.53%;
 
-    --accent: 167, 33%, 72%;
-    --accent-foreground: 172, 90%, 11%;
-    --accent-container: 170.87, 41.82%, 21.57%;
-    --accent-container-foreground: 167.5, 55.81%, 83.14%;
+    --accent: 167 33% 72%;
+    --accent-foreground: 172 90% 11%;
+    --accent-container: 170.87 41.82% 21.57%;
+    --accent-container-foreground: 167.5 55.81% 83.14%;
 
-    --destructive: 6, 100%, 84%;
-    --destructive-foreground: 357, 100%, 21%;
+    --destructive: 6 100% 84%;
+    --destructive-foreground: 357 100% 21%;
 
-    --ring: 69, 6%, 55%;
+    --ring: 69 6% 55%;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 @layer base {

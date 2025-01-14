@@ -20,6 +20,10 @@ export const theme = {
     },
   },
   extend: {
+    backgroundImage: {
+      userRegisterCard: 'url("/register-user-card-bg.jpg")',
+      shelterRegisterCard: 'url("/register-shelter-card-bg.jpg")',
+    },
     fontFamily: {
       generalSans: 'var(--generalsans-font)',
       splieSans: 'var(--spline-font)',
