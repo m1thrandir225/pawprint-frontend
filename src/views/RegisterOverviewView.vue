@@ -19,10 +19,12 @@
       </RouterLink>
       <RouterLink to="/register/shelter">
         <div
-          class="w-full h-[400px] p-8 transition-all ease-in-out border border-main bg-mainContainer hover:opacity-75 rounded-2xl flex flex-col items-center justify-center gap-4"
+          class="w-full h-[400px] p-8 transition-all ease-in-out border border-primary bg-primary hover:opacity-75 rounded-2xl flex flex-col items-center justify-center gap-4"
         >
-          <h1 class="text-2xl font-semibold font-splieSans text-onMainContainer">As a Shelter</h1>
-          <p class="text-lg text-center font-generalSans">
+          <h1 class="text-2xl font-semibold font-splieSans text-primary-foreground">
+            As a Shelter
+          </h1>
+          <p class="text-lg text-center font-generalSans text-primary-foreground">
             You are a shelter that likes to give pets a chance to find their new home.
           </p>
         </div>

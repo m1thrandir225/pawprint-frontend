@@ -34,9 +34,17 @@ export const theme = {
         DEFAULT: 'hsl(var(--primary))',
         foreground: 'hsl(var(--primary-foreground))',
       },
+      primaryContainer: {
+        DEFAULT: 'hsl(var(--primary-container))',
+        foreground: 'hsl(var(--primary-container-foreground))',
+      },
       secondary: {
         DEFAULT: 'hsl(var(--secondary))',
         foreground: 'hsl(var(--secondary-foreground))',
+      },
+      secondaryContainer: {
+        DEFAULT: 'hsl(var(--secondary-container))',
+        foreground: 'hsl(var(--secondary-container-foreground))',
       },
       destructive: {
         DEFAULT: 'hsl(var(--destructive))',
@@ -49,6 +57,10 @@ export const theme = {
       accent: {
         DEFAULT: 'hsl(var(--accent))',
         foreground: 'hsl(var(--accent-foreground))',
+      },
+      accentContainer: {
+        DEFAULT: 'hsl(var(--accent-container))',
+        foreground: 'hsl(var(--accent-container-foreground))',
       },
       popover: {
         DEFAULT: 'hsl(var(--popover))',

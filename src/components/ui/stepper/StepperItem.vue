@@ -14,6 +14,7 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardProps(delegatedProps)
+defineSlots()
 </script>
 
 <template>

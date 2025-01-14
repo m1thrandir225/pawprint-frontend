@@ -12,6 +12,11 @@ const delegatedProps = computed(() => {
 })
 
 const forwardedProps = useForwardProps(delegatedProps)
+
+defineSlots<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default(props: { headingValue: string }): any
+}>()
 </script>
 
 <template>
