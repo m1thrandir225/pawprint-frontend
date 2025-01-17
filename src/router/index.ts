@@ -5,6 +5,7 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterUserView from '@/views/RegisterUserView.vue'
 import RegisterShelterView from '@/views/RegisterShelterView.vue'
 import WelcomeView from '@/views/WelcomeView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -41,6 +42,11 @@ const router = createRouter({
       path: '/welcome',
       name: 'welcome',
       component: WelcomeView,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundView,
     },
   ],
 })

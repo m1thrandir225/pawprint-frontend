@@ -32,13 +32,14 @@ export default class NetworkService {
 
   async request<T>(url: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
     try {
-      const { method = 'GET', headers = {}, params } = options
+      const { method = 'GET', headers = {}, params, data } = options
 
       const response: AxiosResponse<T> = await this.axiosInstance.request({
         url,
         method,
         headers,
         params,
+        data,
       })
 
       return {
