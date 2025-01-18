@@ -1,10 +1,9 @@
 import axios, { type AxiosInstance, type AxiosResponse, type AxiosError } from 'axios'
-import type { ApiResponse, RequestOptions } from '@/types/api.ts'
-import { useRouter } from 'vue-router'
+import type { ApiResponse, ErrorResponse, RequestOptions } from '@/types/api.ts'
+import type { AuthTokens } from '@/types/services/auth-service.types'
 
 export default class NetworkService {
   private axiosInstance: AxiosInstance
-  private readonly router: ReturnType<typeof useRouter>
 
   constructor(baseURL: string) {
     this.axiosInstance = axios.create({
@@ -14,25 +13,26 @@ export default class NetworkService {
         'Content-Type': 'application/json',
       },
     })
-    this.router = useRouter()
-    this.setupInterceptors()
-  }
-
-  private setupInterceptors(): void {}
-
-  private handleUnauthorized() {
-    localStorage.removeItem('token')
-    if (this.router) {
-      this.router.push('/login')
-    } else {
-      console.warn('Router not initialized, falling back to window.location')
-      window.location.href = '/login'
-    }
   }
 
   async request<T>(url: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
     try {
       const { method = 'GET', headers = {}, params, data } = options
+
+      if (options.isProtected) {
+        const tokens = localStorage.getItem('authTokens')
+        const { accessToken } = tokens ? (JSON.parse(tokens) as AuthTokens) : {}
+
+        if (!accessToken) {
+          localStorage.removeItem('authTokens')
+          localStorage.removeItem('user')
+          return {
+            data: null,
+            error: 'Unauthorized',
+          }
+        }
+        headers.Authorization = `Bearer ${accessToken}`
+      }
 
       const response: AxiosResponse<T> = await this.axiosInstance.request({
         url,
@@ -47,13 +47,11 @@ export default class NetworkService {
         error: null,
       }
     } catch (error) {
-      const axiosError = error as AxiosError
+      const axiosError = error as AxiosError<ErrorResponse>
+      console.log(axiosError.response?.data.message)
       return {
         data: null,
-        error:
-          (axiosError.response?.data as string) ||
-          axiosError.message ||
-          'An unexpected error occurred',
+        error: axiosError.response?.data.message || 'An unexpected error occurred',
       }
     }
   }

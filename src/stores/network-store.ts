@@ -6,6 +6,12 @@ import { Config } from '@/utils/config'
 
 const networkService = new NetworkService(Config.apiURL)
 
+/**
+ * @name useNetworkStore
+ * @description
+ * This store is responsible for handling network requests.
+ */
+
 export const useNetworkStore = defineStore('network', () => {
   const isLoading = ref(false)
 

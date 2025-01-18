@@ -1,6 +1,7 @@
 import type { BuildRequest } from '@/types/api'
+import type { PetGender } from '@/types/models/petGender'
 
-const all = (): BuildRequest => {
+const all = (): BuildRequest<PetGender[]> => {
   return {
     url: '/pet-genders',
     options: {
