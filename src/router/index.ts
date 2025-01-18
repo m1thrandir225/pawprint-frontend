@@ -6,6 +6,7 @@ import RegisterUserView from '@/views/RegisterUserView.vue'
 import RegisterShelterView from '@/views/RegisterShelterView.vue'
 import WelcomeView from '@/views/WelcomeView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import useAuthStore from '@/stores/auth-store'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,42 +14,96 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: ComingSoonView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/register',
       name: 'register',
       component: RegisterOverviewView,
-      meta: { transition: 'slide-left' },
+      meta: { requiresAuth: false },
+      beforeEnter: (to, from, next) => {
+        const auth = useAuthStore()
+        if (auth.isAuthenticated) {
+          next({
+            path: '/welcome',
+          })
+        }
+      },
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView,
-      meta: { transition: 'slide-up' },
+      meta: { requiresAuth: false },
+      beforeEnter: (to, from, next) => {
+        const auth = useAuthStore()
+        if (auth.isAuthenticated) {
+          next({
+            path: '/welcome',
+          })
+        } else {
+          next()
+        }
+      },
     },
     {
       path: '/register/user',
       name: 'registerUser',
       component: RegisterUserView,
-      meta: { transition: 'slide-right' },
+      meta: { requiresAuth: false },
+      beforeEnter: (to, from, next) => {
+        const auth = useAuthStore()
+        if (auth.isAuthenticated) {
+          next({
+            path: '/welcome',
+          })
+        } else {
+          next()
+        }
+      },
     },
     {
       path: '/register/shelter',
       name: 'registerShelter',
       component: RegisterShelterView,
-      meta: { transition: 'slide-right' },
+      meta: { requiresAuth: false },
+      beforeEnter: (to, from, next) => {
+        const auth = useAuthStore()
+        if (auth.isAuthenticated) {
+          next({
+            path: '/welcome',
+          })
+        } else {
+          next()
+        }
+      },
     },
     {
       path: '/welcome',
       name: 'welcome',
       component: WelcomeView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundView,
+      meta: { requiresAuth: false },
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore()
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+    console.log('requiresAuth', to.meta.requiresAuth)
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath },
+    })
+  } else {
+    next()
+  }
 })
 
 export default router

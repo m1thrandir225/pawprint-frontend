@@ -7,6 +7,7 @@
     "nightwatch.conf.*",
     "playwright.config.*"
   ],
+  "files": ["./src/types/router.ts"],
   "compilerOptions": {
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",

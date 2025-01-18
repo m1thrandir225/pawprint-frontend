@@ -15,6 +15,11 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { vAutoAnimate } from '@formkit/auto-animate'
+import useAuthStore from '@/stores/auth-store'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
 
 const formSchema = toTypedSchema(
   z.object({
@@ -28,10 +33,16 @@ const formSchema = toTypedSchema(
 const form = useForm({
   validationSchema: formSchema,
 })
+const authStore = useAuthStore()
 
-const onSubmit = form.handleSubmit((values) => {
-  alert('Form submitted!' + values)
-  console.log('Form submitted!', values)
+const onSubmit = form.handleSubmit(async (values) => {
+  const { email, password } = values
+  await authStore.login(email, password)
+  if (route.query.redirect) {
+    router.push(route.query.redirect as string)
+  } else {
+    router.push('/')
+  }
 })
 </script>
 
@@ -63,8 +74,9 @@ const onSubmit = form.handleSubmit((values) => {
             <FormMessage />
           </FormItem>
         </FormField>
-        <Button type="submit"> Login </Button>
+        <Button :disabled="authStore.isLoading" type="submit"> Login </Button>
       </form>
+      <p v-if="authStore.errorMessage" class="text-red-500">{{ authStore.errorMessage }}</p>
       <RouterLink to="/register">
         Don't have an account? <span class="font-bold">Register</span></RouterLink
       >
