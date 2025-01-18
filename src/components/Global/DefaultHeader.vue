@@ -6,7 +6,7 @@
       <DefaultRouteLink to="/register" text="Register" />
     </div>
     <div v-else>
-      <Button variant="link" @click="authStore.logout">Logout</Button>
+      <Button variant="link" @click="logout">Logout</Button>
     </div>
   </div>
 </template>
@@ -16,8 +16,15 @@ import useAuthStore from '@/stores/auth-store'
 import DefaultRouteLink from './DefaultRouteLink.vue'
 import DefaultTitle from './DefaultTitle.vue'
 import Button from '../ui/button/Button.vue'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
+
+const logout = () => {
+  authStore.logout()
+  router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } })
+}
 
 defineOptions({
   name: 'DefaultHeader',

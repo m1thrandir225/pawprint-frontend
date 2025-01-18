@@ -3,6 +3,12 @@ import type { UserDTO } from '@/types/dto/UserDTO'
 import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
+/**
+ * @name useUserStore
+ * @description
+ * This store is responsible for handling the user data.
+ */
+
 export const useUserStore = defineStore('user', () => {
   const user = useStorage<UserDTO | ShelterDTO | null>('user', null, localStorage, {
     serializer: {

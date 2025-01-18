@@ -4,9 +4,14 @@ import { useTokenStore } from './token-store'
 import { useUserStore } from './user-store'
 import { computed, ref } from 'vue'
 import authService from '@/services/auth-service'
-import { type LoginResponse, type AuthTokens } from '@/types/requests/loginRequests'
-import type { RefreshTokenResponse } from '@/types/requests/refreshTokenRequest'
+import type { AuthTokens } from '@/types/services/auth-service.types'
+import type { ExtractResponseType } from '@/types/api'
 
+/**
+ * @name useAuthStore
+ * @description
+ * This store is responsible for handling the authentication logic.
+ */
 const useAuthStore = defineStore('auth', () => {
   const networkStore = useNetworkStore()
   const tokenStore = useTokenStore()
@@ -21,10 +26,17 @@ const useAuthStore = defineStore('auth', () => {
 
   const refreshTimer = ref<number | null>(null)
 
-  async function login(email: string, password: string) {
-    const { options, url } = authService.login(email, password)
+  const accessToken = computed(() => tokenStore.getAccessToken())
+  const refreshToken = computed(() => tokenStore.getRefreshToken())
 
-    const { data, error } = await networkStore.fetchData<LoginResponse>(url, options)
+  async function login(email: string, password: string) {
+    const request = authService.login(email, password)
+    const { options, url } = request
+
+    const { data, error } = await networkStore.fetchData<ExtractResponseType<typeof request>>(
+      url,
+      options,
+    )
 
     if (error || !data) {
       return null
@@ -77,22 +89,28 @@ const useAuthStore = defineStore('auth', () => {
     const userEmail = userStore.getUserEmail()
     const refreshToken = tokenStore.getRefreshToken()
 
-    if (!userEmail || !refreshToken) {
-      return
+    if (isAuthenticated.value) {
+      if (!refreshToken || !userEmail) {
+        logout()
+      }
     }
-    const request = authService.refreshTokens(refreshToken, userEmail)
+    const request = authService.refreshTokens(refreshToken!, userEmail!)
 
-    const { data, error } = await networkStore.fetchData<RefreshTokenResponse>(
-      request.url,
-      request.options,
+    const { url, options } = request
+
+    const { data, error } = await networkStore.fetchData<ExtractResponseType<typeof request>>(
+      url,
+      options,
     )
     if (error || !data) {
-      return
+      return false
     }
 
     const { accessToken, accessTokenExpirationTime } = data
     tokenStore.setAccessToken(accessToken, accessTokenExpirationTime)
     setRefreshTimer()
+
+    return true
   }
 
   function setRefreshTimer() {
@@ -110,7 +128,16 @@ const useAuthStore = defineStore('auth', () => {
     refreshTimer.value = setTimeout(refreshTokens, timeToRefresh)
   }
 
-  return { login, isLoading, errorMessage, isAuthenticated, refreshTokens, logout }
+  return {
+    login,
+    isLoading,
+    errorMessage,
+    isAuthenticated,
+    accessToken,
+    refreshToken,
+    refreshTokens,
+    logout,
+  }
 })
 
 export default useAuthStore

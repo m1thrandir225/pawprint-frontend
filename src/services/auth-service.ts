@@ -1,6 +1,12 @@
 import type { BuildRequest } from '@/types/api'
+import type {
+  LoginResponse,
+  RegisterShelterResponse,
+  RegisterUserResponse,
+  RefreshTokenResponse,
+} from '@/types/services/auth-service.types'
 
-const login = (email: string, password: string): BuildRequest => {
+const login = (email: string, password: string): BuildRequest<LoginResponse> => {
   return {
     url: '/auth/login',
     options: {
@@ -13,7 +19,7 @@ const login = (email: string, password: string): BuildRequest => {
   }
 }
 
-const registerShelter = (): BuildRequest => {
+const registerShelter = (): BuildRequest<RegisterShelterResponse> => {
   return {
     url: '/auth/register/shelter',
     options: {
@@ -21,7 +27,7 @@ const registerShelter = (): BuildRequest => {
     },
   }
 }
-const registerAdopter = (): BuildRequest => {
+const registerAdopter = (): BuildRequest<RegisterUserResponse> => {
   return {
     url: '/auth/register/adopter',
     options: {
@@ -30,7 +36,7 @@ const registerAdopter = (): BuildRequest => {
   }
 }
 
-const refreshTokens = (refreshToken: string, email: string): BuildRequest => {
+const refreshTokens = (refreshToken: string, email: string): BuildRequest<RefreshTokenResponse> => {
   return {
     url: '/auth/refresh',
     options: {

@@ -35,48 +35,18 @@ const router = createRouter({
       name: 'login',
       component: LoginView,
       meta: { requiresAuth: false },
-      beforeEnter: (to, from, next) => {
-        const auth = useAuthStore()
-        if (auth.isAuthenticated) {
-          next({
-            path: '/welcome',
-          })
-        } else {
-          next()
-        }
-      },
     },
     {
       path: '/register/user',
       name: 'registerUser',
       component: RegisterUserView,
       meta: { requiresAuth: false },
-      beforeEnter: (to, from, next) => {
-        const auth = useAuthStore()
-        if (auth.isAuthenticated) {
-          next({
-            path: '/welcome',
-          })
-        } else {
-          next()
-        }
-      },
     },
     {
       path: '/register/shelter',
       name: 'registerShelter',
       component: RegisterShelterView,
       meta: { requiresAuth: false },
-      beforeEnter: (to, from, next) => {
-        const auth = useAuthStore()
-        if (auth.isAuthenticated) {
-          next({
-            path: '/welcome',
-          })
-        } else {
-          next()
-        }
-      },
     },
     {
       path: '/welcome',
@@ -102,7 +72,20 @@ router.beforeEach((to, from, next) => {
       query: { redirect: to.fullPath },
     })
   } else {
-    next()
+    if (
+      to.name === 'login' ||
+      to.name === 'register' ||
+      to.name === 'registerUser' ||
+      to.name === 'registerShelter'
+    ) {
+      if (auth.isAuthenticated) {
+        next({ path: '/welcome' })
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
   }
 })
 

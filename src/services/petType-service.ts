@@ -1,6 +1,7 @@
 import type { BuildRequest } from '@/types/api'
+import type { PetType } from '@/types/models/petType'
 
-const all = (): BuildRequest => {
+const all = (): BuildRequest<PetType[]> => {
   return {
     url: '/pet-types',
     options: {
@@ -9,7 +10,7 @@ const all = (): BuildRequest => {
   }
 }
 
-const single = (id: string): BuildRequest => {
+const single = (id: string): BuildRequest<PetType> => {
   return {
     url: `/pet-types/${id}`,
     options: {
