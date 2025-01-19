@@ -1,105 +1,169 @@
 <script setup lang="ts">
-import DefaultContainer from '@/components/ui/DefaultContainer.vue'
-import DefaultSubtitle from '@/components/ui/DefaultSubtitle.vue'
-import DefaultParagraph from '@/components/ui/DefaultParagraph.vue'
-import { ref } from 'vue'
+import DefaultContainer from '@/components/Global/DefaultContainer.vue'
+import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
+import DefaultParagraph from '@/components/Global/DefaultParagraph.vue'
+import { vAutoAnimate } from '@formkit/auto-animate'
+import {
+  NumberField,
+  NumberFieldContent,
+  NumberFieldDecrement,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from '@/components/ui/number-field'
+import {
+  FormControl,
+  FormField,
+  FormMessage,
+  FormDescription,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
+import { Switch } from '@/components/ui/switch'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as z from 'zod'
+import DefaultRouteLink from '@/components/Global/DefaultRouteLink.vue'
 
-const email = ref()
-const password = ref()
+const formSchema = toTypedSchema(
+  z.object({
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(9)
+      .regex(/[^a-zA-Z]/),
+    capacity: z.number().min(1),
+    isNoKill: z.boolean().default(false),
+    website: z.string().optional().nullable().default(null),
+    address: z.string().min(2).max(50),
+    phoneNumber: z.string().min(9).max(15),
+  }),
+)
+const form = useForm({
+  validationSchema: formSchema,
+  initialValues: {
+    capacity: 1,
+  },
+})
 
-const phoneNumber = ref()
-const address = ref()
-const website = ref()
-const capacity = ref()
-const isNoKill = ref(false)
-
-async function register(credentials: {
-  email: string
-  password: string
-  website: string
-  address: string
-  capacity: number
-  isNoKill: boolean
-  phoneNumber: string
-}) {
-  alert(JSON.stringify(credentials))
-}
+const onSubmit = form.handleSubmit((values) => {
+  console.log('Form submitted!', values)
+})
 </script>
 
 <template>
-  <DefaultContainer additional-class="flex flex-col items-center justify-center">
-    <div class="flex flex-col items-center justify-center h-full min-h-[650px] p-8 w-full">
-      <FormKit type="form" submit-label="Register" @submit="register">
-        <DefaultSubtitle text="Register as a shelter" />
-        <DefaultParagraph text="Reigster yourself as a licensed shelter" />
-        <FormKit
-          v-model="email"
-          type="text"
-          name="email"
-          label="Your Email"
-          placeholder="james.doe@gmail.com"
-          help="What is your email?"
-          prefix-icon="email"
-          validation="required|email"
-          class=""
-        />
-        <FormKit
-          v-model="password"
-          type="password"
-          name="password"
-          label="Your Password"
-          placeholder="se****"
-          prefix-icon="password"
-          validation="required|length:9|matches:/[^a-zA-Z]/"
-        />
-        <FormKit
-          v-model="phoneNumber"
-          type="tel"
-          label="Phone number"
-          placeholder="xxx-xxx-xxx"
-          help="What is your shelters phone number?"
-          validation="matches:/^[0-9]{3}-[0-9]{3}-[0-9]{3}$/"
-          :validation-messages="{
-            matches: 'Phone number must be in the format xxx-xxx-xxxx',
-          }"
-          decorator-icon="telephone"
-          validation-visibility="dirty"
-        />
-        <FormKit
-          v-model="address"
-          type="text"
-          name="address"
-          label="Your Address"
-          placeholder="Sing Street 12."
-          help="What is your shelter's address?"
-          validation="required"
-        />
-        <FormKit
-          v-model="website"
-          type="url"
-          name="website"
-          label="Your Website"
-          placeholder="https://shelters-australia.com.au"
-          help="What is your shelters website?"
-        />
-        <FormKit
-          v-model="capacity"
-          type="number"
-          name="capacity"
-          label="Your Pet Capacity"
-          placeholder="50"
-          help="What is the capacity of your shelter?"
-        />
+  <DefaultContainer additional-class="flex items-center justify-center">
+    <div class="grid w-full h-full grid-cols-2">
+      <div class="flex flex-col items-center justify-center w-full h-full p-8">
+        <DefaultRouteLink to="/register" text="Back" class="self-start" />
+        <form @submit="onSubmit" class="flex flex-col w-full gap-2">
+          <DefaultSubtitle text="Register as a Shelter" />
+          <DefaultParagraph text="Reigster yourself as a licensed shelter" />
+          <FormField v-slot="{ componentField }" name="email">
+            <FormItem v-auto-animate>
+              <FormLabel>Your Email</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="james.doe@gmail.com" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="password">
+            <FormItem v-auto-animate>
+              <FormLabel>Your Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="secre***" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
 
-        <FormKit
-          v-model="isNoKill"
-          type="checkbox"
-          label="Are you a no-kill shelter? "
-          name="isNoKill"
-          :value="false"
-          decorator-icon="check"
+          <FormField v-slot="{ value }" name="capacity">
+            <FormItem v-auto-animate>
+              <FormLabel>Shelter Capacity</FormLabel>
+              <NumberField
+                class="gap-2"
+                :min="0"
+                :model-value="value"
+                @update:model-value="
+                  (v: number | undefined) => {
+                    if (v) {
+                      form.setFieldValue('capacity', v)
+                    } else {
+                      form.setFieldValue('capacity', undefined)
+                    }
+                  }
+                "
+              >
+                <NumberFieldContent>
+                  <NumberFieldDecrement />
+                  <FormControl>
+                    <NumberFieldInput />
+                  </FormControl>
+                  <NumberFieldIncrement />
+                </NumberFieldContent>
+              </NumberField>
+              <FormDescription> Your shelter's pet capacity. </FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="phoneNumber">
+            <FormItem v-auto-animate>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="+389 000 000 00" v-bind="componentField" />
+              </FormControl>
+              <FormDescription> Your shelter's phone number. </FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField v-slot="{ componentField }" name="address">
+            <FormItem v-auto-animate>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="James Street 12." v-bind="componentField" />
+              </FormControl>
+              <FormDescription> Your shelter's address. </FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="website">
+            <FormItem v-auto-animate>
+              <FormLabel>Website (optional) </FormLabel>
+              <FormControl>
+                <Input type="url" placeholder="https://shelters.co.uk" v-bind="componentField" />
+              </FormControl>
+              <FormDescription> Your shelter's website. </FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField v-slot="{ value, handleChange }" name="isNoKill">
+            <FormItem
+              v-auto-animate
+              class="flex flex-row items-center justify-between p-4 border rounded-lg"
+            >
+              <div class="space-y-0.5">
+                <FormLabel class="text-base"> No Kill </FormLabel>
+                <FormDescription> Is your shelter a no kill one? </FormDescription>
+              </div>
+              <FormControl>
+                <Switch :checked="value" @update:checked="handleChange" />
+              </FormControl>
+            </FormItem>
+          </FormField>
+
+          <Button type="submit"> Register </Button>
+        </form>
+      </div>
+      <div class="w-full h-full p-8">
+        <img
+          class="object-cover w-full h-full min-h-[300px] rounded-[32px]"
+          src="/register-shelter-hero.jpg"
         />
-      </FormKit>
+      </div>
     </div>
   </DefaultContainer>
 </template>

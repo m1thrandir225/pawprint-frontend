@@ -1,114 +1,160 @@
 <script setup lang="ts">
-import DefaultSubtitle from '@/components/ui/DefaultSubtitle.vue'
-import DefaultParagraph from '@/components/ui/DefaultParagraph.vue'
-import DefaultContainer from '@/components/ui/DefaultContainer.vue'
-import { ref } from 'vue'
-import DefaultRouteLink from '@/components/ui/DefaultRouteLink.vue'
+import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
+import DefaultParagraph from '@/components/Global/DefaultParagraph.vue'
+import DefaultContainer from '@/components/Global/DefaultContainer.vue'
+import DefaultRouteLink from '@/components/Global/DefaultRouteLink.vue'
+import { vAutoAnimate } from '@formkit/auto-animate'
+import {
+  FormControl,
+  FormField,
+  FormMessage,
+  FormDescription,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as z from 'zod'
 
-const firstName = ref()
-const lastName = ref()
-const email = ref()
-const password = ref()
-const homeType = ref()
-const hasChildren = ref(false)
-const hasOtherPets = ref(false)
+const homeTypes = ['Flat', 'House'] as const
 
-async function register(credentials: {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  homeType: string
-  hasChildren: boolean
-  hasOtherPets: boolean
-}) {
-  alert(JSON.stringify(credentials))
-}
+const formSchema = toTypedSchema(
+  z.object({
+    firstName: z.string().min(2).max(50),
+    lastName: z.string().min(2).max(50),
+    email: z.string().email(),
+    password: z
+      .string()
+      .min(9)
+      .regex(/[^a-zA-Z]/),
+    homeType: z.enum(homeTypes),
+    hasChildren: z.boolean().default(false),
+    hasOtherPets: z.boolean().default(false),
+  }),
+)
+
+const form = useForm({
+  validationSchema: formSchema,
+})
+
+const onSubmit = form.handleSubmit((values) => {
+  alert('Form submitted!' + values)
+  console.log('Form submitted!', values)
+})
 </script>
 
 <template>
-  <DefaultContainer additional-class="flex items-center justify-center min-h-dvh">
-    <div class="grid w-full h-full grid-cols-2 p-8 border border-outline rounded-[16px]">
-      <div class="flex flex-col items-center justify-center h-full min-h-[650px] p-8 w-full">
+  <DefaultContainer additional-class="flex items-center justify-center">
+    <div class="grid w-full h-full grid-cols-2">
+      <div class="flex flex-col items-center justify-center w-full h-full p-8">
         <DefaultRouteLink to="/register" text="Back" class="self-start" />
-        <FormKit type="form" submit-label="Login" @submit="register">
+        <form @submit="onSubmit" class="flex flex-col w-full gap-2">
           <DefaultSubtitle text="Register as an adopter" />
           <DefaultParagraph text="Are you ready to adopt your new pet?" />
-          <FormKit
-            v-model="firstName"
-            type="text"
-            name="firstName"
-            label="Your First Name"
-            placeholder="James"
-            help="What is your first name?"
-            validation="required"
-          />
-          <FormKit
-            v-model="lastName"
-            type="text"
-            name="lastName"
-            label="Your Last Name"
-            placeholder="Doe"
-            help="What is your last name?"
-            validation="required"
-          />
-          <FormKit
-            v-model="email"
-            type="text"
-            name="email"
-            label="Your Email"
-            placeholder="james.doe@gmail.com"
-            help="What is your email?"
-            prefix-icon="email"
-            validation="required|email"
-            class=""
-          />
-          <FormKit
-            v-model="password"
-            type="password"
-            name="password"
-            label="Your Password"
-            placeholder="se****"
-            prefix-icon="password"
-            validation="required|length:9|matches:/[^a-zA-Z]/"
-          />
+          <FormField v-slot="{ componentField }" name="firstName">
+            <FormItem v-auto-animate>
+              <FormLabel>Your First Name</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="James" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="lastName">
+            <FormItem v-auto-animate>
+              <FormLabel>Your Last Name</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="Doe" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="email">
+            <FormItem v-auto-animate>
+              <FormLabel>Your Email</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="james.doe@gmail.com" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="password">
+            <FormItem v-auto-animate>
+              <FormLabel>Your Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="secre***" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="homeType">
+            <FormItem v-auto-animate>
+              <FormLabel>Home Type</FormLabel>
+              <Select v-bind="componentField">
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your home type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem v-for="homeType in homeTypes" :value="homeType" :key="homeType">
+                      {{ homeType }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Please select the home that most describes your current living condition.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
 
-          <FormKit
-            v-model="homeType"
-            type="select"
-            label="Home Type"
-            name="homeType"
-            select-icon="down"
-            help="Please select the description that best matches your house."
-            placeholder="Flat"
-            :options="['', 'Flat', 'House']"
-            validation="required"
-          />
+          <FormField v-slot="{ value, handleChange }" name="hasChildren">
+            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-lg">
+              <div class="space-y-0.5">
+                <FormLabel class="text-base"> Have children </FormLabel>
+                <FormDescription> Do you have children? </FormDescription>
+              </div>
+              <FormControl>
+                <Switch :checked="value" @update:checked="handleChange" />
+              </FormControl>
+            </FormItem>
+          </FormField>
 
-          <FormKit
-            v-if="homeType"
-            v-model="hasChildren"
-            type="checkbox"
-            label="Do you have children ? "
-            name="hasChildren"
-            :value="false"
-            decorator-icon="check"
-          />
-          <FormKit
-            v-if="homeType"
-            v-model="hasOtherPets"
-            type="checkbox"
-            label="Do you have any other pets ?"
-            name="hasOtherPets"
-            :value="false"
-            decorator-icon="check"
-          />
-        </FormKit>
+          <FormField v-slot="{ value, handleChange }" name="hasOtherPets">
+            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-lg">
+              <div class="space-y-0.5">
+                <FormLabel class="text-base"> Have Pets </FormLabel>
+                <FormDescription> Do you have other pets? </FormDescription>
+              </div>
+              <FormControl>
+                <Switch :checked="value" @update:checked="handleChange" />
+              </FormControl>
+            </FormItem>
+          </FormField>
+
+          <Button type="submit"> Register </Button>
+        </form>
       </div>
-      <img
-        class="object-cover w-full h-full max-h-[750px] rounded-[32px]"
-        src="https://images.unsplash.com/photo-1415369629372-26f2fe60c467?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      />
+      <div class="w-full h-full p-8">
+        <img
+          class="object-cover w-full h-full min-h-[300px] rounded-[32px]"
+          src="/register-user-hero.jpg"
+        />
+      </div>
     </div>
   </DefaultContainer>
 </template>
