@@ -1,15 +1,15 @@
-import type { BuildRequest } from '@/types/api'
+import { Config } from '@/utils/config'
+import { api } from './api-service'
 import type { PetGender } from '@/types/models/petGender'
 
-const all = (): BuildRequest<PetGender[]> => {
-  return {
-    url: '/pet-genders',
-    options: {
+const PET_GENDERS_URL = Config.apiURL + '/pet-genders'
+
+const petGendersService = {
+  getPetGenders: () =>
+    api<PetGender[]>({
+      url: PET_GENDERS_URL,
       method: 'GET',
-    },
-  }
+    }),
 }
 
-export default {
-  all,
-}
+export default petGendersService

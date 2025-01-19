@@ -17,6 +17,9 @@ import { Button } from '@/components/ui/button'
 import { vAutoAnimate } from '@formkit/auto-animate'
 import useAuthStore from '@/stores/auth-store'
 import { useRoute, useRouter } from 'vue-router'
+import { useMutation } from '@tanstack/vue-query'
+import authService from '@/services/auth-service'
+import type { LoginRequest } from '@/types/services/auth'
 
 const route = useRoute()
 const router = useRouter()
@@ -35,9 +38,19 @@ const form = useForm({
 })
 const authStore = useAuthStore()
 
+const loginQuery = useMutation({
+  mutationKey: ['login'],
+  mutationFn: async (input: LoginRequest) => await authService.login(input),
+  onSuccess: (data) => {
+    authStore.login(data)
+  },
+})
+
 const onSubmit = form.handleSubmit(async (values) => {
   const { email, password } = values
-  await authStore.login(email, password)
+
+  await loginQuery.mutate({ email, password })
+
   if (route.query.redirect) {
     router.push(route.query.redirect as string)
   } else {
@@ -74,9 +87,8 @@ const onSubmit = form.handleSubmit(async (values) => {
             <FormMessage />
           </FormItem>
         </FormField>
-        <Button :disabled="authStore.isLoading" type="submit"> Login </Button>
+        <Button :disabled="false" type="submit"> Login </Button>
       </form>
-      <p v-if="authStore.errorMessage" class="text-red-500">{{ authStore.errorMessage }}</p>
       <RouterLink to="/register">
         Don't have an account? <span class="font-bold">Register</span></RouterLink
       >

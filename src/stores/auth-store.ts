@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia'
-import { useNetworkStore } from './network-store'
 import { useTokenStore } from './token-store'
 import { useUserStore } from './user-store'
 import { computed, ref } from 'vue'
+import type { AuthTokens, LoginResponse } from '@/types/services/auth'
 import authService from '@/services/auth-service'
-import type { AuthTokens } from '@/types/services/auth-service.types'
-import type { ExtractResponseType } from '@/types/api'
 
 /**
  * @name useAuthStore
@@ -13,35 +11,19 @@ import type { ExtractResponseType } from '@/types/api'
  * This store is responsible for handling the authentication logic.
  */
 const useAuthStore = defineStore('auth', () => {
-  const networkStore = useNetworkStore()
   const tokenStore = useTokenStore()
   const userStore = useUserStore()
 
-  const isLoading = computed(() => networkStore.isLoading)
-  const errorMessage = computed(() => networkStore.error)
+  const refreshTimer = ref<number | null>(null)
 
   const isAuthenticated = computed(() => {
     return !tokenStore.needsRefresh && userStore.user != null
   })
 
-  const refreshTimer = ref<number | null>(null)
-
   const accessToken = computed(() => tokenStore.getAccessToken())
   const refreshToken = computed(() => tokenStore.getRefreshToken())
 
-  async function login(email: string, password: string) {
-    const request = authService.login(email, password)
-    const { options, url } = request
-
-    const { data, error } = await networkStore.fetchData<ExtractResponseType<typeof request>>(
-      url,
-      options,
-    )
-
-    if (error || !data) {
-      return null
-    }
-
+  async function login(response: LoginResponse) {
     const {
       shelter,
       user,
@@ -49,7 +31,7 @@ const useAuthStore = defineStore('auth', () => {
       refreshToken,
       accessTokenExpirationTime,
       refreshTokenExpirationTime,
-    } = data
+    } = response
 
     const tokens: AuthTokens = {
       accessToken: accessToken,
@@ -94,23 +76,19 @@ const useAuthStore = defineStore('auth', () => {
         logout()
       }
     }
-    const request = authService.refreshTokens(refreshToken!, userEmail!)
+    const request = await authService.refreshToken({
+      email: userEmail!,
+      refreshToken: refreshToken!,
+    })
 
-    const { url, options } = request
-
-    const { data, error } = await networkStore.fetchData<ExtractResponseType<typeof request>>(
-      url,
-      options,
-    )
-    if (error || !data) {
-      return false
+    if (!request) {
+      logout()
     }
 
-    const { accessToken, accessTokenExpirationTime } = data
+    const { accessToken, accessTokenExpirationTime } = request
+
     tokenStore.setAccessToken(accessToken, accessTokenExpirationTime)
     setRefreshTimer()
-
-    return true
   }
 
   function setRefreshTimer() {
@@ -130,8 +108,6 @@ const useAuthStore = defineStore('auth', () => {
 
   return {
     login,
-    isLoading,
-    errorMessage,
     isAuthenticated,
     accessToken,
     refreshToken,

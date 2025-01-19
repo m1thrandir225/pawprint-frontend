@@ -22,12 +22,23 @@ export type AuthTokens = {
   refreshTokenExpirationTime: string
 }
 
+export type RegisterUserRequest = {
+  email: string
+  address: string
+}
+
 export type RegisterUserResponse = {
   accessToken: string
   refreshToken: string
   accessTokenExpirationTime: string
   refreshTokenExpirationTime: string
   user: UserDTO
+}
+
+export type RegisterShelterRequest = {
+  email: string
+  password: string
+  address: string
 }
 
 export type RegisterShelterResponse = {

@@ -1,57 +1,38 @@
-import type { BuildRequest } from '@/types/api'
-import type {
-  LoginResponse,
-  RegisterShelterResponse,
-  RegisterUserResponse,
-  RefreshTokenResponse,
-} from '@/types/services/auth-service.types'
+import {
+  type LoginRequest,
+  type LoginResponse,
+  type RefreshTokenRequest,
+  type RefreshTokenResponse,
+  type RegisterShelterRequest,
+  type RegisterShelterResponse,
+  type RegisterUserRequest,
+  type RegisterUserResponse,
+} from '@/types/services/auth'
+import { Config } from '@/utils/config'
+import { api } from './api-service'
 
-const login = (email: string, password: string): BuildRequest<LoginResponse> => {
-  return {
-    url: '/auth/login',
-    options: {
-      method: 'POST',
-      data: {
-        email,
-        password,
-      },
-    },
-  }
-}
+const AUTH_API_URL = Config.apiURL + '/auth'
 
-const registerShelter = (): BuildRequest<RegisterShelterResponse> => {
-  return {
-    url: '/auth/register/shelter',
-    options: {
+const authService = {
+  login: (input: LoginRequest) =>
+    api<LoginResponse>({ url: `${AUTH_API_URL}/login`, method: 'POST', data: input }),
+  refreshToken: (input: RefreshTokenRequest) =>
+    api<RefreshTokenResponse>({
+      url: `${AUTH_API_URL}/refresh`,
       method: 'POST',
-    },
-  }
-}
-const registerAdopter = (): BuildRequest<RegisterUserResponse> => {
-  return {
-    url: '/auth/register/adopter',
-    options: {
+      data: input,
+    }),
+  registerShelter: (input: RegisterShelterRequest) =>
+    api<RegisterShelterResponse>({
+      url: `${AUTH_API_URL}/register/shelter`,
       method: 'POST',
-    },
-  }
-}
-
-const refreshTokens = (refreshToken: string, email: string): BuildRequest<RefreshTokenResponse> => {
-  return {
-    url: '/auth/refresh',
-    options: {
+      data: input,
+    }),
+  registerAdopter: (input: RegisterUserRequest) =>
+    api<RegisterUserResponse>({
+      url: `${AUTH_API_URL}/register/adopter`,
       method: 'POST',
-      data: {
-        refreshToken,
-        email,
-      },
-    },
-  }
+      data: input,
+    }),
 }
-
-export default {
-  login,
-  registerShelter,
-  registerAdopter,
-  refreshTokens,
-}
+export default authService

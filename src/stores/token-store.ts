@@ -1,4 +1,4 @@
-import type { AuthTokens } from '@/types/services/auth-service.types'
+import type { AuthTokens } from '@/types/services/auth'
 import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed } from 'vue'

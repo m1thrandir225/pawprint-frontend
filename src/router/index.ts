@@ -63,7 +63,7 @@ const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      name: 'not-found',
+      name: 'notFound',
       component: NotFoundView,
       meta: { requiresAuth: false },
     },
