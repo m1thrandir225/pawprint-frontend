@@ -40,9 +40,9 @@ const authStore = useAuthStore()
 
 const loginQuery = useMutation({
   mutationKey: ['login'],
-  mutationFn: async (input: LoginRequest) => await authService.login(input),
-  onSuccess: (data) => {
-    authStore.login(data)
+  mutationFn: (input: LoginRequest) => authService.login(input),
+  onSuccess: (response) => {
+    authStore.login(response)
   },
 })
 

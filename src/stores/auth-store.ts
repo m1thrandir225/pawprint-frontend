@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { useTokenStore } from './token-store'
-import { useUserStore } from './user-store'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { AuthTokens, LoginResponse } from '@/types/services/auth'
-import authService from '@/services/auth-service'
+import { useStorage } from '@vueuse/core'
+import type { UserDTO } from '@/types/dto/UserDTO'
+import type { ShelterDTO } from '@/types/dto/ShelterDTO'
 
 /**
  * @name useAuthStore
@@ -11,107 +11,80 @@ import authService from '@/services/auth-service'
  * This store is responsible for handling the authentication logic.
  */
 const useAuthStore = defineStore('auth', () => {
-  const tokenStore = useTokenStore()
-  const userStore = useUserStore()
-
-  const refreshTimer = ref<number | null>(null)
-
-  const isAuthenticated = computed(() => {
-    return !tokenStore.needsRefresh && userStore.user != null
+  const user = useStorage<UserDTO | ShelterDTO | null>('user', null, localStorage, {
+    serializer: {
+      read: (v: string) => (v ? JSON.parse(v) : null),
+      write: (v: UserDTO | ShelterDTO | null) => JSON.stringify(v),
+    },
   })
 
-  const accessToken = computed(() => tokenStore.getAccessToken())
-  const refreshToken = computed(() => tokenStore.getRefreshToken())
+  const tokens = useStorage<AuthTokens | null>('authTokens', null, localStorage, {
+    serializer: {
+      read: (v: string) => (v ? JSON.parse(v) : null),
+      write: (v: AuthTokens | null) => JSON.stringify(v),
+    },
+  })
 
-  async function login(response: LoginResponse) {
-    const {
-      shelter,
-      user,
-      accessToken,
-      refreshToken,
-      accessTokenExpirationTime,
-      refreshTokenExpirationTime,
-    } = response
+  const accessToken = computed(() => tokens.value?.accessToken)
+  const refreshToken = computed(() => tokens.value?.refreshToken)
 
-    const tokens: AuthTokens = {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      accessTokenExpirationTime: accessTokenExpirationTime,
-      refreshTokenExpirationTime: refreshTokenExpirationTime,
+  const isAuthenticated = computed(() => !!user.value && !!tokens.value)
+
+  function setTokens(newTokens: AuthTokens) {
+    tokens.value = newTokens
+  }
+
+  function setAccessToken(newToken: string, newExpirationTime: string) {
+    if (!tokens.value?.refreshToken || !tokens.value?.refreshTokenExpirationTime) return
+    console.log(newToken, newExpirationTime)
+    tokens.value = {
+      accessToken: newToken,
+      accessTokenExpirationTime: newExpirationTime,
+      refreshToken: tokens.value.refreshToken,
+      refreshTokenExpirationTime: tokens.value.refreshTokenExpirationTime,
     }
 
-    if (shelter != null) {
-      tokenStore.setTokens(tokens)
-      userStore.setUser(shelter)
-      setRefreshTimer()
-      return
-    }
+    console.log(tokens.value)
+    console.log(accessToken.value)
+  }
 
-    if (user != null) {
-      tokenStore.setTokens(tokens)
-      userStore.setUser(user)
-      setRefreshTimer()
-      return
-    }
-
-    if (user == null && shelter == null) {
-      return null
-    }
+  function setUser(newUser: ShelterDTO | UserDTO | null) {
+    user.value = newUser
   }
 
   function logout() {
-    tokenStore.clearTokens()
-    userStore.clearUser()
-    if (refreshTimer.value) {
-      clearTimeout(refreshTimer.value)
-    }
+    tokens.value = null
+    user.value = null
   }
 
-  async function refreshTokens() {
-    const userEmail = userStore.getUserEmail()
-    const refreshToken = tokenStore.getRefreshToken()
-
-    if (isAuthenticated.value) {
-      if (!refreshToken || !userEmail) {
-        logout()
-      }
+  function login(response: LoginResponse) {
+    const {
+      accessToken,
+      accessTokenExpirationTime,
+      refreshToken,
+      refreshTokenExpirationTime,
+      user,
+      shelter,
+    } = response
+    setTokens({ accessToken, accessTokenExpirationTime, refreshToken, refreshTokenExpirationTime })
+    if (user !== null) {
+      setUser(user)
+    } else if (shelter !== null) {
+      setUser(shelter)
+    } else {
+      throw new Error('No user or shelter in login response')
     }
-    const request = await authService.refreshToken({
-      email: userEmail!,
-      refreshToken: refreshToken!,
-    })
-
-    if (!request) {
-      logout()
-    }
-
-    const { accessToken, accessTokenExpirationTime } = request
-
-    tokenStore.setAccessToken(accessToken, accessTokenExpirationTime)
-    setRefreshTimer()
-  }
-
-  function setRefreshTimer() {
-    const expirationTime = tokenStore.getAccessTokenExpirationTime()
-
-    if (!expirationTime) {
-      return
-    }
-    if (refreshTimer.value) {
-      clearTimeout(refreshTimer.value)
-    }
-
-    const timeToRefresh = expirationTime - Date.now() - 10000
-
-    refreshTimer.value = setTimeout(refreshTokens, timeToRefresh)
   }
 
   return {
-    login,
-    isAuthenticated,
+    user,
     accessToken,
     refreshToken,
-    refreshTokens,
+    isAuthenticated,
+    setUser,
+    setTokens,
+    setAccessToken,
+    login,
     logout,
   }
 })

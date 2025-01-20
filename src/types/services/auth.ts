@@ -1,6 +1,16 @@
 import type { ShelterDTO } from '../dto/ShelterDTO'
 import type { UserDTO } from '../dto/UserDTO'
 
+export type ApiRequestConfig = {
+  _retry?: boolean
+  url: string
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+  protected?: boolean
+  headers?: Record<string, string>
+  params?: Record<string, string>
+  data?: Record<string, unknown> | FormData
+}
+
 export type LoginRequest = {
   email: string
   password: string

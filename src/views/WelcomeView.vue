@@ -19,6 +19,7 @@ const {
 } = useQuery<PetType[]>({
   queryKey: ['petTypes'],
   queryFn: petTypesService.getPetTypes,
+  retry: 0,
 })
 
 const {
@@ -28,6 +29,7 @@ const {
 } = useQuery<PetSize[]>({
   queryKey: ['petSizes'],
   queryFn: petSizesService.getPetSizes,
+  retry: 0,
 })
 
 const {
@@ -37,6 +39,7 @@ const {
 } = useQuery<PetGender[]>({
   queryKey: ['petGenders'],
   queryFn: petGendersService.getPetGenders,
+  retry: 0,
 })
 
 const {
@@ -46,6 +49,7 @@ const {
 } = useQuery({
   queryKey: ['shelterListings'],
   queryFn: shelterListingService.getShelterListings,
+  retry: 0,
 })
 </script>
 
