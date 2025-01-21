@@ -22,6 +22,7 @@ import shelterListingService from '@/services/shelterListings-service'
 // import medicalConditionService from '@/services/medicalCondition-service'
 // import ownerPetListingService from '@/services/ownerPetListing-service'
 import ownerPetListingDocumentService from '@/services/ownerPetListingDocument-service'
+import ownerSurrenderReasonService from '@/services/ownerSurrenderReason-service'
 
 const {
   data: petTypeData,
@@ -138,8 +139,18 @@ const {
   isPending: ownerPetListingDocumentQueryIsPending,
   isError: ownerPetListingDocumentQueryIsError,
 } = useQuery({
-  queryKey: ['OwnerPetListingDocuments'],
+  queryKey: ['ownerPetListingDocuments'],
   queryFn: ownerPetListingDocumentService.getOwnerPetListingDocuments,
+})
+
+const {
+  data: ownerSurrenderReasonData,
+  isPending: ownerSurrenderReasonQueryIsPending,
+  isError: ownerSurrenderReasonQueryIsError,
+  error: ownerSurrenderReasonQueryError,
+} = useQuery({
+  queryKey: ['ownerSurrenderReasons'],
+  queryFn: ownerSurrenderReasonService.getOwnerSurrenderReasons,
 })
 
 </script>
@@ -210,6 +221,14 @@ const {
     <div v-else-if="ownerPetListingDocumentData">
       <h1 v-for="ownerPetListingDocument in ownerPetListingDocumentData" :key="ownerPetListingDocument.id">
         {{ ownerPetListingDocument.documentType }}
+      </h1>
+    </div>
+
+    <div v-if="ownerSurrenderReasonQueryIsPending">Loading ..</div>
+    <div v-else-if="ownerSurrenderReasonQueryIsError">Error: {{ ownerSurrenderReasonQueryError }}</div>
+    <div v-else-if="ownerSurrenderReasonData">
+      <h1 v-for="ownerSurrenderReason in ownerSurrenderReasonData" :key="ownerSurrenderReason.id">
+        {{ ownerSurrenderReason.description }}
       </h1>
     </div>
 
