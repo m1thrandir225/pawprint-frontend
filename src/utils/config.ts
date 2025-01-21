@@ -13,4 +13,6 @@ export abstract class Config {
   public static apiURL: string = this.baseURL + '/api'
 
   public static publicFilesURL: string = this.baseURL + '/public/'
+
+  public static uploadFilesURL: string = this.baseURL + '/uploads/'
 }

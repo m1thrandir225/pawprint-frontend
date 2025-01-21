@@ -66,14 +66,20 @@ const useAuthStore = defineStore('auth', () => {
       user,
       shelter,
     } = response
+
+    console.log('login', response)
     setTokens({ accessToken, accessTokenExpirationTime, refreshToken, refreshTokenExpirationTime })
-    if (user !== null) {
+    if (user) {
       setUser(user)
-    } else if (shelter !== null) {
-      setUser(shelter)
-    } else {
-      throw new Error('No user or shelter in login response')
+      return
     }
+
+    if (shelter) {
+      setUser(shelter)
+      return
+    }
+
+    throw new Error('No user or shelter in login response')
   }
 
   return {

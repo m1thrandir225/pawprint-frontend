@@ -30,7 +30,7 @@ const authService = {
     apiRequest<RegisterUserResponse>({
       _retry: false,
       data: input,
-      url: `${AUTH_API_URL}/register/user`,
+      url: `${AUTH_API_URL}/register/adopter`,
       method: 'POST',
     }),
 }

@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import shelterListingService from '@/services/shelter-service'
+import shelterListingService from '@/services/shelterListings-service'
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { useQuery } from '@tanstack/vue-query'
 import { watch } from 'vue'

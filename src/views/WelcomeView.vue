@@ -10,7 +10,8 @@ import type { PetGender } from '@/types/models/petGender'
 import AdoptionSearchForm from '@/components/AdoptionSearchForm.vue'
 import petTypesService from '@/services/petTypes-service'
 import petGendersService from '@/services/petGender-service'
-import shelterListingService from '@/services/shelter-service'
+import shelterListingService from '@/services/shelterListings-service'
+import healthStatusService from '@/services/healthStatus-service'
 
 const {
   data: petTypeData,
@@ -51,11 +52,28 @@ const {
   queryFn: shelterListingService.getShelterListings,
   retry: 0,
 })
+
+const {
+  data: healthStatusData,
+  isPending: healthStatusQueryIsPending,
+  isError: healthStatusQueryIsError,
+  error: healthStatusQueryError,
+} = useQuery({
+  queryKey: ['healthStatuses'],
+  queryFn: healthStatusService.getHealthStatuses,
+})
 </script>
 
 <template>
   <DefaultContainer>
     <DefaultHeader />
+    <div v-if="healthStatusQueryIsPending">Loading ..</div>
+    <div v-else-if="healthStatusQueryIsError">Error: {{ healthStatusQueryError }}</div>
+    <div v-else-if="healthStatusData">
+      <h1 v-for="healthStatus in healthStatusData" :key="healthStatus.id">
+        {{ healthStatus.name }}
+      </h1>
+    </div>
     <AdoptionSearchForm
       :is-loading="petTypeQueryIsPending || petGenderQueryIsPending || petSizeQueryIsPending"
       :is-error="petTypeQueryError || petGenderQueryError || petSizeQueryError"

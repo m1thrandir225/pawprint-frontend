@@ -26,6 +26,12 @@ import { Input } from '@/components/ui/input'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { useMutation } from '@tanstack/vue-query'
+import type { RegisterUserRequest } from '@/types/services/auth'
+import authService from '@/services/auth-service'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const homeTypes = ['Flat', 'House'] as const
 
@@ -34,6 +40,7 @@ const formSchema = toTypedSchema(
     firstName: z.string().min(2).max(50),
     lastName: z.string().min(2).max(50),
     email: z.string().email(),
+    address: z.string().min(2).max(100),
     password: z
       .string()
       .min(9)
@@ -44,13 +51,20 @@ const formSchema = toTypedSchema(
   }),
 )
 
+const registerMutation = useMutation({
+  mutationKey: ['registerAdopter'],
+  mutationFn: (input: RegisterUserRequest) => authService.registerAdopter(input),
+  onSuccess: () => {
+    router.replace('/login')
+  },
+})
+
 const form = useForm({
   validationSchema: formSchema,
 })
 
-const onSubmit = form.handleSubmit((values) => {
-  alert('Form submitted!' + values)
-  console.log('Form submitted!', values)
+const onSubmit = form.handleSubmit(async (values) => {
+  await registerMutation.mutate(values)
 })
 </script>
 
@@ -95,6 +109,16 @@ const onSubmit = form.handleSubmit((values) => {
               <FormControl>
                 <Input type="password" placeholder="secre***" v-bind="componentField" />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="address">
+            <FormItem v-auto-animate>
+              <FormLabel>Your Address</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="James Street 12." v-bind="componentField" />
+              </FormControl>
+              <FormDescription> Please provide your current address. </FormDescription>
               <FormMessage />
             </FormItem>
           </FormField>

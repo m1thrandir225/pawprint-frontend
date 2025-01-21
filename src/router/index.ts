@@ -22,14 +22,6 @@ const router = createRouter({
       name: 'register',
       component: RegisterOverviewView,
       meta: { requiresAuth: false },
-      beforeEnter: (to, from, next) => {
-        const auth = useAuthStore()
-        if (auth.isAuthenticated) {
-          next({
-            path: '/welcome',
-          })
-        }
-      },
     },
     {
       path: '/login',
