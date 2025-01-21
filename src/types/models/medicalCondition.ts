@@ -1,8 +1,6 @@
-import type { MedicalRecord } from './medicalRecord'
-
 export type MedicalCondition = {
   id: string
-  medicalRecord: MedicalRecord
+  medicalRecordId: string
   conditionName: string
   notes: string | null
 }

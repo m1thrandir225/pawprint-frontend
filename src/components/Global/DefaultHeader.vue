@@ -6,7 +6,10 @@
       <DefaultRouteLink to="/register" text="Register" />
     </div>
     <div v-else>
-      <Button variant="link" @click="logout">Logout</Button>
+      <Button variant="link" @click="logout">
+        <LogOut class="w-6 h-6" />
+        <span class="hidden lg:block">Logout</span>
+      </Button>
     </div>
   </div>
 </template>
@@ -17,6 +20,7 @@ import DefaultRouteLink from './DefaultRouteLink.vue'
 import DefaultTitle from './DefaultTitle.vue'
 import Button from '../ui/button/Button.vue'
 import { useRouter } from 'vue-router'
+import { LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const router = useRouter()
