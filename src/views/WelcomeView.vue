@@ -20,6 +20,7 @@ import shelterListingService from '@/services/shelterListings-service'
 //import veterinarianSpecializationService from '@/services/veterinarianSpecialization-service'
 //import type { VeterinarianSpecialization } from '@/types/models/veterinarianSpecialization'
 import medicalConditionService from '@/services/medicalCondition-service'
+import ownerPetListingService from '@/services/ownerPetListing-service'
 
 const {
   data: petTypeData,
@@ -123,6 +124,14 @@ const {
   queryKey: ['MedicalConditions'],
   queryFn: medicalConditionService.getMedicalConditions,
 })
+const {
+  data: ownerPetListingData,
+  isPending: ownerPetListingQueryIsPending,
+  isError: ownerPetListingQueryIsError,
+} = useQuery({
+  queryKey: ['OwnerPetListings'],
+  queryFn: ownerPetListingService.getOwnerPetListings,
+})
 
 </script>
 
@@ -176,6 +185,14 @@ const {
     <div v-else-if="medicalConditionData">
       <h1 v-for="medicalCondition in medicalConditionData" :key="medicalCondition.id">
         {{ medicalCondition.conditionName }}
+      </h1>
+    </div>
+
+    <div v-if="ownerPetListingQueryIsPending">Loading ..</div>
+    <div v-else-if="ownerPetListingQueryIsError">Error: {{ ownerPetListingQueryIsError }}</div>
+    <div v-else-if="ownerPetListingData">
+      <h1 v-for="ownerPetListing in ownerPetListingData" :key="ownerPetListing.id">
+        {{ ownerPetListing.adopter.address }}
       </h1>
     </div>
 
