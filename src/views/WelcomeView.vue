@@ -11,7 +11,18 @@ import AdoptionSearchForm from '@/components/AdoptionSearchForm.vue'
 import petTypesService from '@/services/petTypes-service'
 import petGendersService from '@/services/petGender-service'
 import shelterListingService from '@/services/shelterListings-service'
-import healthStatusService from '@/services/healthStatus-service'
+// import healthStatusService from '@/services/healthStatus-service'
+// import adoptionStatusService from '@/services/adoptionStatus-service'
+// import adoptionService from '@/services/adoption-service'
+// import veternarianService from '@/services/veterinarian-service'
+// import vaccinationService from '@/services/vaccination-service'
+// import type { Vaccination } from '@/types/models/vaccination'
+//import veterinarianSpecializationService from '@/services/veterinarianSpecialization-service'
+//import type { VeterinarianSpecialization } from '@/types/models/veterinarianSpecialization'
+// import medicalConditionService from '@/services/medicalCondition-service'
+// import ownerPetListingService from '@/services/ownerPetListing-service'
+import ownerPetListingDocumentService from '@/services/ownerPetListingDocument-service'
+import ownerSurrenderReasonService from '@/services/ownerSurrenderReason-service'
 
 const {
   data: petTypeData,
@@ -44,36 +55,183 @@ const {
 })
 
 const {
-  data: adoptionData,
-  isPending: adoptionQueryIsPending,
-  isError: adoptionQueryIsError,
+  data: shelterListingData,
+  isPending: shelterListingQueryIsPending,
+  isError: shelterListingQueryIsError,
 } = useQuery({
   queryKey: ['shelterListings'],
   queryFn: shelterListingService.getShelterListings,
   retry: 0,
 })
 
+// const {
+//   data: healthStatusData,
+//   isPending: healthStatusQueryIsPending,
+//   isError: healthStatusQueryIsError,
+//   error: healthStatusQueryError,
+// } = useQuery({
+//   queryKey: ['healthStatuses'],
+//   queryFn: healthStatusService.getHealthStatuses,
+// })
+
+// const {
+//   data: adoptionStatusData,
+//   isPending: adoptionStatusQueryIsPending,
+//   isError: adoptionStatusQueryIsError,
+//   error: adoptionStatusQueryError,
+// } = useQuery({
+//   queryKey: ['adoptionStatuses'],
+//   queryFn: adoptionStatusService.getAdoptionStatuses,
+// })
+
+// const {
+//   data: adoptionData,
+//   isPending: adoptionQueryIsPending,
+//   isError: adoptionQueryIsError,
+// } = useQuery({
+//   queryKey: ['adoptions'],
+//   queryFn: adoptionService.getAdoptions,
+// })
+
+// const {
+//   data: veternarianData,
+//   isPending: veternarianQueryIsPending,
+//   isError: veternarianQueryIsError,
+// } = useQuery({
+//   queryKey: ['veternarians'],
+//   queryFn: veternarianService.getVeterinarians,
+// })
+
+// const {
+//   data: vaccinationData,
+//   isPending: vaccinationQueryIsPending,
+//   isError: vaccinationQueryIsError,
+// } = useQuery<Vaccination[]>({
+//   queryKey: ['vaccinations'],
+//   queryFn: vaccinationService.getVaccinations,
+// })
+// const {
+//   data: veterinarianSpecializationData,
+//   isPending: veterinarianSpecializationQueryIsPending,
+//   isError: veterinarianSpecializationQueryIsError,
+// } = useQuery({
+//   queryKey: ['VeterinarianSpecializations'],
+//   queryFn: veterinarianSpecializationService.getVeterinarianSpecializations,
+// })
+// const {
+//   data: medicalConditionData,
+//   isPending: medicalConditionQueryIsPending,
+//   isError: medicalConditionQueryIsError,
+// } = useQuery({
+//   queryKey: ['MedicalConditions'],
+//   queryFn: medicalConditionService.getMedicalConditions,
+// })
+// const {
+//   data: ownerPetListingData,
+//   isPending: ownerPetListingQueryIsPending,
+//   isError: ownerPetListingQueryIsError,
+// } = useQuery({
+//   queryKey: ['OwnerPetListings'],
+//   queryFn: ownerPetListingService.getOwnerPetListings,
+// })
 const {
-  data: healthStatusData,
-  isPending: healthStatusQueryIsPending,
-  isError: healthStatusQueryIsError,
-  error: healthStatusQueryError,
+  data: ownerPetListingDocumentData,
+  isPending: ownerPetListingDocumentQueryIsPending,
+  isError: ownerPetListingDocumentQueryIsError,
 } = useQuery({
-  queryKey: ['healthStatuses'],
-  queryFn: healthStatusService.getHealthStatuses,
+  queryKey: ['ownerPetListingDocuments'],
+  queryFn: ownerPetListingDocumentService.getOwnerPetListingDocuments,
 })
+
+const {
+  data: ownerSurrenderReasonData,
+  isPending: ownerSurrenderReasonQueryIsPending,
+  isError: ownerSurrenderReasonQueryIsError,
+  error: ownerSurrenderReasonQueryError,
+} = useQuery({
+  queryKey: ['ownerSurrenderReasons'],
+  queryFn: ownerSurrenderReasonService.getOwnerSurrenderReasons,
+})
+
 </script>
 
 <template>
   <DefaultContainer>
     <DefaultHeader />
-    <div v-if="healthStatusQueryIsPending">Loading ..</div>
+    <!-- <div v-if="healthStatusQueryIsPending">Loading ..</div>
     <div v-else-if="healthStatusQueryIsError">Error: {{ healthStatusQueryError }}</div>
     <div v-else-if="healthStatusData">
       <h1 v-for="healthStatus in healthStatusData" :key="healthStatus.id">
         {{ healthStatus.name }}
       </h1>
     </div>
+    <div v-if="adoptionStatusQueryIsPending">Loading ..</div>
+    <div v-else-if="adoptionStatusQueryIsError">Error: {{ adoptionStatusQueryError }}</div>
+    <div v-else-if="adoptionStatusData">
+      <h1 v-for="adoptionStatus in adoptionStatusData" :key="adoptionStatus.id">
+        {{ adoptionStatus.name }}
+      </h1>
+    </div> -->
+    <!-- <div v-if="adoptionQueryIsPending">Loading ..</div>
+    <div v-else-if="adoptionQueryIsError">Error: {{ adoptionQueryIsError }}</div>
+    <div v-else-if="adoptionData">
+      <h1 v-for="adoption in adoptionData" :key="adoption.id">
+        {{ adoption.pet.name }}
+      </h1>
+    </div>
+    <div v-if="veternarianQueryIsPending">Loading ..</div>
+    <div v-else-if="veternarianQueryIsError">Error: {{ veternarianQueryIsError }}</div>
+    <div v-else-if="veternarianData">
+      <h1 v-for="veternarian in veternarianData" :key="veternarian.id">
+        {{ veternarian.name }}
+      </h1>
+    </div>
+    <div v-if="vaccinationQueryIsPending">Loading ..</div>
+    <div v-else-if="vaccinationQueryIsError">Error: {{ vaccinationQueryIsError }}</div>
+    <div v-else-if="vaccinationData">
+      <h1 v-for="vaccination in vaccinationData" :key="vaccination.id">
+        {{ vaccination.vaccineName }}
+      </h1>
+    </div>
+    <div v-if="veterinarianSpecializationQueryIsPending">Loading ..</div>
+    <div v-else-if="veterinarianSpecializationQueryIsError">Error: {{ veterinarianSpecializationQueryIsError }}</div>
+    <div v-else-if="veterinarianSpecializationData">
+      <h1 v-for="veterinarianSpecialization in veterinarianSpecializationData" :key="veterinarianSpecialization.id">
+        {{ veterinarianSpecialization.specialization }}
+      </h1>
+    </div>
+    <div v-if="medicalConditionQueryIsPending">Loading ..</div>
+    <div v-else-if="medicalConditionQueryIsError">Error: {{ medicalConditionQueryIsError }}</div>
+    <div v-else-if="medicalConditionData">
+      <h1 v-for="medicalCondition in medicalConditionData" :key="medicalCondition.id">
+        {{ medicalCondition.conditionName }}
+      </h1>
+    </div>
+
+    <div v-if="ownerPetListingQueryIsPending">Loading ..</div>
+    <div v-else-if="ownerPetListingQueryIsError">Error: {{ ownerPetListingQueryIsError }}</div>
+    <div v-else-if="ownerPetListingData">
+      <h1 v-for="ownerPetListing in ownerPetListingData" :key="ownerPetListing.id">
+        {{ ownerPetListing.adopter.address }}
+      </h1>
+    </div> -->
+
+    <div v-if="ownerPetListingDocumentQueryIsPending">Loading ..</div>
+    <div v-else-if="ownerPetListingDocumentQueryIsError">Error: {{ ownerPetListingDocumentQueryIsError }}</div>
+    <div v-else-if="ownerPetListingDocumentData">
+      <h1 v-for="ownerPetListingDocument in ownerPetListingDocumentData" :key="ownerPetListingDocument.id">
+        {{ ownerPetListingDocument.documentType }}
+      </h1>
+    </div>
+
+    <div v-if="ownerSurrenderReasonQueryIsPending">Loading ..</div>
+    <div v-else-if="ownerSurrenderReasonQueryIsError">Error: {{ ownerSurrenderReasonQueryError }}</div>
+    <div v-else-if="ownerSurrenderReasonData">
+      <h1 v-for="ownerSurrenderReason in ownerSurrenderReasonData" :key="ownerSurrenderReason.id">
+        {{ ownerSurrenderReason.description }}
+      </h1>
+    </div>
+
     <AdoptionSearchForm
       :is-loading="petTypeQueryIsPending || petGenderQueryIsPending || petSizeQueryIsPending"
       :is-error="petTypeQueryError || petGenderQueryError || petSizeQueryError"
@@ -82,9 +240,9 @@ const {
       :pet-type-data="petTypeData"
     />
     <PetGrid
-      :is-loading="adoptionQueryIsPending"
-      :is-error="adoptionQueryIsError"
-      :listings="adoptionData"
+      :is-loading="shelterListingQueryIsPending"
+      :is-error="shelterListingQueryIsError"
+      :listings="shelterListingData"
     />
   </DefaultContainer>
 </template>
