@@ -12,6 +12,7 @@ import petTypesService from '@/services/petTypes-service'
 import petGendersService from '@/services/petGender-service'
 import shelterListingService from '@/services/shelterListings-service'
 import healthStatusService from '@/services/healthStatus-service'
+import adoptionStatusService from '@/services/adoptionStatus-service'
 
 const {
   data: petTypeData,
@@ -62,16 +63,26 @@ const {
   queryKey: ['healthStatuses'],
   queryFn: healthStatusService.getHealthStatuses,
 })
+
+const {
+  data: adoptionStatusData,
+  isPending: adoptionStatusQueryIsPending,
+  isError: adoptionStatusQueryIsError,
+  error: adoptionStatusQueryError,
+} = useQuery({
+  queryKey: ['adoptionStatuses'],
+  queryFn: adoptionStatusService.getAdoptionStatuses,
+})
 </script>
 
 <template>
   <DefaultContainer>
     <DefaultHeader />
-    <div v-if="healthStatusQueryIsPending">Loading ..</div>
-    <div v-else-if="healthStatusQueryIsError">Error: {{ healthStatusQueryError }}</div>
-    <div v-else-if="healthStatusData">
-      <h1 v-for="healthStatus in healthStatusData" :key="healthStatus.id">
-        {{ healthStatus.name }}
+    <div v-if="adoptionStatusQueryIsPending">Loading ..</div>
+    <div v-else-if="adoptionStatusQueryIsError">Error: {{ adoptionStatusQueryError }}</div>
+    <div v-else-if="adoptionStatusData">
+      <h1 v-for="adoptionStatus in adoptionStatusData" :key="adoptionStatus.id">
+        {{ adoptionStatus.name }}
       </h1>
     </div>
     <AdoptionSearchForm
