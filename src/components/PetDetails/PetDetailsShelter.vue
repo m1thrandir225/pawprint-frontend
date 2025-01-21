@@ -26,7 +26,7 @@
         <span class="ml-2 text-foreground">{{ shelter.email }}</span>
       </p>
     </div>
-    <div class="flex items-center w-full space-x-4">
+    <div class="flex items-center w-full space-x-4" v-if="shelter.phoneNumber !== null">
       <Phone class="text-accent" />
       <p class="font-generalSans text-[16px]">
         <span class="font-semibold text-accent">Phone Number: </span>
@@ -37,7 +37,9 @@
       <PowerOff class="text-accent" />
       <p class="font-generalSans text-[16px]">
         <span class="font-semibold text-accent">Is a no kill shelter: </span>
-        <span class="ml-2 text-foreground">{{ shelter.isNoKill }}</span>
+        <span class="ml-2 text-foreground">{{
+          capitalizeFirstLetter(shelter.isNoKill.toString())
+        }}</span>
       </p>
     </div>
     <div
@@ -57,6 +59,7 @@
 import type { Shelter } from '@/types/models/shelter'
 import PetDetailsMap from './PetDetailsMap.vue'
 import { Globe, MapPinHouse, PackageOpen, Phone, PowerOff, Send } from 'lucide-vue-next'
+import { capitalizeFirstLetter } from '@/lib/utils'
 
 defineProps<{
   shelter: Shelter

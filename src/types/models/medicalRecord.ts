@@ -1,3 +1,5 @@
+import type { MedicalCondition } from './medicalCondition'
+import type { Vaccination } from './vaccination'
 import type { Veterinarian } from './veterinarian'
 
 export type MedicalRecord = {
@@ -7,4 +9,6 @@ export type MedicalRecord = {
   microchipNumber: string | null
   createdAt: string
   veterinarian: Veterinarian
+  medicalConditions: MedicalCondition[]
+  vaccinations: Vaccination[]
 }

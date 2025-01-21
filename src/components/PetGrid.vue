@@ -11,6 +11,7 @@
       :key="listing.id"
       :pet="listing.pet"
       :listing-id="listing.id"
+      :is-owner-listing="isOwnerPetListing(listing)"
     />
   </div>
 </template>
@@ -19,10 +20,15 @@
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { LoaderCircle } from 'lucide-vue-next'
 import PetCard from './PetCard.vue'
+import type { OwnerPetListing } from '@/types/models/ownerPetListing'
 
 defineProps<{
   isLoading: boolean
   isError: boolean
-  listings: ShelterPetListing[] | undefined
+  listings: (OwnerPetListing | ShelterPetListing)[]
 }>()
+
+function isOwnerPetListing(item: ShelterPetListing | OwnerPetListing): item is OwnerPetListing {
+  return 'surrenderReason' in item // Replace with an actual unique field of OwnerPetListing
+}
 </script>
