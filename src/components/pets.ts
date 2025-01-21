@@ -10,7 +10,7 @@ const dummyPets: Pet[] = [
     imageShowcase: [
       'https://images.unsplash.com/photo-1721327900411-b315dce4388e?q=80&w=2980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ],
-    age_years: 4,
+    ageYears: 4,
     petType: {
       id: '1',
       name: 'dog',
@@ -36,7 +36,7 @@ const dummyPets: Pet[] = [
     goodWithDogs: true,
     energyLevel: 8,
     specialRequirements: null,
-    behavioralNotes: 'Loves fetch and is highly energetic.',
+    behaviorialNotes: 'Loves fetch and is highly energetic.',
     intakeDate: '2024-11-15',
   },
   {
@@ -48,7 +48,7 @@ const dummyPets: Pet[] = [
     imageShowcase: [
       'https://images.unsplash.com/photo-1721327900411-b315dce4388e?q=80&w=2980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ],
-    age_years: 2,
+    ageYears: 2,
     petType: {
       id: '2',
       name: 'cat',
@@ -74,7 +74,7 @@ const dummyPets: Pet[] = [
     goodWithDogs: false,
     energyLevel: 5,
     specialRequirements: 'Requires a calm environment.',
-    behavioralNotes: 'Loves being petted and enjoys naps in the sun.',
+    behaviorialNotes: 'Loves being petted and enjoys naps in the sun.',
     intakeDate: '2024-10-10',
   },
   {
@@ -86,7 +86,7 @@ const dummyPets: Pet[] = [
     imageShowcase: [
       'https://images.unsplash.com/photo-1721327900411-b315dce4388e?q=80&w=2980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ],
-    age_years: 3,
+    ageYears: 3,
     petType: {
       id: '1',
       name: 'dog',
@@ -112,7 +112,7 @@ const dummyPets: Pet[] = [
     goodWithDogs: true,
     energyLevel: 6,
     specialRequirements: 'Daily medication for arthritis.',
-    behavioralNotes: 'Calm and friendly.',
+    behaviorialNotes: 'Calm and friendly.',
     intakeDate: '2024-09-20',
   },
   {
@@ -124,7 +124,7 @@ const dummyPets: Pet[] = [
     imageShowcase: [
       'https://images.unsplash.com/photo-1721327900411-b315dce4388e?q=80&w=2980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ],
-    age_years: 1,
+    ageYears: 1,
     petType: {
       id: '2',
       name: 'cat',
@@ -150,7 +150,7 @@ const dummyPets: Pet[] = [
     goodWithDogs: false,
     energyLevel: 7,
     specialRequirements: null,
-    behavioralNotes: 'Shy but warms up quickly.',
+    behaviorialNotes: 'Shy but warms up quickly.',
     intakeDate: '2024-12-01',
   },
 ]
