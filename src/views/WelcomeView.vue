@@ -19,8 +19,9 @@ import shelterListingService from '@/services/shelterListings-service'
 // import type { Vaccination } from '@/types/models/vaccination'
 //import veterinarianSpecializationService from '@/services/veterinarianSpecialization-service'
 //import type { VeterinarianSpecialization } from '@/types/models/veterinarianSpecialization'
-import medicalConditionService from '@/services/medicalCondition-service'
-import ownerPetListingService from '@/services/ownerPetListing-service'
+// import medicalConditionService from '@/services/medicalCondition-service'
+// import ownerPetListingService from '@/services/ownerPetListing-service'
+import ownerPetListingDocumentService from '@/services/ownerPetListingDocument-service'
 
 const {
   data: petTypeData,
@@ -116,21 +117,29 @@ const {
 //   queryKey: ['VeterinarianSpecializations'],
 //   queryFn: veterinarianSpecializationService.getVeterinarianSpecializations,
 // })
+// const {
+//   data: medicalConditionData,
+//   isPending: medicalConditionQueryIsPending,
+//   isError: medicalConditionQueryIsError,
+// } = useQuery({
+//   queryKey: ['MedicalConditions'],
+//   queryFn: medicalConditionService.getMedicalConditions,
+// })
+// const {
+//   data: ownerPetListingData,
+//   isPending: ownerPetListingQueryIsPending,
+//   isError: ownerPetListingQueryIsError,
+// } = useQuery({
+//   queryKey: ['OwnerPetListings'],
+//   queryFn: ownerPetListingService.getOwnerPetListings,
+// })
 const {
-  data: medicalConditionData,
-  isPending: medicalConditionQueryIsPending,
-  isError: medicalConditionQueryIsError,
+  data: ownerPetListingDocumentData,
+  isPending: ownerPetListingDocumentQueryIsPending,
+  isError: ownerPetListingDocumentQueryIsError,
 } = useQuery({
-  queryKey: ['MedicalConditions'],
-  queryFn: medicalConditionService.getMedicalConditions,
-})
-const {
-  data: ownerPetListingData,
-  isPending: ownerPetListingQueryIsPending,
-  isError: ownerPetListingQueryIsError,
-} = useQuery({
-  queryKey: ['OwnerPetListings'],
-  queryFn: ownerPetListingService.getOwnerPetListings,
+  queryKey: ['OwnerPetListingDocuments'],
+  queryFn: ownerPetListingDocumentService.getOwnerPetListingDocuments,
 })
 
 </script>
@@ -179,7 +188,7 @@ const {
       <h1 v-for="veterinarianSpecialization in veterinarianSpecializationData" :key="veterinarianSpecialization.id">
         {{ veterinarianSpecialization.specialization }}
       </h1>
-    </div> -->
+    </div>
     <div v-if="medicalConditionQueryIsPending">Loading ..</div>
     <div v-else-if="medicalConditionQueryIsError">Error: {{ medicalConditionQueryIsError }}</div>
     <div v-else-if="medicalConditionData">
@@ -193,6 +202,14 @@ const {
     <div v-else-if="ownerPetListingData">
       <h1 v-for="ownerPetListing in ownerPetListingData" :key="ownerPetListing.id">
         {{ ownerPetListing.adopter.address }}
+      </h1>
+    </div> -->
+
+    <div v-if="ownerPetListingDocumentQueryIsPending">Loading ..</div>
+    <div v-else-if="ownerPetListingDocumentQueryIsError">Error: {{ ownerPetListingDocumentQueryIsError }}</div>
+    <div v-else-if="ownerPetListingDocumentData">
+      <h1 v-for="ownerPetListingDocument in ownerPetListingDocumentData" :key="ownerPetListingDocument.id">
+        {{ ownerPetListingDocument.documentType }}
       </h1>
     </div>
 
