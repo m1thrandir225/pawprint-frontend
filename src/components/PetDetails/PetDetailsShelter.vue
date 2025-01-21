@@ -50,9 +50,6 @@
         <span class="ml-2 text-foreground">{{ shelter.website }}</span>
       </p>
     </div>
-    <Button class="w-full">
-      <h1>Apply for adoption</h1>
-    </Button>
   </div>
 </template>
 
@@ -60,7 +57,6 @@
 import type { Shelter } from '@/types/models/shelter'
 import PetDetailsMap from './PetDetailsMap.vue'
 import { Globe, MapPinHouse, PackageOpen, Phone, PowerOff, Send } from 'lucide-vue-next'
-import { Button } from '../ui/button'
 
 defineProps<{
   shelter: Shelter

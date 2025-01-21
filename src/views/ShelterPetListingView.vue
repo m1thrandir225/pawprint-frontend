@@ -12,6 +12,9 @@
         <div class="w-full h-full col-span-1">
           <div class="w-full h-auto border border-1 rounded-[16px] p-4">
             <PetDetailsShelter :shelter="data.shelter" />
+            <Button class="w-full">
+              <h1>Apply for adoption</h1>
+            </Button>
           </div>
         </div>
       </div>
@@ -25,6 +28,7 @@ import DefaultHeader from '@/components/Global/DefaultHeader.vue'
 import PetDetailsInfo from '@/components/PetDetails/PetDetailsInfo.vue'
 import PetDetailsMedicalRecord from '@/components/PetDetails/PetDetailsMedicalRecord.vue'
 import PetDetailsShelter from '@/components/PetDetails/PetDetailsShelter.vue'
+import { Button } from '@/components/ui/button'
 import shelterListingService from '@/services/shelterListings-service'
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { useQuery } from '@tanstack/vue-query'
