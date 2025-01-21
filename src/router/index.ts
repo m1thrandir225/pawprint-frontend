@@ -7,7 +7,7 @@ import RegisterShelterView from '@/views/RegisterShelterView.vue'
 import WelcomeView from '@/views/WelcomeView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import useAuthStore from '@/stores/auth-store'
-import AdoptionDetails from '@/views/AdoptionDetails.vue'
+import PetDetailsView from '@/views/PetDetailsView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -48,9 +48,9 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/adoption/:id',
-      name: 'adoption',
-      component: AdoptionDetails,
+      path: '/listing/:id',
+      name: 'listing',
+      component: PetDetailsView,
       meta: { requiresAuth: true },
     },
     {

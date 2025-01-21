@@ -19,7 +19,6 @@
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { LoaderCircle } from 'lucide-vue-next'
 import PetCard from './PetCard.vue'
-import dummyPets from './pets'
 
 defineProps<{
   isLoading: boolean

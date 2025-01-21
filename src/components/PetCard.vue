@@ -1,6 +1,6 @@
 <template>
   <RouterLink
-    :to="{ name: 'adoption', params: { id: listingId } }"
+    :to="{ name: 'listing', params: { id: listingId } }"
     class="w-full h-full p-4 transition-all duration-100 ease-in-out border border-outline hover:bg-primaryContainer group"
   >
     <img :src="pet.avatarImg" :alt="pet.name" class="object-cover w-full h-[250px]" />
