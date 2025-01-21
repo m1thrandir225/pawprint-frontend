@@ -13,7 +13,10 @@ import petGendersService from '@/services/petGender-service'
 import shelterListingService from '@/services/shelterListings-service'
 // import healthStatusService from '@/services/healthStatus-service'
 // import adoptionStatusService from '@/services/adoptionStatus-service'
-import adoptionService from '@/services/adoption-service'
+// import adoptionService from '@/services/adoption-service'
+// import veternarianService from '@/services/veterinarian-service'
+import vaccinationService from '@/services/vaccination-service'
+import type { Vaccination } from '@/types/models/vaccination'
 
 const {
   data: petTypeData,
@@ -75,14 +78,33 @@ const {
 //   queryFn: adoptionStatusService.getAdoptionStatuses,
 // })
 
+// const {
+//   data: adoptionData,
+//   isPending: adoptionQueryIsPending,
+//   isError: adoptionQueryIsError,
+// } = useQuery({
+//   queryKey: ['adoptions'],
+//   queryFn: adoptionService.getAdoptions,
+// })
+
+// const {
+//   data: veternarianData,
+//   isPending: veternarianQueryIsPending,
+//   isError: veternarianQueryIsError,
+// } = useQuery({
+//   queryKey: ['veternarians'],
+//   queryFn: veternarianService.getVeterinarians,
+// })
+
 const {
-  data: adoptionData,
-  isPending: adoptionQueryIsPending,
-  isError: adoptionQueryIsError,
-} = useQuery({
-  queryKey: ['adoptions'],
-  queryFn: adoptionService.getAdoptions,
+  data: vaccinationData,
+  isPending: vaccinationQueryIsPending,
+  isError: vaccinationQueryIsError,
+} = useQuery<Vaccination[]>({
+  queryKey: ['vaccinations'],
+  queryFn: vaccinationService.getVaccinations,
 })
+
 </script>
 
 <template>
@@ -102,13 +124,28 @@ const {
         {{ adoptionStatus.name }}
       </h1>
     </div> -->
-    <div v-if="adoptionQueryIsPending">Loading ..</div>
+    <!-- <div v-if="adoptionQueryIsPending">Loading ..</div>
     <div v-else-if="adoptionQueryIsError">Error: {{ adoptionQueryIsError }}</div>
     <div v-else-if="adoptionData">
       <h1 v-for="adoption in adoptionData" :key="adoption.id">
         {{ adoption.pet.name }}
       </h1>
     </div>
+    <div v-if="veternarianQueryIsPending">Loading ..</div>
+    <div v-else-if="veternarianQueryIsError">Error: {{ veternarianQueryIsError }}</div>
+    <div v-else-if="veternarianData">
+      <h1 v-for="veternarian in veternarianData" :key="veternarian.id">
+        {{ veternarian.name }}
+      </h1>
+    </div> -->
+    <div v-if="vaccinationQueryIsPending">Loading ..</div>
+    <div v-else-if="vaccinationQueryIsError">Error: {{ vaccinationQueryIsError }}</div>
+    <div v-else-if="vaccinationData">
+      <h1 v-for="vaccination in vaccinationData" :key="vaccination.id">
+        {{ vaccination.vaccineName }}
+      </h1>
+    </div>
+
     <AdoptionSearchForm
       :is-loading="petTypeQueryIsPending || petGenderQueryIsPending || petSizeQueryIsPending"
       :is-error="petTypeQueryError || petGenderQueryError || petSizeQueryError"
