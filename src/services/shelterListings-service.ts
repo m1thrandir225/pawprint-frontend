@@ -17,6 +17,12 @@ const shelterListingService = {
       url: `${SHELTER_LISTING_API_URL}/${id}`,
       method: 'GET',
     }),
+  getListingsByShelter: (shelterId: string) =>
+    apiRequest<ShelterPetListing[]>({
+      url: `${SHELTER_LISTING_API_URL}/shelter/${shelterId}`,
+      method: 'GET',
+      protected: true,
+    }),
 }
 
 export default shelterListingService

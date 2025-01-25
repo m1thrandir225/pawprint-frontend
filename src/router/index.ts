@@ -11,6 +11,7 @@ import ShelterPetListingView from '@/views/ShelterPetListingView.vue'
 import OwnerPetListingView from '@/views/OwnerPetListingView.vue'
 import CreateShelterPetListing from '@/views/CreateShelterPetListing.vue'
 import CreateOwnerPetListing from '@/views/CreateOwnerPetListing.vue'
+import MyListingsView from '@/views/MyListingsView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -72,6 +73,12 @@ const router = createRouter({
       path: '/create-owner-listing',
       name: 'createOwnerListing',
       component: CreateOwnerPetListing,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/my-listings',
+      name: 'myListings',
+      component: MyListingsView,
       meta: { requiresAuth: true },
     },
     {

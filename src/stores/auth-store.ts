@@ -18,6 +18,13 @@ const useAuthStore = defineStore('auth', () => {
     },
   })
 
+  const userType = computed(() => {
+    if (!user.value) return null
+
+    if (user.value.hasOwnProperty('isNoKill')) return 'shelter'
+    else return 'user'
+  })
+
   const tokens = useStorage<AuthTokens | null>('authTokens', null, localStorage, {
     serializer: {
       read: (v: string) => (v ? JSON.parse(v) : null),
@@ -84,6 +91,7 @@ const useAuthStore = defineStore('auth', () => {
 
   return {
     user,
+    userType,
     accessToken,
     refreshToken,
     isAuthenticated,

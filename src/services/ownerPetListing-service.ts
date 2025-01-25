@@ -17,6 +17,12 @@ const ownerPetListingService = {
       method: 'GET',
       protected: true,
     }),
+  getListingsByOwner: (ownerId: string) =>
+    apiRequest<OwnerPetListing[]>({
+      url: `${OWNER_PETLISTING_API_URL}/owner/${ownerId}`,
+      method: 'GET',
+      protected: true,
+    }),
 }
 
 export default ownerPetListingService
