@@ -4,8 +4,7 @@ import DefaultError from '@/components/Global/DefaultError.vue'
 import DefaultHeader from '@/components/Global/DefaultHeader.vue'
 import DefaultLodaer from '@/components/Global/DefaultLoader.vue'
 import DefaultTitle from '@/components/Global/DefaultTitle.vue'
-import OwnerPetListingGrid from '@/components/MyListings/OwnerPetListingGrid.vue'
-import ShelterPetListingGrid from '@/components/MyListings/PetListingGrid.vue'
+import ListingGrid from '@/components/MyListings/PetListingGrid.vue'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import shelterListingService from '@/services/shelterListings-service'
 import useAuthStore from '@/stores/auth-store'
@@ -41,7 +40,7 @@ const {
     <DefaultError v-else-if="isError" :error="error!.message" />
     <div v-else-if="listings" class="flex flex-col items-start w-full gap-8">
       <DefaultTitle text="My Listings" />
-      <ShelterPetListingGrid :listings="listings" />
+      <ListingGrid :listings="listings" />
     </div>
   </DefaultContainer>
 </template>

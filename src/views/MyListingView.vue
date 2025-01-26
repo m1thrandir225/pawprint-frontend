@@ -37,7 +37,7 @@ import adoptionService from '@/services/adoption-service'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import shelterListingService from '@/services/shelterListings-service'
 import useAuthStore from '@/stores/auth-store'
-import { Adoption } from '@/types/models/adoption'
+import type { Adoption } from '@/types/models/adoption'
 import type { OwnerPetListing } from '@/types/models/ownerPetListing'
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { useQuery } from '@tanstack/vue-query'
@@ -68,7 +68,7 @@ const enabled = computed(() => !!listing.value?.petId)
 
 const {
   data: adoptionData,
-  isPending: isAdoptionDataLoading,
+
   error: adoptionDataError,
   isError: isAdoptionDataError,
 } = useQuery<Adoption[]>({
