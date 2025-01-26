@@ -5,6 +5,7 @@ import type { Shelter } from './shelter'
 export type ShelterPetListing = {
   id: string
   pet: Pet
+  petId: string
   medicalRecord: MedicalRecord
   shelter: Shelter
   intakeDate: string | null

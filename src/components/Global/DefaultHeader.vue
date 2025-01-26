@@ -5,7 +5,7 @@
       <DefaultRouteLink to="/login" text="Login" />
       <DefaultRouteLink to="/register" text="Register" />
     </div>
-    <div v-else>
+    <div v-else class="flex flex-row items-center gap-2">
       <DefaultRouteLink to="/my-listings" text="My Listings" />
       <Button variant="link" @click="logout">
         <LogOut class="w-6 h-6" />

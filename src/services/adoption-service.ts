@@ -11,6 +11,12 @@ const adoptionService = {
       method: 'GET',
       protected: true,
     }),
+  getAdoptionsForPet: (petId: string) =>
+    apiRequest<Adoption[]>({
+      url: `${ADOPTION_API_URL}/pet/${petId}`,
+      method: 'GET',
+      protected: true,
+    }),
 }
 
 export default adoptionService

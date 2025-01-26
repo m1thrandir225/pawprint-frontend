@@ -11,11 +11,12 @@ const ownerPetListingService = {
       method: 'GET',
       protected: true,
     }),
-  getOwnerPetListing: (id: string) =>
+  getOwnerPetListing: (id: string, params?: Record<string, string>) =>
     apiRequest<OwnerPetListing>({
       url: `${OWNER_PETLISTING_API_URL}/${id}`,
       method: 'GET',
       protected: true,
+      params: params,
     }),
   getListingsByOwner: (ownerId: string) =>
     apiRequest<OwnerPetListing[]>({
