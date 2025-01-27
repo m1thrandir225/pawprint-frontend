@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import { Toaster } from '@/components/ui/sonner'
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import { RouterView } from 'vue-router'
       <transition name="fade" mode="out-in">
         <component :is="Component" :key="route.path" />
       </transition>
+      <Toaster class="pointer-events-auto" />
     </RouterView>
   </div>
 </template>

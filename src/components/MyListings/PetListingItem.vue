@@ -1,14 +1,13 @@
 <template>
   <Card class="w-full rounded-none border-accent">
     <CardHeader>
+      <img :src="item.pet.avatarImg" :alt="item.pet.name" class="w-full h-auto max-h-[300px]" />
       <div class="flex flex-row items-center justify-between w-full">
         <div class="flex flex-col items-start gap-2">
           <CardTitle>
             {{ item.pet.name }}
           </CardTitle>
-          <CardDescription>
-            {{ item.pet.breed }}
-          </CardDescription>
+          <CardDescription> {{ item.pet.petType.name }} {{ item.pet.breed }} </CardDescription>
         </div>
         <div class="flex flex-row items-center gap-2">
           <Button as-child variant="default">
@@ -18,18 +17,47 @@
             </RouterLink>
           </Button>
           <Button as-child variant="secondary">
-            <RouterLink to="/welcome">
+            <RouterLink :to="{ name: 'editMyListing', params: { id: item.id } }">
               <span class="sr-only"> Edit </span>
               <Edit2 class="w-6 h-6" />
             </RouterLink>
           </Button>
-          <Button as-child variant="destructive">
-            <RouterLink to="/welcome">
-              <span class="sr-only"> Delete </span>
+          <Dialog>
+            <DialogTrigger as-child>
+              <Button variant="destructive">
+                <span class="sr-only"> Delete </span>
 
-              <Trash2 class="w-6 h-6" />
-            </RouterLink>
-          </Button>
+                <Trash2 class="w-6 h-6" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              @interact-outside="
+                (event) => {
+                  const target = event.target as HTMLElement
+                  if (target?.closest('[data-sonner-toaster]')) return event.preventDefault()
+                }
+              "
+            >
+              <DialogHeader>
+                <DialogTitle> Delete Listing </DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete the current listing ?</DialogDescription
+                >
+              </DialogHeader>
+              <DialogFooter class="flex flex-row items-center justify-end gap-2">
+                <DialogClose as-child>
+                  <Button variant="destructive" @click="mutateAsync" :disabled="isPending">
+                    <Loader2 v-if="isPending" class="w-6 h-6 animate-spin" />
+                    <span v-else> Delete </span>
+                  </Button>
+                </DialogClose>
+
+                <DialogClose as-child>
+                  <Button variant="secondary"> Cancel </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </CardHeader>
@@ -41,9 +69,47 @@ import type { OwnerPetListing } from '@/types/models/ownerPetListing'
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
-import { Edit2, Eye, Trash2 } from 'lucide-vue-next'
+import { Edit2, Eye, Loader2, Trash2 } from 'lucide-vue-next'
+import useAuthStore from '@/stores/auth-store'
+import { useMutation } from '@tanstack/vue-query'
+import shelterListingService from '@/services/shelterListings-service'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
+import ownerPetListingService from '@/services/ownerPetListing-service'
+import { toast } from 'vue-sonner'
 
-defineProps<{
+const props = defineProps<{
   item: OwnerPetListing | ShelterPetListing
+  refetch: () => void
 }>()
+
+const { userType } = useAuthStore()
+
+const { mutateAsync, isPending } = useMutation({
+  mutationKey: ['deleteListing', props.item.id],
+  mutationFn: () => {
+    if (userType === 'shelter') {
+      return shelterListingService.deleteShelterListing(props.item.id)
+    } else if (userType === 'user') {
+      return ownerPetListingService.deleteOwnerPetListing(props.item.id)
+    } else {
+      throw new Error('Invalid user type')
+    }
+  },
+  onSuccess: ({}) => {
+    toast.success('Listing deleted successfully')
+    props.refetch()
+  },
+  onError: (error) => {
+    toast.error("Couldn't delete listing: " + error.message)
+  },
+})
 </script>

@@ -24,6 +24,12 @@ const shelterListingService = {
       method: 'GET',
       protected: true,
     }),
+  deleteShelterListing: (id: string) =>
+    apiRequest<boolean>({
+      url: `${SHELTER_LISTING_API_URL}/${id}`,
+      method: 'DELETE',
+      protected: true,
+    }),
 }
 
 export default shelterListingService

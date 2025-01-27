@@ -24,6 +24,12 @@ const ownerPetListingService = {
       method: 'GET',
       protected: true,
     }),
+  deleteOwnerPetListing: (id: string) =>
+    apiRequest<boolean>({
+      url: `${OWNER_PETLISTING_API_URL}/${id}`,
+      method: 'DELETE',
+      protected: true,
+    }),
 }
 
 export default ownerPetListingService

@@ -2,7 +2,7 @@
   <Card class="w-full rounded-none border-accent">
     <CardHeader>
       <CardTitle>Adoptions</CardTitle>
-      <CardDescription>Adoptions for this pet</CardDescription>
+      <CardDescription>All submissions for the pet.</CardDescription>
     </CardHeader>
     <CardContent class="flex flex-col w-full gap-3">
       <Table>

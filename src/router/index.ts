@@ -89,6 +89,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/my-listings/:id/edit',
+      name: 'editMyListing',
+      component: CreateShelterPetListing,
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'notFound',
       component: NotFoundView,

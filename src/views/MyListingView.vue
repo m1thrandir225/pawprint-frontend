@@ -12,7 +12,7 @@
         <div class="flex flex-row items-center justify-between w-full">
           <DefaultBackButton />
           <Button as-child variant="link">
-            <RouterLink to="welcome">
+            <RouterLink :to="{ name: 'editMyListing', params: { id: listing.id } }">
               <span class="">Edit</span>
             </RouterLink>
           </Button>
