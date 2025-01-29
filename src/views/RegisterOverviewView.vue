@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-screen h-screen gap-6">
+  <div class="flex flex-col items-center justify-center w-full h-full gap-6">
     <div class="flex flex-col items-center justify-center gap-4">
       <DefaultTitle text="Register" />
       <DefaultParagraph text="Please select the description that fits you most." />

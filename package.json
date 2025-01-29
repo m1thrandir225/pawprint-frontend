@@ -16,6 +16,7 @@
     "@fawmi/vue-google-maps": "^0.9.79",
     "@formkit/auto-animate": "^0.8.2",
     "@tanstack/vue-query": "^5.64.1",
+    "@tanstack/vue-query-devtools": "^5.65.0",
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^12.4.0",
     "axios": "^1.7.9",

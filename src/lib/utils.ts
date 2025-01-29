@@ -16,3 +16,7 @@ export function checkFileType(file: File) {
   }
   return false
 }
+
+export function booleanToText(value: boolean): string {
+  return value ? 'Yes' : 'No'
+}

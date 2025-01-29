@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DefaultContainer from '@/components/Global/DefaultContainer.vue'
 import DefaultParagraph from '@/components/Global/DefaultParagraph.vue'
 import DefaultRouteLink from '@/components/Global/DefaultRouteLink.vue'
 import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
@@ -68,7 +67,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <DefaultContainer additional-class="flex items-center justify-center">
+  <div class="flex items-center justify-center">
     <div class="grid w-full h-full grid-cols-2">
       <div class="flex flex-col items-center justify-center w-full h-full p-8">
         <DefaultRouteLink to="/register" text="Back" class="self-start" />
@@ -189,5 +188,5 @@ const onSubmit = form.handleSubmit(async (values) => {
         />
       </div>
     </div>
-  </DefaultContainer>
+  </div>
 </template>

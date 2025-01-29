@@ -1,9 +1,7 @@
 <template>
-  <div v-if="isLoading" class="flex items-center justify-center w-full">
-    <LoaderCircle class="animate-spin" />
-  </div>
-  <div v-else-if="isError">
-    <p class="text-destructive">An error occurred</p>
+  <div v-if="isError">
+    <p v-if="error" class="text-destructive">Something went wrong: {{ error }}</p>
+    <p v-else class="text-destructive">Something went wrong</p>
   </div>
   <form
     v-else-if="petTypeData && petGenderData && petSizeData"
@@ -93,7 +91,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { LoaderCircle } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import type { PetGender } from '@/types/models/petGender'
@@ -101,8 +98,8 @@ import type { PetSize } from '@/types/models/petSize'
 import type { PetType } from '@/types/models/petType'
 
 defineProps<{
-  isLoading: boolean
   isError: boolean
+  error?: string
   petTypeData: PetType[] | undefined
   petSizeData: PetSize[] | undefined
   petGenderData: PetGender[] | undefined

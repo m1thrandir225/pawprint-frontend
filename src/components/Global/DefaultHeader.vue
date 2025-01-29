@@ -6,7 +6,9 @@
       <DefaultRouteLink to="/register" text="Register" />
     </div>
     <div v-else class="flex flex-row items-center gap-2">
+      <DefaultRouteLink to="/browse" text="Browse" />
       <DefaultRouteLink to="/my-listings" text="My Listings" />
+      <DefaultRouteLink to="/my-requests" text="My Requests" />
       <Button variant="link" @click="logout">
         <LogOut class="w-6 h-6" />
         <span class="hidden lg:block">Logout</span>
