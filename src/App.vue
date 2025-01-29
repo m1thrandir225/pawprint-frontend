@@ -7,9 +7,11 @@ import { VueQueryDevtools } from '@tanstack/vue-query-devtools'
 <template>
   <div class="w-full min-h-dvh">
     <component :is="$route.meta.layout">
-      <RouterView v-slot="{ Component, route }" :key="$route.fullPath">
+      <RouterView v-slot="{ Component, route }">
         <transition name="fade" mode="out-in">
-          <component :is="Component" :key="route.path" />
+          <div :key="route.fullPath">
+            <component :is="Component" />
+          </div>
         </transition>
         <Toaster class="pointer-events-auto" />
       </RouterView>
