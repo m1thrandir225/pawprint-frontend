@@ -5,10 +5,20 @@
   </div>
   <form
     v-else-if="petTypeData && petGenderData && petSizeData"
+    @submit="onSubmit"
     class="flex flex-row items-center justify-between w-full p-2"
   >
     <div class="flex flex-row items-center justify-start gap-8">
-      <FormField v-slot="{ componentField }" name="email">
+      <FormField v-slot="{ componentField }" name="search">
+        <FormItem class="flex flex-row items-center justify-center gap-4">
+          <FormLabel class="font-bold"> Search </FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Pet Name" v-bind="componentField" />
+          </FormControl>
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ componentField }" name="petTypeId">
         <FormItem class="flex flex-row items-center justify-center gap-4">
           <FormLabel class="font-bold">Type</FormLabel>
           <Select v-if="petTypeData" v-bind="componentField" default-value="all">
@@ -30,7 +40,7 @@
         </FormItem>
       </FormField>
 
-      <FormField v-slot="{ componentField }" name="email">
+      <FormField v-slot="{ componentField }" name="petSizeId">
         <FormItem class="flex flex-row items-center justify-center gap-4">
           <FormLabel class="font-bold">Size</FormLabel>
           <Select v-if="petSizeData" v-bind="componentField" default-value="all">
@@ -52,7 +62,7 @@
         </FormItem>
       </FormField>
 
-      <FormField v-slot="{ componentField }" name="email">
+      <FormField v-slot="{ componentField }" name="petGenderId">
         <FormItem class="flex flex-row items-center justify-center gap-4">
           <FormLabel class="font-bold">Gender</FormLabel>
           <Select v-if="petGenderData" v-bind="componentField" default-value="all">
@@ -96,6 +106,12 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import type { PetGender } from '@/types/models/petGender'
 import type { PetSize } from '@/types/models/petSize'
 import type { PetType } from '@/types/models/petType'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
+import * as z from 'zod'
+import { Input } from './ui/input'
+
+const emit = defineEmits(['submit'])
 
 defineProps<{
   isError: boolean
@@ -104,4 +120,27 @@ defineProps<{
   petSizeData: PetSize[] | undefined
   petGenderData: PetGender[] | undefined
 }>()
+
+const shcema = toTypedSchema(
+  z.object({
+    petTypeId: z.string().optional(),
+    petSizeId: z.string().optional(),
+    petGenderId: z.string().optional(),
+    search: z.string().optional(),
+  }),
+)
+
+const form = useForm({
+  validationSchema: shcema,
+  initialValues: {
+    petGenderId: '',
+    petSizeId: '',
+    petTypeId: '',
+    search: '',
+  },
+})
+
+const onSubmit = form.handleSubmit(async (values) => {
+  emit('submit', values)
+})
 </script>

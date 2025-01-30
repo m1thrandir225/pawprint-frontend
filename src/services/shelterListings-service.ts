@@ -5,11 +5,27 @@ import { apiRequest } from './api-service'
 const SHELTER_LISTING_API_URL = Config.apiURL + '/shelter-listings'
 
 const shelterListingService = {
-  getShelterListings: () =>
+  getShelterListings: ({
+    petSizeId,
+    petTypeId,
+    petGenderId,
+    search,
+  }: {
+    petSizeId: string
+    petTypeId: string
+    petGenderId: string
+    search: string
+  }) =>
     apiRequest<ShelterPetListing[]>({
       url: SHELTER_LISTING_API_URL,
       method: 'GET',
       protected: true,
+      params: {
+        'pet-type': petTypeId,
+        'pet-size': petSizeId,
+        'pet-gender': petGenderId,
+        search: search,
+      },
     }),
 
   getShelterListing: (id: string, params?: Record<string, string>) =>
