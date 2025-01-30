@@ -166,7 +166,7 @@ const onSubmit = form.handleSubmit(async (values) => {
           <FormField v-slot="{ value, handleChange }" name="isNoKill">
             <FormItem
               v-auto-animate
-              class="flex flex-row items-center justify-between p-4 border rounded-lg"
+              class="flex flex-row items-center justify-between p-4 border rounded-none"
             >
               <div class="space-y-0.5">
                 <FormLabel class="text-base"> No Kill </FormLabel>

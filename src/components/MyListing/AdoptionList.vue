@@ -24,7 +24,7 @@
             >
             <TableCell>
               <div class="flex flex-row items-center justify-center gap-4">
-                <Button variant="default" v-if="!isAdoptedAlready">
+                <Button variant="default" v-if="isAdoptedAlready">
                   <Check class="w-6 h-6 space-x-2" />
                   Approve
                 </Button>
@@ -54,7 +54,7 @@
                     </div>
                   </DialogContent>
                 </Dialog>
-                <Button variant="destructive" v-if="!isAdoptedAlready">
+                <Button variant="destructive" v-if="isAdoptedAlready">
                   <X class="w-6 h-6 space-x-2" />
                   Reject
                 </Button>

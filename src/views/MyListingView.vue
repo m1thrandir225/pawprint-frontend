@@ -37,8 +37,11 @@ import type { OwnerPetListing } from '@/types/models/ownerPetListing'
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 const authStore = useAuthStore()
+
+const route = useRoute()
 
 const {
   data: listing,
@@ -46,7 +49,7 @@ const {
   error,
   isError,
 } = useQuery<ShelterPetListing | OwnerPetListing>({
-  queryKey: ['listing'],
+  queryKey: ['listing', route.params.id],
   queryFn: ({ queryKey }) => {
     if (authStore.userType == 'shelter') {
       return shelterListingService.getShelterListing(queryKey[1] as string)

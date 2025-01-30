@@ -114,27 +114,28 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore()
+  // Redirect to login if user is not authenticated and tries to access a route that requires authentication
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    console.log('requiresAuth', to.meta.requiresAuth)
     next({
       path: '/login',
       query: { redirect: to.fullPath },
     })
   } else {
+    // Redirect to browse if user is already authenticated and tries to access login or register
     if (
-      to.name === 'login' ||
-      to.name === 'register' ||
-      to.name === 'registerUser' ||
-      to.name === 'registerShelter'
+      (to.name === 'login' ||
+        to.name === 'register' ||
+        to.name === 'registerUser' ||
+        to.name === 'registerShelter') &&
+      auth.isAuthenticated
     ) {
-      if (auth.isAuthenticated) {
-        next({ path: '/browse' })
-      } else {
-        next()
-      }
-    } else {
-      next()
+      next({ path: '/browse' })
     }
+
+    if (to.name === 'home' && auth.isAuthenticated) {
+      next({ path: '/browse' })
+    }
+    next()
   }
 })
 

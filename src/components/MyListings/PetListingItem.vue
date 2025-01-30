@@ -11,13 +11,13 @@
         </div>
         <div class="flex flex-row items-center gap-2">
           <Button as-child variant="default">
-            <RouterLink :to="{ name: 'myListing', params: { id: item.id } }">
+            <RouterLink :to="{ name: 'myListing', params: { id: props.item.id } }">
               <span class="sr-only"> Adoptions </span>
               <Eye class="w-6 h-6" />
             </RouterLink>
           </Button>
           <Button as-child variant="secondary">
-            <RouterLink :to="{ name: 'editMyListing', params: { id: item.id } }">
+            <RouterLink :to="{ name: 'editMyListing', params: { id: props.item.id } }">
               <span class="sr-only"> Edit </span>
               <Edit2 class="w-6 h-6" />
             </RouterLink>

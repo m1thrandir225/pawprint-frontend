@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CreateForm from '@/components/CreateShelterPetListing/CreateForm.vue'
-import DefaultContainer from '@/components/Global/DefaultContainer.vue'
-import DefaultHeader from '@/components/Global/DefaultHeader.vue'
+import DefaultError from '@/components/Global/DefaultError.vue'
+import DefaultLoader from '@/components/Global/DefaultLoader.vue'
 import petGendersService from '@/services/petGender-service'
 import petSizesService from '@/services/petSizes-service'
 import petTypesService from '@/services/petTypes-service'
@@ -13,7 +13,8 @@ import { useQuery } from '@tanstack/vue-query'
 const {
   data: petTypeData,
   isPending: petTypeQueryIsPending,
-  isError: petTypeQueryError,
+  isError: petTypeQueryIsError,
+  error: petTypeQueryError,
 } = useQuery<PetType[]>({
   queryKey: ['petTypes'],
   queryFn: petTypesService.getPetTypes,
@@ -23,7 +24,8 @@ const {
 const {
   data: petSizeData,
   isPending: petSizeQueryIsPending,
-  isError: petSizeQueryError,
+  isError: petSizeQueryIsError,
+  error: petSizeQueryError,
 } = useQuery<PetSize[]>({
   queryKey: ['petSizes'],
   queryFn: petSizesService.getPetSizes,
@@ -33,7 +35,8 @@ const {
 const {
   data: petGenderData,
   isPending: petGenderQueryIsPending,
-  isError: petGenderQueryError,
+  isError: petGenderQueryIsError,
+  error: petGenderQueryError,
 } = useQuery<PetGender[]>({
   queryKey: ['petGenders'],
   queryFn: petGendersService.getPetGenders,
@@ -42,19 +45,17 @@ const {
 </script>
 
 <template>
-  <DefaultContainer>
-    <DefaultHeader />
-    <div v-if="petTypeQueryIsPending || petSizeQueryIsPending || petGenderQueryIsPending">
-      <p>Loading...</p>
-    </div>
-    <div v-else-if="petTypeQueryError || petSizeQueryError || petGenderQueryError">
-      <p>There was an error loading the data</p>
-    </div>
-    <CreateForm
-      v-else-if="petGenderData && petTypeData && petSizeData"
-      :types="petTypeData"
-      :sizes="petSizeData"
-      :genders="petGenderData"
-    />
-  </DefaultContainer>
+  <DefaultLoader v-if="petTypeQueryIsPending || petSizeQueryIsPending || petGenderQueryIsPending" />
+  <DefaultError
+    v-else-if="petTypeQueryIsError || petSizeQueryIsError || petGenderQueryIsError"
+    :error="
+      petTypeQueryError?.message || petSizeQueryError?.message || petGenderQueryError?.message
+    "
+  />
+  <CreateForm
+    v-else-if="petGenderData && petTypeData && petSizeData"
+    :types="petTypeData"
+    :sizes="petSizeData"
+    :genders="petGenderData"
+  />
 </template>

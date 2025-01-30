@@ -146,7 +146,7 @@ const onSubmit = form.handleSubmit(async (values) => {
           </FormField>
 
           <FormField v-slot="{ value, handleChange }" name="hasChildren">
-            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-lg">
+            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-none">
               <div class="space-y-0.5">
                 <FormLabel class="text-base"> Have children </FormLabel>
                 <FormDescription> Do you have children? </FormDescription>
@@ -158,7 +158,7 @@ const onSubmit = form.handleSubmit(async (values) => {
           </FormField>
 
           <FormField v-slot="{ value, handleChange }" name="hasOtherPets">
-            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-lg">
+            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-none">
               <div class="space-y-0.5">
                 <FormLabel class="text-base"> Have Pets </FormLabel>
                 <FormDescription> Do you have other pets? </FormDescription>
