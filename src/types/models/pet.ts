@@ -10,7 +10,7 @@ export type Pet = {
   breed: string | null
   avatarImg: string
   imageShowcase: string[]
-  age_years: number
+  ageYears: number
   petType: PetType
   petGender: PetGender
   petSize: PetSize
@@ -21,6 +21,6 @@ export type Pet = {
   goodWithDogs: boolean
   energyLevel: number
   specialRequirements: string | null
-  behavioralNotes: string | null
+  behaviorialNotes: string | null
   intakeDate: string | null
 }

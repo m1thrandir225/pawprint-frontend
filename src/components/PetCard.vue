@@ -1,6 +1,6 @@
 <template>
   <RouterLink
-    :to="{ name: 'adoption', params: { id: listingId } }"
+    :to="{ name: isOwnerListing ? 'ownerListing' : 'shelterListing', params: { id: listingId } }"
     class="w-full h-full p-4 transition-all duration-100 ease-in-out border border-outline hover:bg-primaryContainer group"
   >
     <img :src="pet.avatarImg" :alt="pet.name" class="object-cover w-full h-[250px]" />
@@ -18,6 +18,7 @@ import type { Pet } from '@/types/models/pet'
 import { RouterLink } from 'vue-router'
 
 defineProps<{
+  isOwnerListing?: boolean
   listingId: string
   pet: Pet
 }>()

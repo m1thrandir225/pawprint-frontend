@@ -1,11 +1,11 @@
 import { Config } from '@/utils/config'
-import { api } from './api-service'
+import { apiRequest } from './api-service'
 import type { PetType } from '@/types/models/petType'
 
 const PET_TYPES_URL = Config.apiURL + '/pet-types'
 
 const petTypesService = {
-  getPetTypes: () => api<PetType[]>({ url: PET_TYPES_URL, method: 'GET' }),
+  getPetTypes: () => apiRequest<PetType[]>({ url: PET_TYPES_URL, method: 'GET', protected: true }),
 }
 
 export default petTypesService

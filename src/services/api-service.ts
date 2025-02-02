@@ -1,57 +1,125 @@
-import { useTokenStore } from '@/stores/token-store'
-import { useUserStore } from '@/stores/user-store'
-import type { ApiError } from '@/types/api'
+import useAuthStore from '@/stores/auth-store'
+import type { ApiRequestConfig, RefreshTokenResponse } from '@/types/services/auth'
 import { Config } from '@/utils/config'
-import axios, { AxiosError, type AxiosRequestConfig } from 'axios'
-import authService from './auth-service'
+import axios, { AxiosError, type AxiosInstance } from 'axios'
 
-const axiosInstance = axios.create({
-  baseURL: Config.apiURL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    _retry?: boolean
+  }
+}
 
 const handleRefreshToken = async (refreshToken: string, email: string) => {
-  const tokenStore = useTokenStore()
-  const tokens = await authService.refreshToken({ refreshToken: refreshToken, email: email })
+  const response = await axios.post<RefreshTokenResponse>(`${Config.apiURL}/auth/refresh`, {
+    refreshToken,
+    email,
+  })
 
-  if (!tokens) {
-    tokenStore.clearTokens()
-    return Promise.reject(new Error('Unauthorized'))
-  }
+  const { accessToken, accessTokenExpirationTime } = response.data
 
-  tokenStore.setAccessToken(tokens.accessToken, tokens.accessTokenExpirationTime)
+  return { accessToken, accessTokenExpirationTime }
 }
 
-export async function api<T>(options: AxiosRequestConfig): Promise<T> {
-  const tokenStore = useTokenStore()
-  const userStore = useUserStore()
-  const accessToken = tokenStore.getAccessToken()
-  try {
-    const response = await axiosInstance.request<T>({
-      ...options,
-      headers: {
-        ...options.headers,
-        ...(options.headers?.Authorization ? {} : { Authorization: `Bearer ${accessToken}` }),
-      },
-    })
-    return response.data
-  } catch (error) {
-    const axiosError = error as AxiosError<ApiError>
-    if (axiosError.response?.status === 401) {
-      // Handle refresh token logic here
-      const userEmail = userStore.getUserEmail()
-      const refreshToken = tokenStore.getRefreshToken()
-      if (!refreshToken || !userEmail) {
-        userStore.clearUser()
-        tokenStore.clearTokens()
-        return Promise.reject(new Error('Unauthorized'))
+const createApiInstance = (): AxiosInstance => {
+  const api = axios.create({
+    baseURL: Config.apiURL,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  // Request interceptor
+  api.interceptors.request.use(
+    (config) => {
+      const authStore = useAuthStore()
+      const accessToken = authStore.accessToken
+
+      // Check if route is protected (default to true for backward compatibility)
+      const isProtected = config.headers?.protected !== false
+
+      // Only add token for protected routes
+      if (isProtected && accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`
       }
-      await handleRefreshToken(refreshToken, userEmail)
 
-      return api<T>(options)
-    }
-    throw new Error(axiosError.response?.data?.message || 'An error occurred')
+      // Clean up our custom header
+      if (config.headers?.protected !== undefined) {
+        delete config.headers.protected
+      }
+
+      return config
+    },
+    (error: unknown) => {
+      return Promise.reject(error)
+    },
+  )
+
+  // Response interceptor
+  api.interceptors.response.use(
+    (response) => response,
+    async (error: AxiosError) => {
+      const authStore = useAuthStore()
+      const refreshToken = authStore.refreshToken
+      const userEmail = authStore.user?.email
+
+      const originalRequest = error.config
+      if (!originalRequest) {
+        return Promise.reject(error)
+      }
+
+      // Only attempt refresh if it's a protected route
+      const isProtected = originalRequest?.headers?.protected !== false
+
+      if (isProtected && error.response?.status === 401 && !originalRequest?._retry) {
+        originalRequest._retry = true
+
+        try {
+          if (!refreshToken || !userEmail) {
+            throw new Error('No refresh token or user email available')
+          }
+          const { accessToken, accessTokenExpirationTime } = await handleRefreshToken(
+            refreshToken,
+            userEmail,
+          )
+
+          authStore.setAccessToken(accessToken, accessTokenExpirationTime)
+
+          if (originalRequest.headers) {
+            originalRequest.headers.Authorization = `Bearer ${accessToken}`
+          }
+          return api(originalRequest)
+        } catch (refreshError) {
+          authStore.logout()
+          throw refreshError
+        }
+      }
+
+      return Promise.reject(error)
+    },
+  )
+  return api
+}
+
+const api = createApiInstance()
+
+export const apiRequest = async <T>(config: ApiRequestConfig) => {
+  try {
+    const response = await api.request<T>({
+      url: config.url,
+      method: config.method,
+      data: config.data,
+      headers: {
+        ...config.headers,
+        protected: config.protected,
+      },
+      params: config.params,
+      _retry: config._retry,
+    })
+
+    return response.data
+  } catch {
+    throw new Error('Failed to fetch data')
   }
 }
+
+export default api

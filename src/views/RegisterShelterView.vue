@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import DefaultContainer from '@/components/Global/DefaultContainer.vue'
-import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
 import DefaultParagraph from '@/components/Global/DefaultParagraph.vue'
-import { vAutoAnimate } from '@formkit/auto-animate'
+import DefaultRouteLink from '@/components/Global/DefaultRouteLink.vue'
+import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
+import { Button } from '@/components/ui/button'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   NumberField,
   NumberFieldContent,
@@ -10,24 +19,21 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
 } from '@/components/ui/number-field'
-import {
-  FormControl,
-  FormField,
-  FormMessage,
-  FormDescription,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useForm } from 'vee-validate'
+import authService from '@/services/auth-service'
+import type { RegisterShelterRequest } from '@/types/services/auth'
+import { vAutoAnimate } from '@formkit/auto-animate'
+import { useMutation } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
+import { useRouter } from 'vue-router'
 import * as z from 'zod'
-import DefaultRouteLink from '@/components/Global/DefaultRouteLink.vue'
+
+const router = useRouter()
 
 const formSchema = toTypedSchema(
   z.object({
+    name: z.string().min(2).max(50),
     email: z.string().email(),
     password: z
       .string()
@@ -47,19 +53,36 @@ const form = useForm({
   },
 })
 
-const onSubmit = form.handleSubmit((values) => {
-  console.log('Form submitted!', values)
+const registerMutation = useMutation({
+  mutationKey: ['register'],
+  mutationFn: (input: RegisterShelterRequest) => authService.registerShelter(input),
+  onSuccess: () => {
+    router.replace('/login')
+  },
+})
+
+const onSubmit = form.handleSubmit(async (values) => {
+  await registerMutation.mutateAsync(values)
 })
 </script>
 
 <template>
-  <DefaultContainer additional-class="flex items-center justify-center">
+  <div class="flex items-center justify-center">
     <div class="grid w-full h-full grid-cols-2">
       <div class="flex flex-col items-center justify-center w-full h-full p-8">
         <DefaultRouteLink to="/register" text="Back" class="self-start" />
         <form @submit="onSubmit" class="flex flex-col w-full gap-2">
           <DefaultSubtitle text="Register as a Shelter" />
           <DefaultParagraph text="Reigster yourself as a licensed shelter" />
+          <FormField v-slot="{ componentField }" name="name">
+            <FormItem v-auto-animate>
+              <FormLabel>Shelter's Name</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="Petly" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
           <FormField v-slot="{ componentField }" name="email">
             <FormItem v-auto-animate>
               <FormLabel>Your Email</FormLabel>
@@ -143,7 +166,7 @@ const onSubmit = form.handleSubmit((values) => {
           <FormField v-slot="{ value, handleChange }" name="isNoKill">
             <FormItem
               v-auto-animate
-              class="flex flex-row items-center justify-between p-4 border rounded-lg"
+              class="flex flex-row items-center justify-between p-4 border rounded-none"
             >
               <div class="space-y-0.5">
                 <FormLabel class="text-base"> No Kill </FormLabel>
@@ -165,5 +188,5 @@ const onSubmit = form.handleSubmit((values) => {
         />
       </div>
     </div>
-  </DefaultContainer>
+  </div>
 </template>

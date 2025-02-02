@@ -1,6 +1,16 @@
 import type { ShelterDTO } from '../dto/ShelterDTO'
 import type { UserDTO } from '../dto/UserDTO'
 
+export type ApiRequestConfig = {
+  _retry?: boolean
+  url: string
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+  protected?: boolean
+  headers?: Record<string, string>
+  params?: Record<string, string>
+  data?: Record<string, unknown> | FormData
+}
+
 export type LoginRequest = {
   email: string
   password: string
@@ -24,7 +34,13 @@ export type AuthTokens = {
 
 export type RegisterUserRequest = {
   email: string
+  password: string
   address: string
+  firstName: string
+  lastName: string
+  homeType: 'House' | 'Flat'
+  hasChildren: boolean
+  hasOtherPets: boolean
 }
 
 export type RegisterUserResponse = {
@@ -37,8 +53,13 @@ export type RegisterUserResponse = {
 
 export type RegisterShelterRequest = {
   email: string
+  name: string
   password: string
   address: string
+  capacity: number
+  isNoKill: boolean
+  website: string | null
+  phoneNumber: string
 }
 
 export type RegisterShelterResponse = {
