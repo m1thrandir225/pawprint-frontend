@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import DefaultContainer from '@/components/Global/DefaultContainer.vue'
-import DefaultHeader from '@/components/Global/DefaultHeader.vue'
-import PetGrid from '@/components/PetGrid.vue'
-import { useQuery } from '@tanstack/vue-query'
-import petSizesService from '@/services/petSizes-service'
-import type { PetType } from '@/types/models/petType'
-import type { PetSize } from '@/types/models/petSize'
-import type { PetGender } from '@/types/models/petGender'
 import AdoptionSearchForm from '@/components/AdoptionSearchForm.vue'
-import petTypesService from '@/services/petTypes-service'
+import DefaultLoader from '@/components/Global/DefaultLoader.vue'
+import PetGrid from '@/components/PetGrid.vue'
+import ownerPetListingService from '@/services/ownerPetListing-service'
 import petGendersService from '@/services/petGender-service'
+import petSizesService from '@/services/petSizes-service'
+import petTypesService from '@/services/petTypes-service'
 import shelterListingService from '@/services/shelterListings-service'
 import type { OwnerPetListing } from '@/types/models/ownerPetListing'
-import ownerPetListingService from '@/services/ownerPetListing-service'
+import type { PetGender } from '@/types/models/petGender'
+import type { PetSize } from '@/types/models/petSize'
+import type { PetType } from '@/types/models/petType'
+import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 const {
   data: petTypeData,
   isPending: petTypeQueryIsPending,
-  isError: petTypeQueryError,
+  isError: petTypeQueryIsError,
+  error: petTypeQueryError,
 } = useQuery<PetType[]>({
   queryKey: ['petTypes'],
   queryFn: petTypesService.getPetTypes,
@@ -28,7 +29,8 @@ const {
 const {
   data: petSizeData,
   isPending: petSizeQueryIsPending,
-  isError: petSizeQueryError,
+  isError: petSizeQueryIsError,
+  error: petSizeQueryError,
 } = useQuery<PetSize[]>({
   queryKey: ['petSizes'],
   queryFn: petSizesService.getPetSizes,
@@ -38,7 +40,8 @@ const {
 const {
   data: petGenderData,
   isPending: petGenderQueryIsPending,
-  isError: petGenderQueryError,
+  isError: petGenderQueryIsError,
+  error: petGenderQueryError,
 } = useQuery<PetGender[]>({
   queryKey: ['petGenders'],
   queryFn: petGendersService.getPetGenders,
@@ -49,6 +52,7 @@ const {
   data: shelterListingData,
   isPending: shelterListingQueryIsPending,
   isError: shelterListingQueryIsError,
+  error: shelterListingQueryError,
 } = useQuery({
   queryKey: ['shelterListings'],
   queryFn: shelterListingService.getShelterListings,
@@ -59,6 +63,7 @@ const {
   data: ownerListingData,
   isPending: ownerListingQueryIsPending,
   isError: ownerListingQueryIsError,
+  error: ownerListingQueryError,
 } = useQuery<OwnerPetListing[]>({
   queryKey: ['ownerListings'],
   queryFn: ownerPetListingService.getOwnerPetListings,
@@ -71,23 +76,34 @@ const allListings = computed(() => {
   }
   return [...shelterListingData.value, ...ownerListingData.value]
 })
+
+const isLoading = computed(() => {
+  return (
+    petTypeQueryIsPending.value ||
+    petSizeQueryIsPending.value ||
+    petGenderQueryIsPending.value ||
+    shelterListingQueryIsPending.value ||
+    ownerListingQueryIsPending.value
+  )
+})
 </script>
 
 <template>
-  <DefaultContainer>
-    <DefaultHeader />
-
+  <DefaultLoader v-if="isLoading" />
+  <template v-else-if="!isLoading">
     <AdoptionSearchForm
-      :is-loading="petTypeQueryIsPending || petGenderQueryIsPending || petSizeQueryIsPending"
-      :is-error="petTypeQueryError || petGenderQueryError || petSizeQueryError"
+      :is-error="petTypeQueryIsError || petGenderQueryIsError || petSizeQueryIsError"
+      :error="
+        petTypeQueryError?.message || petGenderQueryError?.message || petSizeQueryError?.message
+      "
       :pet-gender-data="petGenderData"
       :pet-size-data="petSizeData"
       :pet-type-data="petTypeData"
     />
     <PetGrid
-      :is-loading="shelterListingQueryIsPending || ownerListingQueryIsPending"
       :is-error="shelterListingQueryIsError || ownerListingQueryIsError"
+      :error="shelterListingQueryError?.message || ownerListingQueryError?.message"
       :listings="allListings"
     />
-  </DefaultContainer>
+  </template>
 </template>

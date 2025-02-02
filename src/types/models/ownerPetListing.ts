@@ -7,6 +7,7 @@ export type OwnerPetListing = {
   id: string
   adopter: User
   pet: Pet
+  petId: string
   surrenderReason: OwnerSurrenderReason
   reviewDate: string
   submissionDate: string

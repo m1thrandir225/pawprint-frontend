@@ -12,10 +12,23 @@ const shelterListingService = {
       protected: true,
     }),
 
-  getShelterListing: (id: string) =>
+  getShelterListing: (id: string, params?: Record<string, string>) =>
     apiRequest<ShelterPetListing>({
       url: `${SHELTER_LISTING_API_URL}/${id}`,
       method: 'GET',
+      params: params,
+    }),
+  getListingsByShelter: (shelterId: string) =>
+    apiRequest<ShelterPetListing[]>({
+      url: `${SHELTER_LISTING_API_URL}/shelter/${shelterId}`,
+      method: 'GET',
+      protected: true,
+    }),
+  deleteShelterListing: (id: string) =>
+    apiRequest<boolean>({
+      url: `${SHELTER_LISTING_API_URL}/${id}`,
+      method: 'DELETE',
+      protected: true,
     }),
 }
 

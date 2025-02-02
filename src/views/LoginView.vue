@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import DefaultContainer from '@/components/Global/DefaultContainer.vue'
 import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
+import { Button } from '@/components/ui/button'
 import {
   FormControl,
-  FormField,
-  FormMessage,
   FormDescription,
+  FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/zod'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { vAutoAnimate } from '@formkit/auto-animate'
-import useAuthStore from '@/stores/auth-store'
-import { useRoute, useRouter } from 'vue-router'
-import { useMutation } from '@tanstack/vue-query'
 import authService from '@/services/auth-service'
+import useAuthStore from '@/stores/auth-store'
 import type { LoginRequest } from '@/types/services/auth'
+import { vAutoAnimate } from '@formkit/auto-animate'
+import { useMutation } from '@tanstack/vue-query'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
+import { useRoute, useRouter } from 'vue-router'
+import * as z from 'zod'
 
 const route = useRoute()
 const router = useRouter()
@@ -60,7 +59,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <DefaultContainer additional-class="flex flex-col items-center justify-center">
+  <div class="flex flex-col items-center justify-center">
     <div class="flex flex-col items-center justify-center h-full min-h-[650px] p-8 w-full gap-4">
       <form
         @submit="onSubmit"
@@ -93,5 +92,5 @@ const onSubmit = form.handleSubmit(async (values) => {
         Don't have an account? <span class="font-bold">Register</span></RouterLink
       >
     </div>
-  </DefaultContainer>
+  </div>
 </template>

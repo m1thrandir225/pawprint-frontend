@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
 import DefaultParagraph from '@/components/Global/DefaultParagraph.vue'
-import DefaultContainer from '@/components/Global/DefaultContainer.vue'
 import DefaultRouteLink from '@/components/Global/DefaultRouteLink.vue'
-import { vAutoAnimate } from '@formkit/auto-animate'
+import DefaultSubtitle from '@/components/Global/DefaultSubtitle.vue'
+import { Button } from '@/components/ui/button'
 import {
   FormControl,
-  FormField,
-  FormMessage,
   FormDescription,
+  FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -21,15 +21,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/zod'
-import * as z from 'zod'
-import { useMutation } from '@tanstack/vue-query'
-import type { RegisterUserRequest } from '@/types/services/auth'
 import authService from '@/services/auth-service'
+import type { RegisterUserRequest } from '@/types/services/auth'
+import { vAutoAnimate } from '@formkit/auto-animate'
+import { useMutation } from '@tanstack/vue-query'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
+import * as z from 'zod'
 
 const router = useRouter()
 
@@ -69,7 +68,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <DefaultContainer additional-class="flex items-center justify-center">
+  <div class="flex items-center justify-center">
     <div class="grid w-full h-full grid-cols-2">
       <div class="flex flex-col items-center justify-center w-full h-full p-8">
         <DefaultRouteLink to="/register" text="Back" class="self-start" />
@@ -147,7 +146,7 @@ const onSubmit = form.handleSubmit(async (values) => {
           </FormField>
 
           <FormField v-slot="{ value, handleChange }" name="hasChildren">
-            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-lg">
+            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-none">
               <div class="space-y-0.5">
                 <FormLabel class="text-base"> Have children </FormLabel>
                 <FormDescription> Do you have children? </FormDescription>
@@ -159,7 +158,7 @@ const onSubmit = form.handleSubmit(async (values) => {
           </FormField>
 
           <FormField v-slot="{ value, handleChange }" name="hasOtherPets">
-            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-lg">
+            <FormItem class="flex flex-row items-center justify-between p-4 border rounded-none">
               <div class="space-y-0.5">
                 <FormLabel class="text-base"> Have Pets </FormLabel>
                 <FormDescription> Do you have other pets? </FormDescription>
@@ -180,5 +179,5 @@ const onSubmit = form.handleSubmit(async (values) => {
         />
       </div>
     </div>
-  </DefaultContainer>
+  </div>
 </template>

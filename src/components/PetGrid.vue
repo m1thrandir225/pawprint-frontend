@@ -1,9 +1,7 @@
 <template>
-  <div v-if="isLoading" class="w-full h-full">
-    <LoaderCircle class="animate-spin" />
-  </div>
-  <div v-else-if="isError">
-    <p class="text-destructive">An error occured.</p>
+  <div v-if="isError">
+    <p v-if="error" class="text-destructive">Ther was an error with your request: {{ error }}</p>
+    <p v-else class="text-destructive">Something went wrong</p>
   </div>
   <div v-else-if="listings" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
     <PetCard
@@ -18,13 +16,12 @@
 
 <script setup lang="ts">
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
-import { LoaderCircle } from 'lucide-vue-next'
 import PetCard from './PetCard.vue'
 import type { OwnerPetListing } from '@/types/models/ownerPetListing'
 
 defineProps<{
-  isLoading: boolean
   isError: boolean
+  error?: string
   listings: (OwnerPetListing | ShelterPetListing)[]
 }>()
 
