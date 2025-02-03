@@ -13,4 +13,4 @@ const veterinarianService = {
     }),
 }
 
-export default veterinarianService;
+export default veterinarianService

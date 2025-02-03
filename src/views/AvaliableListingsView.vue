@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AdoptionSearchForm from '@/components/AdoptionSearchForm.vue'
-import DefaultLoader from '@/components/Global/DefaultLoader.vue'
 import PetGrid from '@/components/PetGrid.vue'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import petGendersService from '@/services/petGender-service'
@@ -12,8 +11,14 @@ import type { PetGender } from '@/types/models/petGender'
 import type { PetSize } from '@/types/models/petSize'
 import type { PetType } from '@/types/models/petType'
 import { useQuery } from '@tanstack/vue-query'
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, reactive } from 'vue'
+
+const searchParams = reactive({
+  petGenderId: '',
+  petSizeId: '',
+  petTypeId: '',
+  search: '',
+})
 
 const {
   data: petTypeData,
@@ -54,8 +59,14 @@ const {
   isError: shelterListingQueryIsError,
   error: shelterListingQueryError,
 } = useQuery({
-  queryKey: ['shelterListings'],
-  queryFn: shelterListingService.getShelterListings,
+  queryKey: ['shelterListings', searchParams],
+  queryFn: () =>
+    shelterListingService.getShelterListings({
+      petGenderId: searchParams.petGenderId,
+      petSizeId: searchParams.petSizeId,
+      petTypeId: searchParams.petTypeId,
+      search: searchParams.search,
+    }),
   retry: 0,
 })
 
@@ -65,8 +76,14 @@ const {
   isError: ownerListingQueryIsError,
   error: ownerListingQueryError,
 } = useQuery<OwnerPetListing[]>({
-  queryKey: ['ownerListings'],
-  queryFn: ownerPetListingService.getOwnerPetListings,
+  queryKey: ['ownerListings', searchParams],
+  queryFn: () =>
+    ownerPetListingService.getOwnerPetListings({
+      petGenderId: searchParams.petGenderId,
+      petSizeId: searchParams.petSizeId,
+      petTypeId: searchParams.petTypeId,
+      search: searchParams.search,
+    }),
   retry: 0,
 })
 
@@ -78,28 +95,34 @@ const allListings = computed(() => {
 })
 
 const isLoading = computed(() => {
-  return (
-    petTypeQueryIsPending.value ||
-    petSizeQueryIsPending.value ||
-    petGenderQueryIsPending.value ||
-    shelterListingQueryIsPending.value ||
-    ownerListingQueryIsPending.value
-  )
+  return shelterListingQueryIsPending.value || ownerListingQueryIsPending.value
 })
+
+const handleSubmit = (formData: {
+  petTypeId: string
+  petGenderId: string
+  petSizeId: string
+  search: string
+}) => {
+  searchParams.petTypeId = formData.petTypeId === 'all' ? '' : formData.petTypeId
+  searchParams.petGenderId = formData.petGenderId === 'all' ? '' : formData.petGenderId
+  searchParams.petSizeId = formData.petSizeId === 'all' ? '' : formData.petSizeId
+  searchParams.search = formData.search
+}
 </script>
 
 <template>
-  <DefaultLoader v-if="isLoading" />
-  <template v-else-if="!isLoading">
-    <AdoptionSearchForm
-      :is-error="petTypeQueryIsError || petGenderQueryIsError || petSizeQueryIsError"
-      :error="
-        petTypeQueryError?.message || petGenderQueryError?.message || petSizeQueryError?.message
-      "
-      :pet-gender-data="petGenderData"
-      :pet-size-data="petSizeData"
-      :pet-type-data="petTypeData"
-    />
+  <AdoptionSearchForm
+    :is-error="petTypeQueryIsError || petGenderQueryIsError || petSizeQueryIsError"
+    :error="
+      petTypeQueryError?.message || petGenderQueryError?.message || petSizeQueryError?.message
+    "
+    :pet-gender-data="petGenderData"
+    :pet-size-data="petSizeData"
+    :pet-type-data="petTypeData"
+    @submit="handleSubmit"
+  />
+  <template v-if="!isLoading">
     <PetGrid
       :is-error="shelterListingQueryIsError || ownerListingQueryIsError"
       :error="shelterListingQueryError?.message || ownerListingQueryError?.message"

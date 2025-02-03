@@ -4,14 +4,41 @@ import DefaultLodaer from '@/components/Global/DefaultLoader.vue'
 import DefaultTitle from '@/components/Global/DefaultTitle.vue'
 import ListingGrid from '@/components/MyListings/PetListingGrid.vue'
 import { Button } from '@/components/ui/button'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import adoptionStatusService from '@/services/adoptionStatus-service'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import shelterListingService from '@/services/shelterListings-service'
 import useAuthStore from '@/stores/auth-store'
+import type { AdoptionStatus } from '@/types/models/adoptionStatus'
 import type { OwnerPetListing } from '@/types/models/ownerPetListing'
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { useQuery } from '@tanstack/vue-query'
-import { Plus } from 'lucide-vue-next'
+import { toTypedSchema } from '@vee-validate/zod'
+import { Filter, Plus } from 'lucide-vue-next'
+import { useForm } from 'vee-validate'
+import { ref } from 'vue'
+import * as z from 'zod'
 const authStore = useAuthStore()
+
+const adoptionStatusId = ref<string>('')
+
+const {
+  data: adoptionStatuses,
+  isPending: adoptionStatusesIsPending,
+  isError: adoptionStatusesIsError,
+  error: adoptionStatusesError,
+} = useQuery<AdoptionStatus[]>({
+  queryKey: ['adoptionStatuses'],
+  queryFn: () => adoptionStatusService.getAdoptionStatuses(),
+})
 
 const {
   data: listings,
@@ -20,17 +47,42 @@ const {
   isPending,
   refetch,
 } = useQuery<ShelterPetListing[] | OwnerPetListing[]>({
-  queryKey: ['my-listings', authStore.userType],
+  queryKey: ['my-listings', authStore.userType, adoptionStatusId.value],
   queryFn: () => {
     if (authStore.userType === 'shelter') {
-      return shelterListingService.getListingsByShelter(authStore.user!.id)
+      return shelterListingService.getListingsByShelter({
+        shelterId: authStore.user!.id,
+        adoptionStatusId: adoptionStatusId.value,
+      })
     } else if (authStore.userType === 'user') {
-      return ownerPetListingService.getListingsByOwner(authStore.user!.id)
+      return ownerPetListingService.getListingsByOwner({
+        adoptionStatusId: adoptionStatusId.value,
+        ownerId: authStore.user!.id,
+      })
     } else {
       throw new Error('Invalid user type')
     }
   },
   refetchOnMount: true,
+})
+
+const schema = toTypedSchema(
+  z.object({
+    adoptionStatusId: z.string(),
+  }),
+)
+
+const form = useForm({
+  validationSchema: schema,
+  initialValues: {
+    adoptionStatusId: '',
+  },
+})
+
+const onSubmit = form.handleSubmit(async (values) => {
+  console.log(values)
+  adoptionStatusId.value = values.adoptionStatusId === 'all' ? '' : values.adoptionStatusId
+  refetch()
 })
 </script>
 
@@ -47,6 +99,37 @@ const {
         </RouterLink>
       </Button>
     </div>
-    <ListingGrid :listings="listings" :refetch="refetch" />
+    <div class="flex flex-col items-start w-full h-full gap-4">
+      <form @submit="onSubmit" class="flex flex-row items-center justify-between w-full">
+        <FormField v-slot="{ componentField }" name="adoptionStatusId">
+          <FormItem class="flex flex-row items-center justify-center gap-4">
+            <FormLabel class="font-bold">Type</FormLabel>
+            <Select v-if="adoptionStatuses" v-bind="componentField" default-value="all">
+              <FormControl class="!mt-0">
+                <SelectTrigger class="w-[150px]">
+                  <SelectValue placeholder="Pet Type" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="all"> All </SelectItem>
+                  <SelectItem
+                    v-for="adoptionStatus in adoptionStatuses"
+                    :key="adoptionStatus.id"
+                    :value="adoptionStatus.id"
+                    >{{ adoptionStatus.name }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+
+        <Button type="submit" variant="secondary"> <Filter class="w-6 h-6" /> Filter </Button>
+      </form>
+
+      <ListingGrid :listings="listings" :refetch="refetch" />
+    </div>
   </div>
 </template>
