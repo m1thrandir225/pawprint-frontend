@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AdoptionSearchForm from '@/components/AdoptionSearchForm.vue'
-import DefaultLoader from '@/components/Global/DefaultLoader.vue'
 import PetGrid from '@/components/PetGrid.vue'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import petGendersService from '@/services/petGender-service'
@@ -59,7 +58,6 @@ const {
   isPending: shelterListingQueryIsPending,
   isError: shelterListingQueryIsError,
   error: shelterListingQueryError,
-  refetch: refetchShelterListings,
 } = useQuery({
   queryKey: ['shelterListings', searchParams],
   queryFn: () =>
@@ -78,8 +76,14 @@ const {
   isError: ownerListingQueryIsError,
   error: ownerListingQueryError,
 } = useQuery<OwnerPetListing[]>({
-  queryKey: ['ownerListings'],
-  queryFn: ownerPetListingService.getOwnerPetListings,
+  queryKey: ['ownerListings', searchParams],
+  queryFn: () =>
+    ownerPetListingService.getOwnerPetListings({
+      petGenderId: searchParams.petGenderId,
+      petSizeId: searchParams.petSizeId,
+      petTypeId: searchParams.petTypeId,
+      search: searchParams.search,
+    }),
   retry: 0,
 })
 
@@ -100,13 +104,10 @@ const handleSubmit = (formData: {
   petSizeId: string
   search: string
 }) => {
-  console.log(formData)
   searchParams.petTypeId = formData.petTypeId === 'all' ? '' : formData.petTypeId
   searchParams.petGenderId = formData.petGenderId === 'all' ? '' : formData.petGenderId
   searchParams.petSizeId = formData.petSizeId === 'all' ? '' : formData.petSizeId
   searchParams.search = formData.search
-
-  console.log(searchParams)
 }
 </script>
 
