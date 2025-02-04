@@ -11,6 +11,26 @@ const healthStatusService = {
       method: 'GET',
       protected: true,
     }),
+  createHealthStatus: ({ name }: { name: string }) =>
+    apiRequest<HealthStatus>({
+      url: HEALTH_STATUS_API_URL,
+      method: 'POST',
+      protected: true,
+      data: { name },
+    }),
+  updateHealthStatus: ({ id, name }: { id: string; name: string }) =>
+    apiRequest<HealthStatus>({
+      url: `${HEALTH_STATUS_API_URL}/${id}`,
+      method: 'PUT',
+      protected: true,
+      data: { name },
+    }),
+  deleteHealthStatus: ({ id }: { id: string }) =>
+    apiRequest<HealthStatus>({
+      url: `${HEALTH_STATUS_API_URL}/${id}`,
+      method: 'DELETE',
+      protected: true,
+    }),
 }
 
 export default healthStatusService
