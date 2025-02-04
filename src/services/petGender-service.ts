@@ -11,6 +11,26 @@ const petGendersService = {
       method: 'GET',
       protected: true,
     }),
+  createPetGender: ({ name }: { name: string }) =>
+    apiRequest<PetGender>({
+      url: PET_GENDERS_URL,
+      method: 'POST',
+      protected: true,
+      data: { name },
+    }),
+  updatePetGender: ({ id, name }: { id: string; name: string }) =>
+    apiRequest<PetGender>({
+      url: `${PET_GENDERS_URL}/${id}`,
+      method: 'PUT',
+      protected: true,
+      data: { name },
+    }),
+  deletePetGender: ({ id }: { id: string }) =>
+    apiRequest<PetGender>({
+      url: `${PET_GENDERS_URL}/${id}`,
+      method: 'DELETE',
+      protected: true,
+    }),
 }
 
 export default petGendersService

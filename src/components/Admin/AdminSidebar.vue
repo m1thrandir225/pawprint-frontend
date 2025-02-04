@@ -46,7 +46,11 @@
     <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton tooltip="Logout">
+          <SidebarMenuButton
+            tooltip="Logout"
+            @click="authStore.logout()"
+            class="px-4 py-5 transition-all duration-100 ease-in-out bg-muted text-muted-foreground hover:bg-primaryContainer hover:text-primaryContainer-foreground"
+          >
             <LogOut class="w-6 h-6" />
             <span>Logout</span>
           </SidebarMenuButton>
@@ -74,8 +78,10 @@ import {
   SidebarRail,
 } from '../ui/sidebar'
 import { Icon } from '@iconify/vue'
+import useAuthStore from '@/stores/auth-store'
 
 const route = useRoute()
+const authStore = useAuthStore()
 
 const navLinks = ref([
   {
@@ -97,6 +103,16 @@ const navLinks = ref([
     title: 'Pet Sizes',
     to: { name: 'admin.petSizes' },
     icon: 'lucide:ruler',
+  },
+  {
+    title: 'Health Statuses',
+    to: { name: 'admin.healthStatuses' },
+    icon: 'lucide:pill-bottle',
+  },
+  {
+    title: 'Adoption Statuses',
+    to: { name: 'admin.adoptionStatuses' },
+    icon: 'streamline:pet-paw',
   },
   {
     title: 'Users',

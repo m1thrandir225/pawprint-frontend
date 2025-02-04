@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/dialog'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import petSizesService from '@/services/petSizes-service'
-import type { PetSize } from '@/types/models/petSize'
+import petGendersService from '@/services/petGender-service'
+import type { PetGender } from '@/types/models/petGender'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
 import { Plus } from 'lucide-vue-next'
@@ -26,22 +26,22 @@ import { toast } from 'vue-sonner'
 import * as z from 'zod'
 import { columns } from './columns'
 
-const { data, isLoading, isError, error, refetch } = useQuery<PetSize[]>({
-  queryKey: ['petSizes'],
-  queryFn: petSizesService.getPetSizes,
+const { data, isLoading, isError, error, refetch } = useQuery<PetGender[]>({
+  queryKey: ['petGenders'],
+  queryFn: petGendersService.getPetGenders,
 })
 
 const createFormOpen = ref(false)
 
 const { mutateAsync } = useMutation({
-  mutationKey: ['createPetSize'],
-  mutationFn: petSizesService.createPetSize,
+  mutationKey: ['createPetGender'],
+  mutationFn: petGendersService.createPetGender,
   onSuccess: () => {
-    toast.success('Pet size created successfully')
+    toast.success('Pet gender created successfully')
     refetch()
   },
   onError: () => {
-    toast.error('An error occurred while creating the pet size')
+    toast.error('An error occurred while creating the pet gender')
   },
 })
 
@@ -64,7 +64,7 @@ const onSubmit = form.handleSubmit(async (values: FormValues) => {
 
 <template>
   <div class="flex flex-row items-center justify-between">
-    <DefaultTitle text="Pet Sizes" />
+    <DefaultTitle text="Pet Genders" />
     <Dialog v-model:open="createFormOpen">
       <DialogTrigger as-child>
         <Button variant="outline" size="icon" class="rounded-none">
@@ -73,22 +73,22 @@ const onSubmit = form.handleSubmit(async (values: FormValues) => {
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle> Create a pet size </DialogTitle>
-          <DialogDescription> Add a new pet size to the system. </DialogDescription>
+          <DialogTitle> Create a pet gender </DialogTitle>
+          <DialogDescription> Add a new pet gender to the system. </DialogDescription>
         </DialogHeader>
-        <form id="createPetSizeForm" @submit.prevent="onSubmit">
+        <form id="createPetGenderForm" @submit.prevent="onSubmit">
           <FormField v-slot="{ componentField }" name="name">
             <FormItem>
-              <FormLabel>Size</FormLabel>
+              <FormLabel>Gender</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="Enter the pet size" v-bind="componentField" />
+                <Input type="text" placeholder="Enter the pet gender" v-bind="componentField" />
               </FormControl>
               <FormMessage />
             </FormItem>
           </FormField>
         </form>
         <DialogFooter>
-          <Button type="submit" form="createPetSizeForm">Create</Button>
+          <Button type="submit" form="createPetGenderForm">Create</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

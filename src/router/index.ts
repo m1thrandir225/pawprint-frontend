@@ -1,3 +1,4 @@
+import AdminPetGendersView from '@/components/Admin/PetGenders/AdminPetGendersView.vue'
 import AdminPetsView from '@/components/Admin/Pets/AdminPetsView.vue'
 import AdminPetSizesView from '@/components/Admin/PetSizes/AdminPetSizesView.vue'
 import AdminPetTypesView from '@/components/Admin/PetTypes/AdminPetTypesView.vue'
@@ -134,13 +135,25 @@ const router = createRouter({
     {
       path: '/admin/pet-genders',
       name: 'admin.petGenders',
-      component: AdminHomeView,
+      component: AdminPetGendersView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
     {
       path: '/admin/pet-sizes',
       name: 'admin.petSizes',
       component: AdminPetSizesView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/health-statuses',
+      name: 'admin.healthStatuses',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/adoption-statuses',
+      name: 'admin.adoptionStatuses',
+      component: AdminHomeView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
     {
