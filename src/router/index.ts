@@ -1,5 +1,6 @@
 import layouts from '@/layouts'
 import useAuthStore from '@/stores/auth-store'
+import AdminHomeView from '@/views/admin/AdminHomeView.vue'
 import AvaliableListingsView from '@/views/AvaliableListingsView.vue'
 import ComingSoonView from '@/views/ComingSoonView.vue'
 import CreateOwnerPetListing from '@/views/CreateOwnerPetListing.vue'
@@ -108,6 +109,60 @@ const router = createRouter({
       name: 'notFound',
       component: NotFoundView,
       meta: { layout: layouts.default, requiresAuth: false },
+    },
+    {
+      path: '/admin',
+      name: 'adminHome',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pets',
+      name: 'admin.pets',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pet-types',
+      name: 'admin.petTypes',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pet-genders',
+      name: 'admin.petGenders',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pet-sizes',
+      name: 'admin.petSizes',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/users-overview',
+      name: 'admin.usersOverview',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/shelters',
+      name: 'admin.shelters',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/users',
+      name: 'admin.users',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/user-roles',
+      name: 'admin.roles',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
     },
   ],
 })

@@ -16,7 +16,7 @@
   :root {
     --spline-font: 'SplineSans';
     --generalsans-font: 'GeneralSans';
-    --surface: 265.71 100% 98.63%;
+    --surface: 265.71 10.14% 86.47%;
     --surface-foreground: 240 10% 11.76%;
 
     --background: 265.71 100% 98.63%;
@@ -55,6 +55,23 @@
     --ring: 237.19 100% 87.45%;
 
     --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* --sidebar-background: 265.71 10.14% 86.47%;
+    --sidebar-foreground: var(--surface-foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring); */
   }
 
   .dark {
@@ -95,6 +112,24 @@
     --destructive-foreground: 357.14 100% 20.59%;
 
     --ring: 237 25.86% 45.49%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* --sidebar-background: 102 67.31% 20.39%;
+    --sidebar-foreground: var(--surface-foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring); */
   }
 }
 
