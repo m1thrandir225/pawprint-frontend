@@ -5,6 +5,7 @@ import AdminPetGendersView from '@/components/Admin/PetGenders/AdminPetGendersVi
 import AdminPetsView from '@/components/Admin/Pets/AdminPetsView.vue'
 import AdminPetSizesView from '@/components/Admin/PetSizes/AdminPetSizesView.vue'
 import AdminPetTypesView from '@/components/Admin/PetTypes/AdminPetTypesView.vue'
+import AdminRolesView from '@/components/Admin/Roles/AdminRolesView.vue'
 import AdminSheltersView from '@/components/Admin/Shelters/AdminSheltersView.vue'
 import layouts from '@/layouts'
 import useAuthStore from '@/stores/auth-store'
@@ -176,7 +177,7 @@ const router = createRouter({
     {
       path: '/admin/user-roles',
       name: 'admin.roles',
-      component: AdminHomeView,
+      component: AdminRolesView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
   ],

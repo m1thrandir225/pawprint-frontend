@@ -2,6 +2,7 @@ import { Config } from '@/utils/config'
 import type { UserDTO } from '@/types/dto/UserDTO'
 import type { ShelterDTO } from '@/types/dto/ShelterDTO'
 import { apiRequest } from './api-service'
+import type { UserRole } from '@/types/models/userRole'
 
 const USERS_API_URL = Config.apiURL + '/users'
 
@@ -19,7 +20,7 @@ const usersService = {
       protected: true,
     }),
   getUserRoles: () =>
-    apiRequest<string[]>({
+    apiRequest<UserRole[]>({
       url: USERS_API_URL + '/roles',
       method: 'GET',
       protected: true,
