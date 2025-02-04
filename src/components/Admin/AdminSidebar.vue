@@ -19,7 +19,7 @@
     </SidebarHeader>
     <SidebarContent>
       <SidebarGroup>
-        <SidebarMenu>
+        <SidebarMenu class="gap-4">
           <SidebarMenuItem v-for="item in navLinks" :key="item.title">
             <SidebarMenuButton
               as-child
@@ -28,14 +28,14 @@
             >
               <RouterLink
                 :to="item.to"
-                class="flex-1 transition-all duration-100 ease-in-out hover:bg-primaryContainer hover:text-primaryContainer-foreground"
+                class="flex-1 px-4 py-5 transition-all duration-100 ease-in-out hover:bg-primaryContainer hover:text-primaryContainer-foreground"
                 :class="
                   item.to.name === route.name
                     ? 'bg-accentContainer text-accentContainer-foreground'
                     : 'bg-muted text-muted-foreground'
                 "
               >
-                <Icon :icon="item.icon" class="w-8 h-8" />
+                <Icon :icon="item.icon" class="w-10 h-10" />
                 <span>{{ item.title }}</span>
               </RouterLink>
             </SidebarMenuButton>

@@ -122,7 +122,7 @@ export const columns: ColumnDef<Pet>[] = [
   {
     id: 'actions',
     enableHiding: false,
-    header: () => h('div', { class: 'text-right' }, 'Actions'),
+    header: () => h('div', { class: 'text-left' }, 'Actions'),
     cell: ({ row }) => {
       const pet = row.original
 
