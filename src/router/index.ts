@@ -1,5 +1,15 @@
+import AdminAdopterView from '@/components/Admin/Adopters/AdminAdopterView.vue'
+import AdminAdoptionStatusesView from '@/components/Admin/AdoptionStatuses/AdminAdoptionStatusesView.vue'
+import AdminHealthStatusesView from '@/components/Admin/HealthStatuses/AdminHealthStatusesView.vue'
+import AdminPetGendersView from '@/components/Admin/PetGenders/AdminPetGendersView.vue'
+import AdminPetsView from '@/components/Admin/Pets/AdminPetsView.vue'
+import AdminPetSizesView from '@/components/Admin/PetSizes/AdminPetSizesView.vue'
+import AdminPetTypesView from '@/components/Admin/PetTypes/AdminPetTypesView.vue'
+import AdminRolesView from '@/components/Admin/Roles/AdminRolesView.vue'
+import AdminSheltersView from '@/components/Admin/Shelters/AdminSheltersView.vue'
 import layouts from '@/layouts'
 import useAuthStore from '@/stores/auth-store'
+import AdminHomeView from '@/views/admin/AdminHomeView.vue'
 import AvaliableListingsView from '@/views/AvaliableListingsView.vue'
 import ComingSoonView from '@/views/ComingSoonView.vue'
 import CreateOwnerPetListing from '@/views/CreateOwnerPetListing.vue'
@@ -108,6 +118,67 @@ const router = createRouter({
       name: 'notFound',
       component: NotFoundView,
       meta: { layout: layouts.default, requiresAuth: false },
+    },
+    {
+      path: '/admin',
+      name: 'admin.home',
+      component: AdminHomeView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pets',
+      name: 'admin.pets',
+      component: AdminPetsView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pet-types',
+      name: 'admin.petTypes',
+      component: AdminPetTypesView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pet-genders',
+      name: 'admin.petGenders',
+      component: AdminPetGendersView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/pet-sizes',
+      name: 'admin.petSizes',
+      component: AdminPetSizesView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/health-statuses',
+      name: 'admin.healthStatuses',
+      component: AdminHealthStatusesView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/adoption-statuses',
+      name: 'admin.adoptionStatuses',
+      component: AdminAdoptionStatusesView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+
+    {
+      path: '/admin/shelters',
+      name: 'admin.shelters',
+      component: AdminSheltersView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/adopters',
+      name: 'admin.adopters',
+      component: AdminAdopterView,
+      meta: { layout: layouts.admin, requiresAuth: true },
+    },
+    {
+      path: '/admin/user-roles',
+      name: 'admin.roles',
+      component: AdminRolesView,
+      meta: { layout: layouts.admin, requiresAuth: true },
     },
   ],
 })

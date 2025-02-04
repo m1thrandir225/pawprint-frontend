@@ -1,5 +1,5 @@
 <template>
-  <div class="grid w-full grid-cols-1 sm:grid-cols-3">
+  <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
     <PetListingItem
       v-for="listing in listings"
       :key="listing.id"
