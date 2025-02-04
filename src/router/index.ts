@@ -1,9 +1,11 @@
+import AdminAdopterView from '@/components/Admin/Adopters/AdminAdopterView.vue'
 import AdminAdoptionStatusesView from '@/components/Admin/AdoptionStatuses/AdminAdoptionStatusesView.vue'
 import AdminHealthStatusesView from '@/components/Admin/HealthStatuses/AdminHealthStatusesView.vue'
 import AdminPetGendersView from '@/components/Admin/PetGenders/AdminPetGendersView.vue'
 import AdminPetsView from '@/components/Admin/Pets/AdminPetsView.vue'
 import AdminPetSizesView from '@/components/Admin/PetSizes/AdminPetSizesView.vue'
 import AdminPetTypesView from '@/components/Admin/PetTypes/AdminPetTypesView.vue'
+import AdminSheltersView from '@/components/Admin/Shelters/AdminSheltersView.vue'
 import layouts from '@/layouts'
 import useAuthStore from '@/stores/auth-store'
 import AdminHomeView from '@/views/admin/AdminHomeView.vue'
@@ -158,22 +160,17 @@ const router = createRouter({
       component: AdminAdoptionStatusesView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
-    {
-      path: '/admin/users-overview',
-      name: 'admin.usersOverview',
-      component: AdminHomeView,
-      meta: { layout: layouts.admin, requiresAuth: true },
-    },
+
     {
       path: '/admin/shelters',
       name: 'admin.shelters',
-      component: AdminHomeView,
+      component: AdminSheltersView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
     {
-      path: '/admin/users',
-      name: 'admin.users',
-      component: AdminHomeView,
+      path: '/admin/adopters',
+      name: 'admin.adopters',
+      component: AdminAdopterView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
     {

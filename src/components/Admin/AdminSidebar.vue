@@ -115,8 +115,8 @@ const navLinks = ref([
     icon: 'streamline:pet-paw',
   },
   {
-    title: 'Users',
-    to: { name: 'admin.users' },
+    title: 'Adopters',
+    to: { name: 'admin.adopters' },
     icon: 'lucide:users',
   },
   {
