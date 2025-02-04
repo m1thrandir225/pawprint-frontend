@@ -1,11 +1,11 @@
 import DataTableColumnHeader from '@/components/DataTable/DataTableColumnHeader.vue'
-import TooltipText from '@/components/TooltipText.vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import { booleanToText } from '@/lib/utils'
+import type { ShelterDTO } from '@/types/dto/ShelterDTO'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { h } from 'vue'
 import DropdownActions from './ShelterDropdownActions.vue'
-import type { ShelterDTO } from '@/types/dto/ShelterDTO'
+import TooltipText from '@/components/TooltipText.vue'
 
 export const columns: ColumnDef<ShelterDTO>[] = [
   {
@@ -24,6 +24,22 @@ export const columns: ColumnDef<ShelterDTO>[] = [
       }),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: 'id',
+    header: () => h('div', { class: 'text-left' }, 'ID'),
+    cell: ({ row }) => {
+      const text = row.original.id
+      return h(
+        'div',
+        { class: 'text-left truncate' },
+        h(TooltipText, {
+          text: text,
+          tooltip: text,
+        }),
+      )
+    },
+    enableHiding: true,
   },
   {
     accessorKey: 'name',
