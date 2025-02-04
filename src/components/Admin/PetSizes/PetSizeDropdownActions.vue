@@ -18,8 +18,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import petTypesService from '@/services/petTypes-service'
-import type { PetType } from '@/types/models/petType'
+import petSizesService from '@/services/petSizes-service'
+import type { PetSize } from '@/types/models/petSize'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
 import { MoreHorizontal } from 'lucide-vue-next'
@@ -29,7 +29,7 @@ import { toast } from 'vue-sonner'
 import * as z from 'zod'
 
 const props = defineProps<{
-  petType: PetType
+  petSize: PetSize
 }>()
 
 const editDialogOpen = ref(false)
@@ -42,43 +42,43 @@ const schema = toTypedSchema(
 const form = useForm({
   validationSchema: schema,
   initialValues: {
-    name: props.petType.name,
+    name: props.petSize.name,
   },
 })
 
 const queryClient = useQueryClient()
 
 const { mutateAsync: deleteAsync } = useMutation({
-  mutationKey: ['deletePetType', props.petType.id],
-  mutationFn: petTypesService.deletePetType,
+  mutationKey: ['deletePetSize', props.petSize.id],
+  mutationFn: petSizesService.deletePetSize,
   onSuccess: () => {
-    toast.success('Pet type deleted successfully')
+    toast.success('Pet size deleted successfully')
     queryClient.invalidateQueries({
-      queryKey: ['petTypes'],
+      queryKey: ['petSizes'],
     })
   },
   onError: (error) => {
-    toast.error("Couldn't delete the pet type. Error: " + error.message)
+    toast.error("Couldn't delete the pet size. Error: " + error.message)
   },
 })
 
 const { mutateAsync: updateAsync } = useMutation({
-  mutationKey: ['editPetType', props.petType.id],
-  mutationFn: petTypesService.updatePetType,
+  mutationKey: ['editPetSize', props.petSize.id],
+  mutationFn: petSizesService.updatePetSize,
   onSuccess: () => {
     editDialogOpen.value = false
-    toast.success('Pet type updated successfully')
+    toast.success('Pet size updated successfully')
     queryClient.invalidateQueries({
-      queryKey: ['petTypes'],
+      queryKey: ['petSizes'],
     })
   },
   onError: (error) => {
-    toast.error('There was an error updating the pet type. Error: ' + error.message)
+    toast.error('There was an error updating the pet size. Error: ' + error.message)
   },
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await updateAsync({ id: props.petType.id, ...values })
+  await updateAsync({ id: props.petSize.id, ...values })
 })
 </script>
 
@@ -97,28 +97,28 @@ const onSubmit = form.handleSubmit(async (values) => {
           <DropdownMenuItem> Edit </DropdownMenuItem>
         </DialogTrigger>
 
-        <DropdownMenuItem @click="deleteAsync({ id: petType.id })"> Delete </DropdownMenuItem>
+        <DropdownMenuItem @click="deleteAsync({ id: petSize.id })"> Delete </DropdownMenuItem>
         <DropdownMenuItem @click="$emit('expand')"> Expand </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle> Editing: {{ petType.name }} </DialogTitle>
-        <DialogDescription> Update the properties of the pet type. </DialogDescription>
+        <DialogTitle> Editing: {{ petSize.name }} </DialogTitle>
+        <DialogDescription> Update the properties of the pet size. </DialogDescription>
       </DialogHeader>
-      <form id="editPetTypeForm" @submit.prevent="onSubmit">
+      <form id="editPetSizeForm" @submit.prevent="onSubmit">
         <FormField v-slot="{ componentField }" name="name">
           <FormItem>
-            <FormLabel>Name</FormLabel>
+            <FormLabel>Size</FormLabel>
             <FormControl>
-              <Input type="text" placeholder="Enter the pet type" v-bind="componentField" />
+              <Input type="text" placeholder="Enter the pet size" v-bind="componentField" />
             </FormControl>
             <FormMessage />
           </FormItem>
         </FormField>
       </form>
       <DialogFooter>
-        <Button type="submit" form="editPetTypeForm">Edit</Button>
+        <Button type="submit" form="editPetSizeForm">Edit</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

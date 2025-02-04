@@ -95,7 +95,7 @@ const table = useVueTable({
       />
       <DataTableColumnVisibility :table="table" />
     </div>
-    <div class="border rounded-md">
+    <div class="border rounded-none">
       <Table>
         <TableHeader>
           <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
