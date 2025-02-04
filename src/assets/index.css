@@ -16,13 +16,13 @@
   :root {
     --spline-font: 'SplineSans';
     --generalsans-font: 'GeneralSans';
-    --surface: 265.71 10.14% 86.47%;
+    --surface: 270 26.67% 94.12%;
     --surface-foreground: 240 10% 11.76%;
 
     --background: 265.71 100% 98.63%;
     --foreground: 240 10% 11.76%;
 
-    --muted: 63.53 23.94% 86.08%;
+    --muted: 265.71 10.14% 86.47%;
     --muted-foreground: 70 9.09% 25.88%;
 
     --popover: var(--surface);
@@ -44,8 +44,8 @@
     --secondary-container: 242.4 67.57% 92.75%;
     --secondary-container-foreground: 236.84 27.54% 13.53%;
 
-    --accent: 322.7 18.23% 39.8%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 327.69 100% 92.35%;
+    --accent-foreground: 316.55 46.03% 12.35%;
     --accent-container: 327.69 100% 92.35%;
     --accent-container-foreground: 316.55 46.03% 12.35%;
 
@@ -56,32 +56,25 @@
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-    /* --sidebar-background: 265.71 10.14% 86.47%;
+    /* --sidebar-background: 265.71 10.14% 86.47%; */
+    --sidebar-background: var(--surface);
     --sidebar-foreground: var(--surface-foreground);
     --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: var(--primary-foreground);
     --sidebar-accent: var(--accent);
     --sidebar-accent-foreground: var(--accent-foreground);
     --sidebar-border: var(--border);
-    --sidebar-ring: var(--ring); */
+    --sidebar-ring: var(--ring);
   }
 
   .dark {
     --background: 240 11.63% 8.43%;
     --foreground: 262.5 15.38% 89.8%;
 
-    --surface: 240 11.63% 8.43%;
+    --surface: 240 8.82% 13.33%;
     --surface-foreground: 262.5 15.38% 89.8%;
 
-    --muted: 70 9.09% 25.88%;
+    --muted: 240 11.63% 8.43%;
     --muted-foreground: 63.75 12.7% 75.29%;
 
     --popover: var(--surface);
@@ -103,8 +96,8 @@
     --secondary-container: 237.14 13.38% 30.78%;
     --secondary-container-foreground: 242.4 67.57% 92.75%;
 
-    --accent: 325.53 50.54% 81.76%;
-    --accent-foreground: 320.63 29.63% 21.18%;
+    --accent: 327.69 100% 92.35%;
+    --accent-foreground: 316.55 46.03% 12.35%;
     --accent-container: 321.18 22.08% 30.2%;
     --accent-container-foreground: 327.69 100% 92.35%;
 
@@ -113,23 +106,14 @@
 
     --ring: 237 25.86% 45.49%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* --sidebar-background: 102 67.31% 20.39%;
+    --sidebar-background: var(--surface);
     --sidebar-foreground: var(--surface-foreground);
     --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: var(--primary-foreground);
     --sidebar-accent: var(--accent);
     --sidebar-accent-foreground: var(--accent-foreground);
     --sidebar-border: var(--border);
-    --sidebar-ring: var(--ring); */
+    --sidebar-ring: var(--ring);
   }
 }
 

@@ -1,3 +1,4 @@
+import AdminPetsView from '@/components/Admin/Pets/AdminPetsView.vue'
 import layouts from '@/layouts'
 import useAuthStore from '@/stores/auth-store'
 import AdminHomeView from '@/views/admin/AdminHomeView.vue'
@@ -119,7 +120,7 @@ const router = createRouter({
     {
       path: '/admin/pets',
       name: 'admin.pets',
-      component: AdminHomeView,
+      component: AdminPetsView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
     {

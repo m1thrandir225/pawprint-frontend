@@ -1,5 +1,5 @@
 <template>
-  <Sidebar collapsible="icon">
+  <Sidebar collapsible="icon" class="bg-[hsl(var(--sidebar-background))]">
     <SidebarHeader>
       <SidebarMenu>
         <SidebarMenuItem>
@@ -28,8 +28,12 @@
             >
               <RouterLink
                 :to="item.to"
-                class="flex-1"
-                :class="{ 'text-primary': item.to.name === route.name }"
+                class="flex-1 transition-all duration-100 ease-in-out hover:bg-primaryContainer hover:text-primaryContainer-foreground"
+                :class="
+                  item.to.name === route.name
+                    ? 'bg-accentContainer text-accentContainer-foreground'
+                    : 'bg-muted text-muted-foreground'
+                "
               >
                 <Icon :icon="item.icon" class="w-8 h-8" />
                 <span>{{ item.title }}</span>
