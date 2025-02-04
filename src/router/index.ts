@@ -121,7 +121,7 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      name: 'adminHome',
+      name: 'admin.home',
       component: AdminHomeView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },

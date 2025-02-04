@@ -10,7 +10,9 @@
             <div
               class="flex items-center justify-center rounded-lg aspect-square size-8 bg-sidebar-primary text-sidebar-primary-foreground"
             >
-              <DefaultLogo />
+              <RouterLink :to="{ name: 'admin.home' }">
+                <DefaultLogo />
+              </RouterLink>
             </div>
             <h1 class="text-2xl font-bold font-splieSans text-primary">PawPrint</h1>
           </SidebarMenuButton>
@@ -48,7 +50,7 @@
         <SidebarMenuItem>
           <SidebarMenuButton
             tooltip="Logout"
-            @click="authStore.logout()"
+            @click="logout()"
             class="px-4 py-5 transition-all duration-100 ease-in-out bg-muted text-muted-foreground hover:bg-primaryContainer hover:text-primaryContainer-foreground"
           >
             <LogOut class="w-6 h-6" />
@@ -64,7 +66,7 @@
 <script setup lang="ts">
 import { LogOut } from 'lucide-vue-next'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import DefaultLogo from '../Global/DefaultLogo.vue'
 import {
   Sidebar,
@@ -81,7 +83,13 @@ import { Icon } from '@iconify/vue'
 import useAuthStore from '@/stores/auth-store'
 
 const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
+
+const logout = () => {
+  authStore.logout()
+  router.push({ name: 'login' })
+}
 
 const navLinks = ref([
   {
