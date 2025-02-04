@@ -46,7 +46,7 @@ export const columns: ColumnDef<UserDTO>[] = [
     header: ({ column }) =>
       h(DataTableColumnHeader, {
         column,
-        title: 'First Name',
+        title: 'Name',
       }),
   },
   {
