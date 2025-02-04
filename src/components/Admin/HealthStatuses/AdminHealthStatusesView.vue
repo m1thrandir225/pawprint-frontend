@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/dialog'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import petGendersService from '@/services/petGender-service'
-import type { PetGender } from '@/types/models/petGender'
+import healthStatusService from '@/services/healthStatus-service'
+import type { HealthStatus } from '@/types/models/healthStatus'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
 import { Plus } from 'lucide-vue-next'
@@ -26,22 +26,22 @@ import { toast } from 'vue-sonner'
 import * as z from 'zod'
 import { columns } from './columns'
 
-const { data, isLoading, isError, error, refetch } = useQuery<PetGender[]>({
-  queryKey: ['petGenders'],
-  queryFn: petGendersService.getPetGenders,
+const { data, isLoading, isError, error, refetch } = useQuery<HealthStatus[]>({
+  queryKey: ['healthStatuses'],
+  queryFn: healthStatusService.getHealthStatuses,
 })
 
 const createFormOpen = ref(false)
 
 const { mutateAsync } = useMutation({
-  mutationKey: ['createPetGender'],
-  mutationFn: petGendersService.createPetGender,
+  mutationKey: ['createHealthStatus'],
+  mutationFn: healthStatusService.createHealthStatus,
   onSuccess: () => {
-    toast.success('Pet gender created successfully')
+    toast.success('Health status created successfully')
     refetch()
   },
   onError: () => {
-    toast.error('An error occurred while creating the pet gender')
+    toast.error('An error occurred while creating the health status')
   },
 })
 
@@ -64,7 +64,7 @@ const onSubmit = form.handleSubmit(async (values: FormValues) => {
 
 <template>
   <div class="flex flex-row items-center justify-between">
-    <DefaultTitle text="Pet Genders" />
+    <DefaultTitle text="Health Statuses" />
     <Dialog v-model:open="createFormOpen">
       <DialogTrigger as-child>
         <Button variant="outline" size="icon" class="rounded-none">
@@ -73,22 +73,22 @@ const onSubmit = form.handleSubmit(async (values: FormValues) => {
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle> Create a pet gender </DialogTitle>
-          <DialogDescription> Add a new pet gender to the system. </DialogDescription>
+          <DialogTitle> Create a health status </DialogTitle>
+          <DialogDescription> Add a new health status to the system. </DialogDescription>
         </DialogHeader>
-        <form id="createPetGenderForm" @submit.prevent="onSubmit">
+        <form id="createHealthStatusForm" @submit.prevent="onSubmit">
           <FormField v-slot="{ componentField }" name="name">
             <FormItem>
-              <FormLabel>Gender</FormLabel>
+              <FormLabel>Status</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="Enter the pet gender" v-bind="componentField" />
+                <Input type="text" placeholder="Enter the status" v-bind="componentField" />
               </FormControl>
               <FormMessage />
             </FormItem>
           </FormField>
         </form>
         <DialogFooter>
-          <Button type="submit" form="createPetGenderForm">Create</Button>
+          <Button type="submit" form="createHealthStatusForm">Create</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -101,6 +101,6 @@ const onSubmit = form.handleSubmit(async (values: FormValues) => {
     :columns="columns"
     class="max-w-full"
     searchable-column="name"
-    search-placeholder="Filter Genders..."
+    search-placeholder="Filter Statuses..."
   />
 </template>

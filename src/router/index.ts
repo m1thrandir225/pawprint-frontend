@@ -1,3 +1,4 @@
+import AdminHealthStatusesView from '@/components/Admin/HealthStatuses/AdminHealthStatusesView.vue'
 import AdminPetGendersView from '@/components/Admin/PetGenders/AdminPetGendersView.vue'
 import AdminPetsView from '@/components/Admin/Pets/AdminPetsView.vue'
 import AdminPetSizesView from '@/components/Admin/PetSizes/AdminPetSizesView.vue'
@@ -147,7 +148,7 @@ const router = createRouter({
     {
       path: '/admin/health-statuses',
       name: 'admin.healthStatuses',
-      component: AdminHomeView,
+      component: AdminHealthStatusesView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
     {
