@@ -1,3 +1,4 @@
+import AdminAdoptionStatusesView from '@/components/Admin/AdoptionStatuses/AdminAdoptionStatusesView.vue'
 import AdminHealthStatusesView from '@/components/Admin/HealthStatuses/AdminHealthStatusesView.vue'
 import AdminPetGendersView from '@/components/Admin/PetGenders/AdminPetGendersView.vue'
 import AdminPetsView from '@/components/Admin/Pets/AdminPetsView.vue'
@@ -154,7 +155,7 @@ const router = createRouter({
     {
       path: '/admin/adoption-statuses',
       name: 'admin.adoptionStatuses',
-      component: AdminHomeView,
+      component: AdminAdoptionStatusesView,
       meta: { layout: layouts.admin, requiresAuth: true },
     },
     {
