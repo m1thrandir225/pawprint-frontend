@@ -81,7 +81,7 @@ const {
     "
   />
   <CreateForm
-    v-else-if="petGenderData && petTypeData && petSizeData"
+    v-else-if="petGenderData && petTypeData && petSizeData && healthStatusData"
     :types="petTypeData"
     :sizes="petSizeData"
     :genders="petGenderData"

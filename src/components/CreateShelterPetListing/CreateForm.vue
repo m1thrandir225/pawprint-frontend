@@ -1,6 +1,6 @@
 <template>
   <Form
-    v-slot="{ meta, values, validate, errors }"
+    v-slot="{ meta, values, validate }"
     as=""
     keep-values
     :validation-schema="toTypedSchema(formSchema[stepIndex - 1])"
@@ -77,7 +77,9 @@
             />
           </template>
 
-          <template v-if="stepIndex === 2"> </template>
+          <template v-if="stepIndex === 2">
+            <CreateMedicalRecordForm />
+          </template>
 
           <template v-if="stepIndex === 3"> </template>
         </div>
@@ -125,6 +127,7 @@ import { ref } from 'vue'
 import * as z from 'zod'
 import CreatePetForm from './CreatePetForm.vue'
 import type { HealthStatus } from '@/types/models/healthStatus'
+import CreateMedicalRecordForm from './CreateMedicalRecordForm.vue'
 const MAX_FILE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
