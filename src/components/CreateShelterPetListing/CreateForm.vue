@@ -1,6 +1,6 @@
 <template>
   <Form
-    v-slot="{ meta, values, validate }"
+    v-slot="{ meta, values, validate, errors }"
     as=""
     keep-values
     :validation-schema="toTypedSchema(formSchema[stepIndex - 1])"
@@ -10,6 +10,8 @@
       v-model="stepIndex"
       class="block w-full"
     >
+      <pre>{{ errors }}</pre>
+      <pre>{{ meta.valid }} {{ meta.touched }} {{ meta.dirty }} {{ meta.initialValues }}</pre>
       <form
         @submit="
           (e) => {
@@ -94,7 +96,12 @@
               :type="meta.valid ? 'button' : 'submit'"
               :disabled="isNextDisabled"
               size="sm"
-              @click="meta.valid && nextStep()"
+              @click="
+                () => {
+                  console.log(values)
+                  meta.valid && nextStep()
+                }
+              "
             >
               Next
             </Button>
@@ -133,26 +140,32 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 
 const formSchema = [
   z.object({
-    name: z.string().min(2).max(50),
-    breed: z.string().min(2).max(50).nullable().default(null),
+    name: z.string().min(2).max(50).nonempty(),
+    breed: z.string().min(2).max(50).nonempty(),
     avatarImg: z
       .custom<File>()
-      .refine((file) => file.size <= MAX_FILE_SIZE, `File must be less than or equal to 5MB.`)
+      .refine((file) => file, 'An image is required.')
       .refine(
-        (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+        (file) => file && file.size <= MAX_FILE_SIZE,
+        `File must be less than or equal to 5MB.`,
+      )
+      .refine(
+        (file) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
         'Only .jpg, .jpeg, .png, and .webp files are accepted.',
       ),
     imageShowcase: z
       .custom<FileList>() // Use FileList for HTML file input
-      .refine((files) => files?.length > 0, 'At least one image is required.')
-      .refine((files) => files?.length <= 10, 'You can upload a maximum of 10 files.')
+      .refine((files) => files && files?.length > 0, 'At least one image is required.')
+      .refine((files) => files && files?.length <= 10, 'You can upload a maximum of 10 files.')
       .refine((files) => {
+        if (!files) return false
         return Array.from(files).every((file) => file.size <= MAX_FILE_SIZE)
       }, `Each file must be less than or equal to 5MB.`)
       .refine((files) => {
+        if (!files) return false
         return Array.from(files).every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
       }, 'Only .jpg, .jpeg, .png, and .webp files are accepted.'),
-    ageYears: z.coerce.number().gt(0).lt(100),
+    ageYears: z.coerce.number().min(0).max(100),
     petTypeId: z.string(),
     petGenderId: z.string(),
     petSizeId: z.string(),
@@ -165,8 +178,8 @@ const formSchema = [
     behaviorialNotes: z.string().nullable().default(null),
   }),
   z.object({
-    spayNeuterStatus: z.string(),
-    lastMedicalCheckup: z.string().nullable().default(null),
+    spayNeuterStatus: z.boolean(),
+    lastMedicalCheckup: z.string().max(15).nullable().default(null),
     microchipNumber: z.string().nullable().default(null),
   }),
   z.object({
