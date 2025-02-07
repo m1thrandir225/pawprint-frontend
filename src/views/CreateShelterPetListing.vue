@@ -1,16 +1,26 @@
 <script setup lang="ts">
-import CreateForm from '@/components/CreateShelterPetListing/CreateForm.vue'
+import CreateForm from '@/components/CreatePetListing/CreateShelterListingForm.vue'
 import DefaultError from '@/components/Global/DefaultError.vue'
 import DefaultLoader from '@/components/Global/DefaultLoader.vue'
 import healthStatusService from '@/services/healthStatus-service'
 import petGendersService from '@/services/petGender-service'
 import petSizesService from '@/services/petSizes-service'
 import petTypesService from '@/services/petTypes-service'
+import useAuthStore from '@/stores/auth-store'
 import type { HealthStatus } from '@/types/models/healthStatus'
 import type { PetGender } from '@/types/models/petGender'
 import type { PetSize } from '@/types/models/petSize'
 import type { PetType } from '@/types/models/petType'
 import { useQuery } from '@tanstack/vue-query'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const authStore = useAuthStore()
+
+if (authStore.userType === 'user') {
+  router.replace({ name: 'createOwnerListing' })
+}
 
 const {
   data: petTypeData,

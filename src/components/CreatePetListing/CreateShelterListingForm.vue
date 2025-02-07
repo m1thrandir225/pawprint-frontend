@@ -85,6 +85,9 @@
           <template v-if="stepIndex === 3">
             <CreateVeterinarianForm />
           </template>
+          <template v-if="stepIndex === 4">
+            <CreateFeeForm />
+          </template>
         </div>
 
         <div class="flex items-center justify-between mt-4">
@@ -93,7 +96,7 @@
           </Button>
           <div class="flex items-center gap-3">
             <Button
-              v-if="stepIndex !== 3"
+              v-if="stepIndex !== 4"
               :type="meta.valid ? 'button' : 'submit'"
               :disabled="isNextDisabled"
               size="sm"
@@ -106,7 +109,7 @@
             >
               Next
             </Button>
-            <Button v-if="stepIndex === 3" size="sm" type="submit"> Submit </Button>
+            <Button v-if="stepIndex === 4" size="sm" type="submit"> Submit </Button>
           </div>
         </div>
       </form>
@@ -137,6 +140,7 @@ import CreatePetForm from './CreatePetForm.vue'
 import type { HealthStatus } from '@/types/models/healthStatus'
 import CreateMedicalRecordForm from './CreateMedicalRecordForm.vue'
 import CreateVeterinarianForm from './CreateVeterinarianForm.vue'
+import CreateFeeForm from './CreateFeeForm.vue'
 const MAX_FILE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
@@ -205,34 +209,18 @@ const formSchema = [
     veterinarianEmail: z.string().email(),
     specializations: z.array(z.string()).min(1, 'At least one specialization is required.'),
   }),
+  z.object({
+    fee: z.number().min(0),
+    feeCurrency: z.string().min(3).max(3),
+  }),
 ]
 
 const initialValues = {
-  name: '',
-  breed: '',
-  avatarImg: null,
-  imageShowcase: null,
-  ageYears: 0,
-  petTypeId: '',
-  petGenderId: '',
-  petSizeId: '',
-  healthStatusId: '',
-  goodWithChildren: false,
-  goodWithDogs: false,
-  goodWithCats: false,
-  energyLevel: 1,
-  specialRequirements: null,
-  behaviorialNotes: null,
-  spayNeuterStatus: false,
-  lastMedicalCheckup: null,
-  microchipNumber: null,
   medicalConditions: [],
   vaccinations: [],
-  veterinarianName: '',
-  clinicName: '',
-  veterinarianContactNumber: '',
-  veterinarianEmail: '',
   specializations: [],
+  fee: 0,
+  feeCurrency: 'MKD',
 }
 
 const stepIndex = ref(1)
@@ -251,6 +239,11 @@ const steps = [
     step: 3,
     title: 'Veterinarian',
     description: 'Enter your veterinarian details',
+  },
+  {
+    step: 4,
+    title: 'Fee',
+    description: 'Pricing Details',
   },
 ]
 

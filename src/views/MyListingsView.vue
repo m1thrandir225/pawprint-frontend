@@ -93,7 +93,11 @@ const onSubmit = form.handleSubmit(async (values) => {
     <div class="flex flex-row items-center justify-between w-full">
       <DefaultTitle text="My Listings" />
       <Button as-child variant="default">
-        <RouterLink :to="{ name: 'createShelterListing' }">
+        <RouterLink
+          :to="{
+            name: authStore.userType === 'shelter' ? 'createShelterListing' : 'createOwnerListing',
+          }"
+        >
           <Plus class="w-6 h-6" />
           Create Listing
         </RouterLink>

@@ -195,7 +195,8 @@
 
             <Button
               v-if="value && value.length > 0"
-              size="sm"
+              size="icon"
+              class="rounded-none"
               variant="outline"
               @click="triggerAddFileInput"
             >
@@ -242,8 +243,9 @@
                     class="object-cover w-24 h-24"
                   />
                   <Button
-                    size="sm"
+                    size="icon"
                     variant="outline"
+                    class="rounded-none"
                     @click="
                       () => {
                         const withoutImage = value.filter((file: File) => file !== image)
@@ -251,7 +253,7 @@
                       }
                     "
                   >
-                    Remove
+                    <Trash class="w-6 h-6" />
                   </Button>
                 </div>
               </div>
@@ -317,7 +319,7 @@
 </template>
 
 <script setup lang="ts">
-import { Baby, Cat, Dog, Plus } from 'lucide-vue-next'
+import { Baby, Cat, Dog, Plus, Trash } from 'lucide-vue-next'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import {
