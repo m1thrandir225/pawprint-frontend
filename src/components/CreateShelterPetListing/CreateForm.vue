@@ -1,8 +1,9 @@
 <template>
   <Form
-    v-slot="{ meta, values, validate, errors }"
+    v-slot="{ meta, values, validate }"
     as=""
     keep-values
+    :initial-values="initialValues"
     :validation-schema="toTypedSchema(formSchema[stepIndex - 1])"
   >
     <Stepper
@@ -10,8 +11,6 @@
       v-model="stepIndex"
       class="block w-full"
     >
-      <pre>{{ errors }}</pre>
-      <pre>{{ meta.valid }} {{ meta.touched }} {{ meta.dirty }} {{ meta.initialValues }}</pre>
       <form
         @submit="
           (e) => {
@@ -83,7 +82,9 @@
             <CreateMedicalRecordForm />
           </template>
 
-          <template v-if="stepIndex === 3"> </template>
+          <template v-if="stepIndex === 3">
+            <CreateVeterinarianForm />
+          </template>
         </div>
 
         <div class="flex items-center justify-between mt-4">
@@ -135,6 +136,7 @@ import * as z from 'zod'
 import CreatePetForm from './CreatePetForm.vue'
 import type { HealthStatus } from '@/types/models/healthStatus'
 import CreateMedicalRecordForm from './CreateMedicalRecordForm.vue'
+import CreateVeterinarianForm from './CreateVeterinarianForm.vue'
 const MAX_FILE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
@@ -181,27 +183,57 @@ const formSchema = [
     spayNeuterStatus: z.boolean(),
     lastMedicalCheckup: z.string().max(15).nullable().default(null),
     microchipNumber: z.string().nullable().default(null),
+    medicalConditions: z
+      .array(
+        z.object({
+          conditionName: z.string().min(2).max(100),
+          notes: z.string().nullable().default(null),
+        }),
+      )
+      .optional(),
+    vaccinations: z.array(
+      z.object({
+        name: z.string().min(2).max(100),
+        date: z.string().min(2).max(100),
+      }),
+    ),
   }),
   z.object({
     veterinarianName: z.string().min(2).max(50),
     clinicName: z.string().min(2).max(50),
-    contactNumber: z.string().min(2).max(50),
-    email: z.string().email(),
-    specializations: z.array(z.string()),
-    medicalConditions: z.array(
-      z.object({
-        conditionName: z.string().min(2).max(100),
-        notes: z.string().nullable().default(null),
-      }),
-    ),
-    vaccinations: z.array(
-      z.object({
-        vaccinationName: z.string().min(2).max(100),
-        vaccineDate: z.string().min(2).max(100),
-      }),
-    ),
+    veterinarianContactNumber: z.string().min(2).max(50),
+    veterinarianEmail: z.string().email(),
+    specializations: z.array(z.string()).min(1, 'At least one specialization is required.'),
   }),
 ]
+
+const initialValues = {
+  name: '',
+  breed: '',
+  avatarImg: null,
+  imageShowcase: null,
+  ageYears: 0,
+  petTypeId: '',
+  petGenderId: '',
+  petSizeId: '',
+  healthStatusId: '',
+  goodWithChildren: false,
+  goodWithDogs: false,
+  goodWithCats: false,
+  energyLevel: 1,
+  specialRequirements: null,
+  behaviorialNotes: null,
+  spayNeuterStatus: false,
+  lastMedicalCheckup: null,
+  microchipNumber: null,
+  medicalConditions: [],
+  vaccinations: [],
+  veterinarianName: '',
+  clinicName: '',
+  veterinarianContactNumber: '',
+  veterinarianEmail: '',
+  specializations: [],
+}
 
 const stepIndex = ref(1)
 const steps = [
