@@ -203,7 +203,7 @@ const formSchema = [
           notes: z.string().nullable().default(null),
         }),
       )
-      .optional(),
+      .nullable(),
     vaccinations: z.array(
       z.object({
         name: z.string().min(2).max(100),

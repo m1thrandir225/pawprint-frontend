@@ -15,6 +15,11 @@
       <DefaultRouteLink to="/my-requests" text="My Requests" v-if="authStore.userType == 'user'" />
     </div>
     <div class="flex flex-row items-center gap-4">
+      <Button as-child size="icon" variant="outline" class="rounded-none text-primary">
+        <RouterLink :to="{ name: 'admin.home' }">
+          <Shield class="w-6 h-6" />
+        </RouterLink>
+      </Button>
       <ToggleDarkMode />
       <Button size="icon" variant="outline" @click="logout" class="rounded-none text-primary">
         <LogOut class="w-6 h-6" />
@@ -26,8 +31,8 @@
 <script setup lang="ts">
 import useAuthStore from '@/stores/auth-store'
 import DefaultRouteLink from './DefaultRouteLink.vue'
-import { useRouter } from 'vue-router'
-import { LogOut } from 'lucide-vue-next'
+import { RouterLink, useRouter } from 'vue-router'
+import { LogOut, Shield } from 'lucide-vue-next'
 import ToggleDarkMode from '../ToggleDarkMode.vue'
 import DefaultLogo from './DefaultLogo.vue'
 import { Button } from '../ui/button'

@@ -49,6 +49,28 @@
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton
+            tooltip="Go to Home"
+            @click="goToHome()"
+            class="px-4 py-5 transition-all duration-100 ease-in-out bg-muted text-muted-foreground hover:bg-primaryContainer hover:text-primaryContainer-foreground"
+          >
+            <Home class="w-6 h-6" />
+            <span>Go to Home</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            :tooltip="isDark ? 'Light Mode' : 'Dark Mode'"
+            @click="toggleDark()"
+            class="px-4 py-5 transition-all duration-100 ease-in-out bg-muted text-muted-foreground hover:bg-primaryContainer hover:text-primaryContainer-foreground"
+          >
+            <Sun v-if="isDark" class="w-6 h-6" />
+            <Moon v-else class="w-6 h-6" />
+            <span v-if="isDark">Light Mode</span>
+            <span v-else>Dark Mode</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton
             tooltip="Logout"
             @click="logout()"
             class="px-4 py-5 transition-all duration-100 ease-in-out bg-muted text-muted-foreground hover:bg-primaryContainer hover:text-primaryContainer-foreground"
@@ -64,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { LogOut } from 'lucide-vue-next'
+import { Home, LogOut, Moon, Sun } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DefaultLogo from '../Global/DefaultLogo.vue'
@@ -81,10 +103,19 @@ import {
 } from '../ui/sidebar'
 import { Icon } from '@iconify/vue'
 import useAuthStore from '@/stores/auth-store'
+import { useDark, useToggle } from '@vueuse/core'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+
+const isDark = useDark()
+
+const toggleDark = useToggle(isDark)
+
+const goToHome = () => {
+  router.push({ name: 'avaliableListings' })
+}
 
 const logout = () => {
   authStore.logout()

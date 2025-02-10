@@ -27,6 +27,7 @@ export const theme = {
     fontFamily: {
       generalSans: 'var(--generalsans-font)',
       splieSans: 'var(--spline-font)',
+      balooBahijaan: 'var(--baloo-font)',
     },
     colors: {
       border: 'hsl(var(--border))',
