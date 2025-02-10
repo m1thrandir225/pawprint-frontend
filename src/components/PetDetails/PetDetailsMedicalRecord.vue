@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-start w-full gap-2 font-generalSans text-foreground">
-    <Card class="w-full rounded-none border-accent">
+    <Card class="w-full rounded-none border-secondary">
       <CardHeader>
         <CardTitle>Veterinarian</CardTitle>
         <CardDescription>
@@ -9,25 +9,25 @@
       </CardHeader>
       <CardContent>
         <h1>
-          <span class="font-semibold text-accent">Veterinarian E-Mail:</span>
+          <span class="font-semibold text-secondary">Veterinarian E-Mail:</span>
           {{ medicalRecord.veterinarian.email }}
         </h1>
         <h1>
-          <span class="font-semibold text-accent">Clinic Name:</span>
+          <span class="font-semibold text-secondary">Clinic Name:</span>
           {{ medicalRecord.veterinarian.clinicName }}
         </h1>
         <h1>
-          <span class="font-semibold text-accent">Clinic Contact Number:</span>
+          <span class="font-semibold text-secondary">Clinic Contact Number:</span>
           {{ medicalRecord.veterinarian.contactNumber }}
         </h1>
         <h1>
-          <span class="font-semibold text-accent">Neuter status:</span>
+          <span class="font-semibold text-secondary">Neuter status:</span>
           {{ capitalizeFirstLetter(medicalRecord.spayNeuterStatus.toString()) }}
         </h1>
         <h1 v-if="medicalRecord.lastMedicalCheckup" class="text-foreground">
           Last medical checkup: {{ medicalRecord.lastMedicalCheckup }}
         </h1>
-        <h1 class="font-semibold text-accent">Specializations:</h1>
+        <h1 class="font-semibold text-secondary">Specializations:</h1>
         <ol class="list-disc list-inside">
           <li v-if="!medicalRecord.veterinarian.vetSpecializations.length">No specializations</li>
           <li
@@ -41,7 +41,7 @@
       </CardContent>
     </Card>
 
-    <Card class="w-full rounded-none border-accent">
+    <Card class="w-full rounded-none border-secondary">
       <CardHeader>
         <CardTitle>Medical Conditions</CardTitle>
         <CardDescription> Information about the pet's medical conditions. </CardDescription>
@@ -61,14 +61,14 @@
         </Accordion>
       </CardContent>
     </Card>
-    <Card class="w-full rounded-none border-accent">
+    <Card class="w-full rounded-none border-secondary">
       <CardHeader>
         <CardTitle> Vacinations </CardTitle>
         <CardDescription> Information about the pet's vaccinations. </CardDescription>
       </CardHeader>
       <CardContent>
         <p
-          class="text-accent"
+          class="text-secondary"
           v-for="vaccination in medicalRecord.vaccinations"
           :key="vaccination.id"
         >

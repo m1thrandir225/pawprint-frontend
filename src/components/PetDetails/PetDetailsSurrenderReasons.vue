@@ -1,11 +1,11 @@
 <template>
-  <Card class="w-full rounded-none border-accent">
+  <Card class="w-full rounded-none border-secondary">
     <CardHeader>
       <CardTitle>Surrender Reasons</CardTitle>
       <CardDescription> The owner's reasons for surrendering the pet. </CardDescription>
     </CardHeader>
     <CardContent>
-      <p class="text-accent">{{ surrenderReason.description }}</p>
+      <p class="text-secondary">{{ surrenderReason.description }}</p>
     </CardContent>
   </Card>
 </template>

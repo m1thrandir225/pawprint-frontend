@@ -26,8 +26,10 @@ import type { RegisterUserRequest } from '@/types/services/auth'
 import { vAutoAnimate } from '@formkit/auto-animate'
 import { useMutation } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
+import { Loader2 } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
 import * as z from 'zod'
 
 const router = useRouter()
@@ -50,11 +52,15 @@ const formSchema = toTypedSchema(
   }),
 )
 
-const registerMutation = useMutation({
+const { isPending, mutateAsync } = useMutation({
   mutationKey: ['registerAdopter'],
   mutationFn: (input: RegisterUserRequest) => authService.registerAdopter(input),
   onSuccess: () => {
     router.replace('/login')
+    toast.success('Successfully registered. Please login to continue.')
+  },
+  onError: (error) => {
+    toast.error("Couldn't register. Error: " + error.message)
   },
 })
 
@@ -63,7 +69,7 @@ const form = useForm({
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await registerMutation.mutate(values)
+  await mutateAsync(values)
 })
 </script>
 
@@ -169,7 +175,10 @@ const onSubmit = form.handleSubmit(async (values) => {
             </FormItem>
           </FormField>
 
-          <Button type="submit"> Register </Button>
+          <Button type="submit" :disabled="isPending">
+            <Loader2 v-if="isPending" class="animate-spin" />
+            <span v-else>Register</span>
+          </Button>
         </form>
       </div>
       <div class="w-full h-full p-8">
