@@ -16,8 +16,10 @@ import type { LoginRequest } from '@/types/services/auth'
 import { vAutoAnimate } from '@formkit/auto-animate'
 import { useMutation } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
+import { Loader2 } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
 import { useRoute, useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
 import * as z from 'zod'
 
 const route = useRoute()
@@ -37,24 +39,27 @@ const form = useForm({
 })
 const authStore = useAuthStore()
 
-const loginQuery = useMutation({
+const { isPending, mutateAsync } = useMutation({
   mutationKey: ['login'],
   mutationFn: (input: LoginRequest) => authService.login(input),
   onSuccess: (response) => {
     authStore.login(response)
+
+    if (route.query.redirect) {
+      router.push(route.query.redirect as string)
+    } else {
+      router.push('/browse')
+    }
+  },
+  onError: (error) => {
+    toast.error("Couldn't login. Error: " + error.message)
   },
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
   const { email, password } = values
 
-  await loginQuery.mutate({ email, password })
-
-  if (route.query.redirect) {
-    router.push(route.query.redirect as string)
-  } else {
-    router.push('/')
-  }
+  await mutateAsync({ email, password })
 })
 </script>
 
@@ -86,7 +91,10 @@ const onSubmit = form.handleSubmit(async (values) => {
             <FormMessage />
           </FormItem>
         </FormField>
-        <Button :disabled="false" type="submit"> Login </Button>
+        <Button :disabled="isPending" type="submit">
+          <Loader2 v-if="isPending" class="animate-spin" />
+          <span v-else>Login</span>
+        </Button>
       </form>
       <RouterLink to="/register">
         Don't have an account? <span class="font-bold">Register</span></RouterLink
