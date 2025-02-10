@@ -1,5 +1,5 @@
 <template>
-  <Button size="icon" variant="outline" @click="toggleDark()" class="rounded-none text-primary">
+  <Button size="icon" variant="outline" @click="toggleDark()" class="rounded-lg text-primary">
     <Moon class="w-6 h-6" v-if="isDark" />
     <Sun class="w-6 h-6" v-else />
   </Button>

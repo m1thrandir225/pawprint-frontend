@@ -2,13 +2,13 @@
   <DefaultLoader v-if="isPending" />
   <DefaultError v-else-if="isError" :error="error?.message" />
   <div v-else-if="data" class="grid w-full h-full grid-cols-3 gap-4 py-4">
-    <div class="flex flex-col items-start col-span-2 gap-4 p-4 border border-1">
+    <div class="flex flex-col items-start col-span-2 gap-4 p-4 border rounded-lg border-1">
       <DefaultBackButton />
       <PetDetailsInfo :pet="data.pet" />
       <PetDetailsMedicalRecord :medicalRecord="data.medicalRecord" />
     </div>
     <div class="w-full h-full col-span-1">
-      <div class="flex flex-col items-start w-full h-auto gap-4 p-4 border border-1">
+      <div class="flex flex-col items-start w-full h-auto gap-4 p-4 border rounded-lg border-1">
         <PetDetailsShelter :shelter="data.shelter" />
         <Button class="w-full">
           <h1>Apply for adoption</h1>

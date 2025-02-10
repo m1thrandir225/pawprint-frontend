@@ -1,5 +1,5 @@
 <template>
-  <Card class="w-full rounded-none border-accent">
+  <Card class="w-full rounded-none border-secondary">
     <CardHeader>
       <CardTitle> Pet Documents </CardTitle>
       <CardDescription> Documents related to the pet. </CardDescription>
@@ -10,8 +10,8 @@
         v-for="document in documents"
         :key="document.id"
       >
-        <p class="text-accent">Type: {{ document.documentType }}</p>
-        <a class="text-accent" :href="document.documentUrl">
+        <p class="text-secondary">Type: {{ document.documentType }}</p>
+        <a class="text-secondary" :href="document.documentUrl">
           {{ document.documentUrl }}
         </a>
       </div>
