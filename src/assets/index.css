@@ -12,10 +12,16 @@
   src: url('./fonts/SplineSans-Variable.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: BalooBhaijaan;
+  src: url('./fonts/BalooBhaijaan-Regular.woff') format('woff');
+}
+
 @layer base {
   :root {
     --spline-font: 'SplineSans';
     --generalsans-font: 'GeneralSans';
+    --baloo-font: 'BalooBhaijaan';
     --surface: 270 26.67% 94.12%;
     --surface-foreground: 240 10% 11.76%;
 
@@ -86,7 +92,7 @@
     --surface: 240 8.82% 13.33%;
     --surface-foreground: 262.5 15.38% 89.8%;
 
-    --muted: 240 11.63% 8.43%;
+    --muted: 240 5% 23.53%;
     --muted-foreground: 63.75 12.7% 75.29%;
 
     --popover: var(--surface);

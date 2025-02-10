@@ -11,7 +11,6 @@ import layouts from '@/layouts'
 import useAuthStore from '@/stores/auth-store'
 import AdminHomeView from '@/views/admin/AdminHomeView.vue'
 import AvaliableListingsView from '@/views/AvaliableListingsView.vue'
-import ComingSoonView from '@/views/ComingSoonView.vue'
 import CreateOwnerPetListing from '@/views/CreateOwnerPetListing.vue'
 import CreateShelterPetListing from '@/views/CreateShelterPetListing.vue'
 import LoginView from '@/views/LoginView.vue'
@@ -24,6 +23,7 @@ import RegisterOverviewView from '@/views/RegisterOverviewView.vue'
 import RegisterShelterView from '@/views/RegisterShelterView.vue'
 import RegisterUserView from '@/views/RegisterUserView.vue'
 import ShelterPetListingView from '@/views/ShelterPetListingView.vue'
+import WelcomeView from '@/views/WelcomeView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -32,8 +32,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: ComingSoonView,
-      meta: { layout: layouts.empty, requiresAuth: true },
+      component: WelcomeView,
+      meta: { layout: layouts.welcome, requiresAuth: false },
     },
     {
       path: '/register',
@@ -49,13 +49,13 @@ const router = createRouter({
     },
     {
       path: '/register/user',
-      name: 'registerUser',
+      name: 'register.adopter',
       component: RegisterUserView,
       meta: { layout: layouts.default, requiresAuth: false },
     },
     {
       path: '/register/shelter',
-      name: 'registerShelter',
+      name: 'register.shelter',
       component: RegisterShelterView,
       meta: { layout: layouts.default, requiresAuth: false },
     },

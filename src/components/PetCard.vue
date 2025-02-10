@@ -8,7 +8,7 @@
       <h2 class="text-xl font-semibold text-primary group-hover:text-primaryContainer-foreground">
         {{ pet.name }}
       </h2>
-      <p class="text-accent">{{ pet.breed }}</p>
+      <p class="text-secondary">{{ pet.breed }}</p>
     </div>
   </RouterLink>
 </template>
