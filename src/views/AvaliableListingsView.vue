@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AdoptionSearchForm from '@/components/AdoptionSearchForm.vue'
+import AdoptionSearchForm from '@/components/AvaliableListingsView/AdoptionSearchForm.vue'
 import PetGrid from '@/components/PetGrid.vue'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import petGendersService from '@/services/petGender-service'
@@ -94,7 +94,11 @@ const allListings = computed(() => {
   return [...shelterListingData.value, ...ownerListingData.value]
 })
 
-const isLoading = computed(() => {
+const areFiltersLoading = computed(() => {
+  return petTypeQueryIsPending.value || petGenderQueryIsPending.value || petSizeQueryIsPending.value
+})
+
+const areListingsLoading = computed(() => {
   return shelterListingQueryIsPending.value || ownerListingQueryIsPending.value
 })
 
@@ -113,6 +117,7 @@ const handleSubmit = (formData: {
 
 <template>
   <AdoptionSearchForm
+    :is-loading="areFiltersLoading"
     :is-error="petTypeQueryIsError || petGenderQueryIsError || petSizeQueryIsError"
     :error="
       petTypeQueryError?.message || petGenderQueryError?.message || petSizeQueryError?.message
@@ -122,11 +127,11 @@ const handleSubmit = (formData: {
     :pet-type-data="petTypeData"
     @submit="handleSubmit"
   />
-  <template v-if="!isLoading">
-    <PetGrid
-      :is-error="shelterListingQueryIsError || ownerListingQueryIsError"
-      :error="shelterListingQueryError?.message || ownerListingQueryError?.message"
-      :listings="allListings"
-    />
-  </template>
+
+  <PetGrid
+    :is-error="shelterListingQueryIsError || ownerListingQueryIsError"
+    :is-loading="areListingsLoading"
+    :error="shelterListingQueryError?.message || ownerListingQueryError?.message"
+    :listings="allListings"
+  />
 </template>
