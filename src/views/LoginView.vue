@@ -44,7 +44,6 @@ const { isPending, mutateAsync } = useMutation({
   mutationFn: (input: LoginRequest) => authService.login(input),
   onSuccess: (response) => {
     authStore.login(response)
-
     if (route.query.redirect) {
       router.push(route.query.redirect as string)
     } else {

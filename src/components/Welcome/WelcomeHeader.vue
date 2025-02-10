@@ -14,8 +14,10 @@
         <h1 class="text-4xl font-bold font-balooBahijaan text-primary">PawPrint</h1>
       </RouterLink>
     </div>
-    <DefaultRouteLink to="/login" text="Login" class="relative z-20" />
-    <ToggleDarkMode />
+    <div class="flex flex-row gap-2">
+      <DefaultRouteLink to="/login" text="Login" class="relative z-20" />
+      <ToggleDarkMode />
+    </div>
   </div>
 </template>
 
