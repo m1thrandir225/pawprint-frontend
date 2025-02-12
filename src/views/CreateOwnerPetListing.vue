@@ -1,33 +1,19 @@
 <template>
-  <DefaultLoader
-    v-if="
-      petTypeQueryIsPending ||
-      petSizeQueryIsPending ||
-      petGenderQueryIsPending ||
-      healthStatusQueryIsPending
-    "
-  />
-
-  <DefaultError
-    v-else-if="
-      petTypeQueryIsError ||
-      petSizeQueryIsError ||
-      petGenderQueryIsError ||
-      healthStatusQueryIsError
-    "
-    :error="
-      petTypeQueryError?.message ||
-      petSizeQueryError?.message ||
-      petGenderQueryError?.message ||
-      healthStatusQueryError?.message
-    "
-  />
+  <DefaultLoader v-if="queries.isPending" />
+  <DefaultError v-else-if="queries.isError" :error="queries.error?.error?.message" />
   <CreateOwnerListingForm
-    v-else-if="petGenderData && petTypeData && petSizeData && healthStatusData"
-    :types="petTypeData"
-    :sizes="petSizeData"
-    :genders="petGenderData"
-    :healthStatuses="healthStatusData"
+    v-else-if="
+      queries.data.healthStatuses &&
+      queries.data.petTypes &&
+      queries.data.petSizes &&
+      queries.data.petGenders &&
+      queries.data.ownerSurrenderReasons
+    "
+    :types="queries.data.petTypes"
+    :sizes="queries.data.petSizes"
+    :genders="queries.data.petGenders"
+    :healthStatuses="queries.data.healthStatuses"
+    :ownerSurrenderReasons="queries.data.ownerSurrenderReasons"
   />
 </template>
 
@@ -36,15 +22,12 @@ import CreateOwnerListingForm from '@/components/CreatePetListing/CreateOwnerLis
 import DefaultError from '@/components/Global/DefaultError.vue'
 import DefaultLoader from '@/components/Global/DefaultLoader.vue'
 import healthStatusService from '@/services/healthStatus-service'
+import ownerSurrenderReasonService from '@/services/ownerSurrenderReason-service'
 import petGendersService from '@/services/petGender-service'
 import petSizesService from '@/services/petSizes-service'
 import petTypesService from '@/services/petTypes-service'
 import useAuthStore from '@/stores/auth-store'
-import type { HealthStatus } from '@/types/models/healthStatus'
-import type { PetGender } from '@/types/models/petGender'
-import type { PetSize } from '@/types/models/petSize'
-import type { PetType } from '@/types/models/petType'
-import { useQuery } from '@tanstack/vue-query'
+import { useQueries } from '@tanstack/vue-query'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -54,47 +37,42 @@ if (authStore.userType === 'shelter') {
   router.replace({ name: 'createShelterListing' })
 }
 
-const {
-  data: petTypeData,
-  isPending: petTypeQueryIsPending,
-  isError: petTypeQueryIsError,
-  error: petTypeQueryError,
-} = useQuery<PetType[]>({
-  queryKey: ['petTypes'],
-  queryFn: petTypesService.getPetTypes,
-  retry: 0,
-})
-
-const {
-  data: petSizeData,
-  isPending: petSizeQueryIsPending,
-  isError: petSizeQueryIsError,
-  error: petSizeQueryError,
-} = useQuery<PetSize[]>({
-  queryKey: ['petSizes'],
-  queryFn: petSizesService.getPetSizes,
-  retry: 0,
-})
-
-const {
-  data: petGenderData,
-  isPending: petGenderQueryIsPending,
-  isError: petGenderQueryIsError,
-  error: petGenderQueryError,
-} = useQuery<PetGender[]>({
-  queryKey: ['petGenders'],
-  queryFn: petGendersService.getPetGenders,
-  retry: 0,
-})
-
-const {
-  data: healthStatusData,
-  isPending: healthStatusQueryIsPending,
-  isError: healthStatusQueryIsError,
-  error: healthStatusQueryError,
-} = useQuery<HealthStatus[]>({
-  queryKey: ['healthStatuses'],
-  queryFn: healthStatusService.getHealthStatuses,
-  retry: 0,
+const queries = useQueries({
+  queries: [
+    {
+      queryKey: ['petTypes'],
+      queryFn: petTypesService.getPetTypes,
+    },
+    {
+      queryKey: ['petGenders'],
+      queryFn: petGendersService.getPetGenders,
+    },
+    {
+      queryKey: ['petSizes'],
+      queryFn: petSizesService.getPetSizes,
+    },
+    {
+      queryKey: ['healthStatuses'],
+      queryFn: healthStatusService.getHealthStatuses,
+    },
+    {
+      queryKey: ['ownerSurrenderReasons'],
+      queryFn: ownerSurrenderReasonService.getOwnerSurrenderReasons,
+    },
+  ],
+  combine: (result) => {
+    return {
+      data: {
+        petTypes: result[0].data,
+        petGenders: result[1].data,
+        petSizes: result[2].data,
+        healthStatuses: result[3].data,
+        ownerSurrenderReasons: result[4].data,
+      },
+      isPending: result.some((r) => r.isPending),
+      isError: result.find((r) => r.isError),
+      error: result.find((r) => r.error),
+    }
+  },
 })
 </script>

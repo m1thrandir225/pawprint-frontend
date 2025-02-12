@@ -10,7 +10,7 @@
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField v-slot="{ componentField }" name="clinicName">
+    <FormField v-slot="{ componentField }" name="veterinarianClinicName">
       <FormItem v-auto-animate>
         <FormLabel> Clinic Name </FormLabel>
         <FormControl>
@@ -42,7 +42,7 @@
     </FormField>
   </div>
   <div class="flex flex-col items-start gap-4 p-4 border">
-    <FormField v-slot="{ value, setValue }" name="specializations">
+    <FormField v-slot="{ value, setValue }" name="veterinarianSpecializations">
       <div>
         <FormLabel> Veterinarian Specialization's </FormLabel>
         <FormDescription>

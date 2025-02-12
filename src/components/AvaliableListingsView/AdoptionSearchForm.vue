@@ -4,29 +4,34 @@
     <p v-else class="text-destructive">Something went wrong</p>
   </div>
   <div v-else-if="isLoading" class="w-full my-2">
-    <Skeleton class="w-full h-12 rounded-none" />
+    <Skeleton class="w-full h-12 rounded-lg" />
   </div>
   <form
     v-else-if="petTypeData && petGenderData && petSizeData"
     @submit="onSubmit"
-    class="flex flex-row items-center justify-between w-full p-2"
+    class="flex flex-col justify-between w-full gap-2 p-2 lg:gap-0 md:items-center lg:flex-row"
   >
-    <div class="flex flex-row items-center justify-start gap-8">
+    <div class="flex flex-col justify-start gap-2 md:items-center lg:flex-row lg:gap-8">
       <FormField v-slot="{ componentField }" name="search">
         <FormItem class="flex flex-row items-center justify-center gap-4 space-y-0">
           <FormLabel class="font-bold"> Search </FormLabel>
           <FormControl>
-            <Input type="text" placeholder="Pet Name" v-bind="componentField" />
+            <Input
+              type="text"
+              class="w-full lg:w-[200px]"
+              placeholder="Pet Name"
+              v-bind="componentField"
+            />
           </FormControl>
         </FormItem>
       </FormField>
 
       <FormField v-slot="{ componentField }" name="petTypeId">
-        <FormItem class="flex flex-row items-center justify-center gap-4">
+        <FormItem class="flex flex-row items-center justify-center w-full gap-4 space-y-0">
           <FormLabel class="font-bold">Type</FormLabel>
           <Select v-if="petTypeData" v-bind="componentField" default-value="all">
             <FormControl class="!mt-0">
-              <SelectTrigger class="w-[150px]">
+              <SelectTrigger class="w-full lg:w-[150px]">
                 <SelectValue placeholder="Pet Type" />
               </SelectTrigger>
             </FormControl>
@@ -48,7 +53,7 @@
           <FormLabel class="font-bold">Size</FormLabel>
           <Select v-if="petSizeData" v-bind="componentField" default-value="all">
             <FormControl class="!mt-0">
-              <SelectTrigger class="w-[150px]">
+              <SelectTrigger class="w-full lg:w-[150px]">
                 <SelectValue placeholder="Pet Size" />
               </SelectTrigger>
             </FormControl>
@@ -70,7 +75,7 @@
           <FormLabel class="font-bold">Gender</FormLabel>
           <Select v-if="petGenderData" v-bind="componentField" default-value="all">
             <FormControl class="!mt-0">
-              <SelectTrigger class="w-[150px] mt-0">
+              <SelectTrigger class="w-full lg:w-[150px] mt-0">
                 <SelectValue class="mt-0" placeholder="Pet Gender" />
               </SelectTrigger>
             </FormControl>

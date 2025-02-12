@@ -15,59 +15,20 @@
       <DefaultRouteLink to="/my-listings" text="My Listings" />
       <DefaultRouteLink to="/my-requests" text="My Requests" v-if="authStore.userType == 'user'" />
       <ToggleDarkMode />
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <Button size="icon" variant="outline" class="text-primary">
-            <Menu class="w-6 h-6" />
-          </Button>
-          <DropdownMenuContent>
-            <DropdownMenuItem as-child>
-              <RouterLink :to="{ name: 'admin.home' }">
-                <Shield class="w-6 h-6" />
-                <span>Admin Dashboard</span>
-              </RouterLink>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem as-child class="w-full">
-              <Button
-                variant="ghost"
-                @click="logout"
-                class="flex flex-row items-center justify-start"
-              >
-                <LogOut class="w-6 h-6" />
-                <span> Logout </span>
-              </Button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenuTrigger>
-      </DropdownMenu>
+      <DefaultUserActionMenu />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import useAuthStore from '@/stores/auth-store'
-import DefaultRouteLink from './DefaultRouteLink.vue'
-import { RouterLink, useRouter } from 'vue-router'
-import { LogOut, Menu, Shield } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 import ToggleDarkMode from '../ToggleDarkMode.vue'
 import DefaultLogo from './DefaultLogo.vue'
-import { Button } from '../ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
+import DefaultRouteLink from './DefaultRouteLink.vue'
+import DefaultUserActionMenu from './DefaultUserActionMenu.vue'
 
 const authStore = useAuthStore()
-const router = useRouter()
-
-const logout = () => {
-  authStore.logout()
-  router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } })
-}
 
 defineOptions({
   name: 'DefaultHeader',

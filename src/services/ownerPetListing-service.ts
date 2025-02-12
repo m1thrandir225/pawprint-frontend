@@ -1,6 +1,7 @@
 import { Config } from '@/utils/config'
-import { apiRequest } from './api-service'
+import { apiRequest, multipartApiRequest } from './api-service'
 import type { OwnerPetListing } from '@/types/models/ownerPetListing'
+import type { CreateOwnerListingDTO } from '@/types/dto/CreateOwnerListingDTO'
 
 const OWNER_PETLISTING_API_URL = Config.apiURL + '/owner-pet-listings'
 
@@ -47,11 +48,21 @@ const ownerPetListingService = {
       protected: true,
       params: { 'adoption-status': adoptionStatusId },
     }),
-  deleteOwnerPetListing: (id: string) =>
+  deleteOwnerPetListing: ({ id, userId }: { id: string; userId: string }) =>
     apiRequest<boolean>({
       url: `${OWNER_PETLISTING_API_URL}/${id}`,
       method: 'DELETE',
       protected: true,
+      data: {
+        userId,
+      },
+    }),
+  createListing: (input: CreateOwnerListingDTO) =>
+    multipartApiRequest<CreateOwnerListingDTO, string>({
+      url: OWNER_PETLISTING_API_URL,
+      method: 'POST',
+      protected: true,
+      data: input,
     }),
 }
 

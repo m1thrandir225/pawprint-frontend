@@ -4,24 +4,28 @@
       <CarouselItem v-for="(image, index) in images" :key="image">
         <div class="p-1">
           <img
-            :src="image"
+            :src="constructImageUrl(image)"
             :alt="index.toString()"
-            class="object-cover w-full h-full max-h-[350px]"
+            class="w-full h-full max-h-[350px] object-scale-down"
           />
         </div>
       </CarouselItem>
     </CarouselContent>
   </Carousel>
-  <Carousel class="relative w-full max-w-xs" @init-api="(val) => (emblaThumbnailApi = val)">
+  <Carousel class="relative w-full max-w-full" @init-api="(val) => (emblaThumbnailApi = val)">
     <CarouselContent class="flex gap-1 ml-0">
       <CarouselItem
         v-for="(image, index) in images"
         :key="index"
-        class="pl-0 cursor-pointer basis-1/4"
+        class="pl-0 cursor-pointer basis-1/8"
         @click="onThumbClick(index)"
       >
         <div class="p-1" :class="index === selectedIndex ? '' : 'opacity-50'">
-          <img :src="image" :alt="index.toString()" class="object-cover w-full h-full" />
+          <img
+            :src="constructImageUrl(image)"
+            :alt="index.toString()"
+            class="object-cover w-[250px] h-[100px] object-center"
+          />
         </div>
       </CarouselItem>
     </CarouselContent>
@@ -29,16 +33,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import {
-  Carousel,
-  CarouselContent,
-  type CarouselApi,
-  CarouselNext,
-  CarouselPrevious,
-  CarouselItem,
-} from '../ui/carousel'
 import { watchOnce } from '@vueuse/core'
+import { ref } from 'vue'
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '../ui/carousel'
+import { constructImageUrl } from '@/lib/utils'
 
 defineProps<{
   images: string[] | undefined

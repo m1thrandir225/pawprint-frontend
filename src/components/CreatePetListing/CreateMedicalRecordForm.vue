@@ -157,6 +157,7 @@ const vaccination = ref<string>('')
             </div>
           </div>
         </ScrollArea>
+        <FormMessage />
       </FormField>
     </div>
   </div>
@@ -212,6 +213,7 @@ const vaccination = ref<string>('')
             <Input v-model="medicalCondition" type="text" placeholder="Medical Condition" />
             <Textarea
               v-model="medicalConditionNote"
+              type="text"
               class="w-full"
               placeholder="Additional Notes (Optional)"
             />
@@ -229,7 +231,7 @@ const vaccination = ref<string>('')
                       ? [
                           ...value,
                           {
-                            condition: medicalCondition,
+                            conditionName: medicalCondition,
                             note: medicalConditionNote ? medicalConditionNote : null,
                           },
                         ]

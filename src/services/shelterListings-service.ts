@@ -1,6 +1,7 @@
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { Config } from '@/utils/config'
-import { apiRequest } from './api-service'
+import { apiRequest, multipartApiRequest } from './api-service'
+import type { CreateShelterListingDTO } from '@/types/dto/CreateShelterListingDTO'
 
 const SHELTER_LISTING_API_URL = Config.apiURL + '/shelter-listings'
 
@@ -47,10 +48,27 @@ const shelterListingService = {
       protected: true,
       params: { 'adoption-status': adoptionStatusId },
     }),
-  deleteShelterListing: (id: string) =>
+  deleteShelterListing: ({ id, userId }: { id: string; userId: string }) =>
     apiRequest<boolean>({
       url: `${SHELTER_LISTING_API_URL}/${id}`,
       method: 'DELETE',
+      protected: true,
+      data: {
+        userId,
+      },
+    }),
+  createShelterListing: (data: CreateShelterListingDTO) =>
+    multipartApiRequest<CreateShelterListingDTO, string>({
+      url: SHELTER_LISTING_API_URL,
+      method: 'POST',
+      data: data,
+      protected: true,
+    }),
+  updateShelterListing: (id: string, data: Record<string, unknown>) =>
+    multipartApiRequest<Record<string, unknown>, ShelterPetListing>({
+      url: `${SHELTER_LISTING_API_URL}/${id}`,
+      method: 'PUT',
+      data: data,
       protected: true,
     }),
 }
