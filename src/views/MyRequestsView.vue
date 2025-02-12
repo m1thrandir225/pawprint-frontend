@@ -6,7 +6,7 @@
     <div
       v-for="adoption in data"
       :key="adoption.id"
-      class="flex flex-row items-center justify-between p-4 rounded-lg bg-primaryContainer text-primaryContainer-foreground font-generalSans"
+      class="flex flex-row items-center justify-between p-4 my-4 rounded-lg bg-primaryContainer text-primaryContainer-foreground font-generalSans"
     >
       <div class="flex flex-col items-start gap-2">
         <p class="text-lg font-bold">{{ adoption.pet.name }}</p>

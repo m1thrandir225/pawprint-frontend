@@ -11,8 +11,14 @@
     <div class="w-full h-full col-span-1">
       <div class="flex flex-col items-start w-full h-auto gap-4 p-4 border rounded-lg border-1">
         <PetDetailsOwner :owner="data.adopter" />
-        <Button class="w-full">
-          <h1>Apply for adoption</h1>
+        <Button
+          class="w-full"
+          v-if="!ownedByUser"
+          :disabled="adoptionMutationPending"
+          @click="mutateAsync"
+        >
+          <Loader2 v-if="adoptionMutationPending" class="animate-spin" />
+          <span v-else>Apply for adoption</span>
         </Button>
       </div>
     </div>
@@ -28,16 +34,37 @@ import PetDetailsOwner from '@/components/PetDetails/PetDetailsOwner.vue'
 import PetDetailsOwnerDocuments from '@/components/PetDetails/PetDetailsOwnerDocuments.vue'
 import PetDetailsSurrenderReasons from '@/components/PetDetails/PetDetailsSurrenderReasons.vue'
 import { Button } from '@/components/ui/button'
+import adoptionService from '@/services/adoption-service'
 import ownerPetListingService from '@/services/ownerPetListing-service'
+import useAuthStore from '@/stores/auth-store'
 import type { OwnerPetListing } from '@/types/models/ownerPetListing'
-import { useQuery } from '@tanstack/vue-query'
-import { useRoute } from 'vue-router'
+import { useMutation, useQuery } from '@tanstack/vue-query'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
 
 const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
 
 const { data, isPending, isError, error } = useQuery<OwnerPetListing>({
   queryKey: ['ownerPetListings', route.params.id],
   queryFn: ({ queryKey }) => ownerPetListingService.getOwnerPetListing(queryKey[1] as string),
   retry: 0,
+})
+
+const ownedByUser = computed(() => {
+  return data?.value?.adopter.id === authStore.user?.id
+})
+
+const { isPending: adoptionMutationPending, mutateAsync } = useMutation({
+  mutationKey: ['applyForAdoption', data?.value?.pet.id],
+  mutationFn: () => adoptionService.createAdoption(data?.value?.pet.id as string),
+  onSuccess: () => {
+    router.push({ name: 'myRequests' })
+  },
+  onError: (error) => {
+    toast.error(error.message)
+  },
 })
 </script>
