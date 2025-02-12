@@ -1,5 +1,5 @@
 <template>
-  <Card class="w-full rounded-none border-accent">
+  <Card class="w-full rounded-none border-secondary">
     <CardHeader>
       <CardTitle>Adoptions</CardTitle>
       <CardDescription>All submissions for the pet.</CardDescription>
@@ -17,14 +17,22 @@
           <TableRow
             v-for="adoption in adoptions"
             :key="adoption.id"
-            :class="{ 'bg-accent/50 hover:bg-accent/20': adoption.isSuccessful }"
+            :class="{
+              'bg-secondary/50 hover:bg-secondary/20 text-secondary-foreground hover:text-secondary':
+                adoption.approved === 0,
+              'bg-destructive/50 text-destructive-foreground': adoption.approved === 2,
+            }"
           >
-            <TableCell class="w-[90%]"
-              >{{ adoption.adopter.firstName }} {{ adoption.adopter.lastName }}</TableCell
+            <TableCell class="w-[90%]">
+              {{ adoption.adopter.firstName }} {{ adoption.adopter.lastName }}</TableCell
             >
             <TableCell>
               <div class="flex flex-row items-center justify-center gap-4">
-                <Button variant="default" v-if="isAdoptedAlready">
+                <Button
+                  variant="default"
+                  v-if="!hasAnApprovedAdoptionRequest"
+                  @click="() => $emit('approve', adoption.id)"
+                >
                   <Check class="w-6 h-6 space-x-2" />
                   Approve
                 </Button>
@@ -43,6 +51,9 @@
                       </DialogDescription>
                     </DialogHeader>
                     <div class="flex flex-col w-full gap-4">
+                      <p v-if="adoption.approved === 2" class="font-bold">
+                        This request has been rejected before
+                      </p>
                       <p>Name: {{ adoption.adopter.firstName }} {{ adoption.adopter.lastName }}</p>
                       <p>Has Children: {{ booleanToText(adoption.adopter.hasChildren) }}</p>
                       <p>Has Other Pets: {{ booleanToText(adoption.adopter.hasOtherPets) }}</p>
@@ -54,7 +65,11 @@
                     </div>
                   </DialogContent>
                 </Dialog>
-                <Button variant="destructive" v-if="isAdoptedAlready">
+                <Button
+                  variant="destructive"
+                  v-if="!hasAnApprovedAdoptionRequest && adoption.approved !== 2"
+                  @click="() => $emit('reject', adoption.id)"
+                >
                   <X class="w-6 h-6 space-x-2" />
                   Reject
                 </Button>
@@ -71,10 +86,21 @@
 </template>
 
 <script setup lang="ts">
+import { booleanToText } from '@/lib/utils'
 import type { Adoption } from '@/types/models/adoption'
+import { Check, ListCollapse, X } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import CardDescription from '../ui/card/CardDescription.vue'
-import { Check, ListCollapse, X } from 'lucide-vue-next'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 import {
   Table,
   TableBody,
@@ -84,24 +110,18 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table'
-import { Button } from '../ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog'
-import { computed } from 'vue'
-import { booleanToText } from '@/lib/utils'
+
+defineEmits<{
+  (e: 'approve', adoptionId: string): void
+  (e: 'reject', adoptionId: string): void
+}>()
 
 const props = defineProps<{
   adoptions: Adoption[]
 }>()
 
-const isAdoptedAlready = computed(() => {
-  return props.adoptions.some((adoption) => adoption.isSuccessful)
+const hasAnApprovedAdoptionRequest = computed(() => {
+  return props.adoptions.some((adoption) => adoption.approved === 0)
 })
 </script>
 

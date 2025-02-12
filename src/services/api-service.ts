@@ -1,6 +1,11 @@
 import useAuthStore from '@/stores/auth-store'
-import type { ApiRequestConfig, RefreshTokenResponse } from '@/types/services/auth'
+import type {
+  ApiRequestConfig,
+  MultipartApiRequestConfig,
+  RefreshTokenResponse,
+} from '@/types/services/auth'
 import { Config } from '@/utils/config'
+import { buildFormData } from '@/utils/form'
 import axios, { AxiosError, type AxiosInstance } from 'axios'
 
 declare module 'axios' {
@@ -117,8 +122,40 @@ export const apiRequest = async <T>(config: ApiRequestConfig) => {
     })
 
     return response.data
-  } catch {
-    throw new Error('Failed to fetch data')
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data.message)
+    } else {
+      throw new Error('Something went wrong. Please try again later.')
+    }
+  }
+}
+
+export const multipartApiRequest = async <T extends Record<string, unknown>, R = unknown>(
+  config: MultipartApiRequestConfig<T>,
+): Promise<R> => {
+  try {
+    const formData = buildFormData(config.data)
+
+    const response = await api.request<R>({
+      url: config.url,
+      method: config.method,
+      data: formData,
+      headers: {
+        ...config.headers,
+        'Content-Type': 'multipart/form-data',
+        protected: config.protected,
+      },
+      params: config.params,
+      _retry: config.retry,
+    })
+    return response.data
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data.message)
+    } else {
+      throw new Error('Something went wrong. Please try again later.')
+    }
   }
 }
 

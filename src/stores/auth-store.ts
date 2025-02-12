@@ -25,6 +25,12 @@ const useAuthStore = defineStore('auth', () => {
     else return 'user'
   })
 
+  const userIsAdmin = computed(() => {
+    if (!user.value) return false
+    if (userType.value !== 'user') return false
+    return (user.value as UserDTO).isAdmin
+  })
+
   const tokens = useStorage<AuthTokens | null>('authTokens', null, localStorage, {
     serializer: {
       read: (v: string) => (v ? JSON.parse(v) : null),
@@ -92,6 +98,7 @@ const useAuthStore = defineStore('auth', () => {
   return {
     user,
     userType,
+    userIsAdmin,
     accessToken,
     refreshToken,
     isAuthenticated,

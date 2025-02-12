@@ -13,4 +13,4 @@ const ownerSurrenderReasonService = {
     }),
 }
 
-export default ownerSurrenderReasonService;
+export default ownerSurrenderReasonService

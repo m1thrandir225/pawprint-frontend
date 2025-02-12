@@ -127,7 +127,7 @@
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="specialRequirements">
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Special Requirements (Optional)</FormLabel>
         <FormControl>
           <Textarea
@@ -141,7 +141,7 @@
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="behaviorialNotes">
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>Behavioral Notes (Optional)</FormLabel>
         <FormControl>
           <Textarea
@@ -157,7 +157,7 @@
   </div>
   <div class="flex flex-col w-full gap-4">
     <FormField v-slot="{ handleBlur, handleChange, value }" name="avatarImg">
-      <Card class="w-full rounded-none">
+      <Card class="w-full rounded-lg">
         <CardHeader>
           <CardTitle> Pet Avatar </CardTitle>
           <CardDescription> The main image of the listing </CardDescription>
@@ -185,7 +185,7 @@
     </FormField>
 
     <FormField v-slot="{ handleBlur, handleChange, value, setValue }" name="imageShowcase">
-      <Card class="w-full rounded-none">
+      <Card class="w-full rounded-lg">
         <CardHeader>
           <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col gap-2">
@@ -196,7 +196,6 @@
             <Button
               v-if="value && value.length > 0"
               size="icon"
-              class="rounded-none"
               variant="outline"
               @click="triggerAddFileInput"
             >
@@ -231,21 +230,21 @@
         <CardContent>
           <div class="flex flex-col gap-2">
             <FormItem v-auto-animate>
-              <div v-if="value" class="flex flex-col w-full gap-2">
+              <div v-if="value" class="flex flex-col w-full gap-2" v-auto-animate>
                 <div
                   v-for="image in value"
                   :key="image"
-                  class="flex flex-row items-center justify-between p-4 border"
+                  class="flex flex-row items-center justify-between p-4 border rounded-md"
+                  :class="{ 'bg-red-200': image.size > maxImageSize }"
                 >
                   <img
                     :src="createURLPreview(image)"
                     alt="Pet Avatar"
-                    class="object-cover w-24 h-24"
+                    class="object-cover object-top w-32 h-32 rounded-sm"
                   />
                   <Button
                     size="icon"
                     variant="outline"
-                    class="rounded-none"
                     @click="
                       () => {
                         const withoutImage = value.filter((file: File) => file !== image)
@@ -274,7 +273,10 @@
     </FormField>
 
     <FormField v-slot="{ value, handleChange }" name="goodWithDogs">
-      <FormItem class="flex flex-row items-center justify-between p-4 border rounded-none">
+      <FormItem
+        v-auto-animate
+        class="flex flex-row items-center justify-between p-4 border rounded-lg"
+      >
         <div class="flex flex-row items-center gap-4">
           <Dog class="w-6 h-6" />
           <div class="space-y-0.5">
@@ -288,7 +290,10 @@
       </FormItem>
     </FormField>
     <FormField v-slot="{ value, handleChange }" name="goodWithCats">
-      <FormItem class="flex flex-row items-center justify-between p-4 border rounded-none">
+      <FormItem
+        v-auto-animate
+        class="flex flex-row items-center justify-between p-4 border rounded-lg"
+      >
         <div class="flex flex-row items-center gap-4">
           <Cat class="w-6 h-6" />
           <div class="space-y-0.5">
@@ -302,7 +307,10 @@
       </FormItem>
     </FormField>
     <FormField v-slot="{ value, handleChange }" name="goodWithChildren">
-      <FormItem class="flex flex-row items-center justify-between p-4 border rounded-none">
+      <FormItem
+        v-auto-animate
+        class="flex flex-row items-center justify-between p-4 border rounded-lg"
+      >
         <div class="flex flex-row items-center gap-4">
           <Baby class="w-6 h-6" />
           <div class="space-y-0.5">
@@ -353,6 +361,7 @@ defineProps<{
   sizes: PetSize[]
   genders: PetGender[]
   healthStatuses: HealthStatus[]
+  maxImageSize: number
 }>()
 
 const addImageInputRef = ref<HTMLInputElement | null>(null)

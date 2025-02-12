@@ -17,7 +17,7 @@
             e.preventDefault()
             validate()
             if (stepIndex === steps.length && meta.valid) {
-              onSubmit(values)
+              onSubmit(values as CreateShelterListingDTO)
             }
           }
         "
@@ -75,6 +75,7 @@
               :sizes="sizes"
               :types="types"
               :health-statuses="healthStatuses"
+              :max-image-size="MAX_IMAGE_SIZE"
             />
           </template>
 
@@ -109,7 +110,10 @@
             >
               Next
             </Button>
-            <Button v-if="stepIndex === 4" size="sm" type="submit"> Submit </Button>
+            <Button v-if="stepIndex === 4" size="sm" type="submit" :disabled="isPending">
+              <Loader2 v-if="isPending" class="animate-spin" />
+              <span v-else>Submit</span>
+            </Button>
           </div>
         </div>
       </form>
@@ -133,7 +137,7 @@ import type { PetSize } from '@/types/models/petSize'
 import type { PetType } from '@/types/models/petType'
 
 import { toTypedSchema } from '@vee-validate/zod'
-import { Check, Circle, Dot } from 'lucide-vue-next'
+import { Check, Circle, Dot, Loader2 } from 'lucide-vue-next'
 import { ref } from 'vue'
 import * as z from 'zod'
 import CreatePetForm from './CreatePetForm.vue'
@@ -141,7 +145,26 @@ import type { HealthStatus } from '@/types/models/healthStatus'
 import CreateMedicalRecordForm from './CreateMedicalRecordForm.vue'
 import CreateVeterinarianForm from './CreateVeterinarianForm.vue'
 import CreateFeeForm from './CreateFeeForm.vue'
-const MAX_FILE_SIZE = 5000000
+import { useMutation } from '@tanstack/vue-query'
+import shelterListingService from '@/services/shelterListings-service'
+import type { CreateShelterListingDTO } from '@/types/dto/CreateShelterListingDTO'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
+
+const router = useRouter()
+
+const { mutateAsync, isPending } = useMutation({
+  mutationKey: ['createPetListing'],
+  mutationFn: (input: CreateShelterListingDTO) => shelterListingService.createShelterListing(input),
+  onSuccess: (data) => {
+    router.push({ name: 'shelterListing', params: { id: data } })
+  },
+  onError: (error) => {
+    toast.error("Couldn't create the listing. Error + " + error.message)
+  },
+})
+
+const MAX_IMAGE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
 const formSchema = [
@@ -152,7 +175,7 @@ const formSchema = [
       .custom<File>()
       .refine((file) => file, 'An image is required.')
       .refine(
-        (file) => file && file.size <= MAX_FILE_SIZE,
+        (file) => file && file.size <= MAX_IMAGE_SIZE,
         `File must be less than or equal to 5MB.`,
       )
       .refine(
@@ -165,7 +188,7 @@ const formSchema = [
       .refine((files) => files && files?.length <= 10, 'You can upload a maximum of 10 files.')
       .refine((files) => {
         if (!files) return false
-        return Array.from(files).every((file) => file.size <= MAX_FILE_SIZE)
+        return Array.from(files).every((file) => file.size <= MAX_IMAGE_SIZE)
       }, `Each file must be less than or equal to 5MB.`)
       .refine((files) => {
         if (!files) return false
@@ -204,10 +227,12 @@ const formSchema = [
   }),
   z.object({
     veterinarianName: z.string().min(2).max(50),
-    clinicName: z.string().min(2).max(50),
+    veterinarianClinicName: z.string().min(2).max(50),
     veterinarianContactNumber: z.string().min(2).max(50),
     veterinarianEmail: z.string().email(),
-    specializations: z.array(z.string()).min(1, 'At least one specialization is required.'),
+    veterinarianSpecializations: z
+      .array(z.string())
+      .min(1, 'At least one specialization is required.'),
   }),
   z.object({
     fee: z.number().min(0),
@@ -218,7 +243,7 @@ const formSchema = [
 const initialValues = {
   medicalConditions: [],
   vaccinations: [],
-  specializations: [],
+  veterinarianSpecializations: [],
   fee: 0,
   feeCurrency: 'MKD',
 }
@@ -254,8 +279,8 @@ defineProps<{
   healthStatuses: HealthStatus[]
 }>()
 
-function onSubmit(values: unknown) {
-  console.log(values)
+async function onSubmit(values: CreateShelterListingDTO) {
+  await mutateAsync(values)
 }
 </script>
 

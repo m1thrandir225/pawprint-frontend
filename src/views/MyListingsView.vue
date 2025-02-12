@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import DefaultError from '@/components/Global/DefaultError.vue'
-import DefaultLodaer from '@/components/Global/DefaultLoader.vue'
 import DefaultTitle from '@/components/Global/DefaultTitle.vue'
 import ListingGrid from '@/components/MyListings/PetListingGrid.vue'
 import { Button } from '@/components/ui/button'
@@ -13,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
 import adoptionStatusService from '@/services/adoptionStatus-service'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import shelterListingService from '@/services/shelterListings-service'
@@ -24,7 +23,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
 import { Filter, Plus } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import * as z from 'zod'
 const authStore = useAuthStore()
 
@@ -84,12 +83,23 @@ const onSubmit = form.handleSubmit(async (values) => {
   adoptionStatusId.value = values.adoptionStatusId === 'all' ? '' : values.adoptionStatusId
   refetch()
 })
+
+const allListings = computed(() => {
+  if (!listings.value) {
+    return []
+  }
+  return listings.value
+})
 </script>
 
 <template>
-  <DefaultLodaer v-if="isPending" />
-  <DefaultError v-else-if="isError" :error="error!.message" />
-  <div v-else-if="listings" class="flex flex-col items-start w-full gap-8">
+  <div v-if="adoptionStatusesIsPending" class="w-full h-12 rounded-lg">
+    <Skeleton class="w-full h-12 rounded-none" />
+  </div>
+  <div v-else-if="adoptionStatusesIsError">
+    <p class="text-destructive">Something went wrong: {{ adoptionStatusesError?.message }}</p>
+  </div>
+  <div v-else-if="adoptionStatuses" class="flex flex-col items-start w-full gap-8">
     <div class="flex flex-row items-center justify-between w-full">
       <DefaultTitle text="My Listings" />
       <Button as-child variant="default">
@@ -107,11 +117,11 @@ const onSubmit = form.handleSubmit(async (values) => {
       <form @submit="onSubmit" class="flex flex-row items-center justify-between w-full">
         <FormField v-slot="{ componentField }" name="adoptionStatusId">
           <FormItem class="flex flex-row items-center justify-center gap-4">
-            <FormLabel class="font-bold">Type</FormLabel>
+            <FormLabel class="font-bold">Status</FormLabel>
             <Select v-if="adoptionStatuses" v-bind="componentField" default-value="all">
               <FormControl class="!mt-0">
                 <SelectTrigger class="w-[150px]">
-                  <SelectValue placeholder="Pet Type" />
+                  <SelectValue placeholder="Listing Status" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -133,7 +143,13 @@ const onSubmit = form.handleSubmit(async (values) => {
         <Button type="submit" variant="secondary"> <Filter class="w-6 h-6" /> Filter </Button>
       </form>
 
-      <ListingGrid :listings="listings" :refetch="refetch" />
+      <ListingGrid
+        :listings="allListings"
+        :refetch="refetch"
+        :is-error="isError"
+        :is-loading="isPending"
+        :error="error?.message"
+      />
     </div>
   </div>
 </template>
