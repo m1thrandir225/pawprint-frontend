@@ -7,4 +7,5 @@ export type UserDTO = {
   hasChildren: boolean
   hasOtherPets: boolean
   homeType: string
+  isAdmin?: boolean
 }

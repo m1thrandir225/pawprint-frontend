@@ -1,6 +1,27 @@
 <template>
+  <FormField v-slot="{ componentField }" name="surrenderReasonId">
+    <FormItem v-auto-animate class="w-full col-span-2 my-4">
+      <FormLabel>Surrender Reason</FormLabel>
+      <Select v-bind="componentField">
+        <FormControl>
+          <SelectTrigger>
+            <SelectValue placeholder="Select the type of your pet" />
+          </SelectTrigger>
+        </FormControl>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem v-for="reason in surrenderReasons" :value="reason.id" :key="reason.id">
+              {{ reason.description }}
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <FormDescription> The reason you are listing your pet. </FormDescription>
+      <FormMessage />
+    </FormItem>
+  </FormField>
   <FormField v-slot="{ handleBlur, handleChange, value, setValue }" name="documents">
-    <Card class="w-full col-span-2 rounded-none">
+    <Card class="w-full col-span-2 rounded-lg">
       <CardHeader>
         <div class="flex flex-row items-center justify-between">
           <div class="flex flex-col gap-2">
@@ -10,9 +31,8 @@
 
           <Button
             v-if="value && value.length > 0"
-            size="sm"
+            size="icon"
             variant="outline"
-            class="rounded-none"
             @click="triggerAddFileInput"
           >
             <Plus class="w-8 h-8" />
@@ -48,19 +68,19 @@
               <div
                 v-for="document in value"
                 :key="document"
-                class="flex flex-row items-center justify-between p-4 border"
+                class="flex flex-row items-center justify-between p-4 border rounded-lg"
+                :class="{ 'bg-red-200': document.size > maxDocumentSize }"
               >
                 <img
                   v-if="document.type.includes('image')"
                   :src="createURLPreview(document)"
                   alt="Pet Avatar"
-                  class="object-cover w-24 h-24"
+                  class="object-cover w-24 h-24 rounded-sm"
                 />
                 <p v-else>{{ document.name }}</p>
                 <Button
                   size="icon"
-                  class="rounded-none"
-                  variant="destructive"
+                  variant="outline"
                   @click="
                     () => {
                       const withoutDocument = value.filter((file: File) => file !== document)
@@ -94,11 +114,32 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { FormField, FormItem } from '../ui/form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Plus, Trash } from 'lucide-vue-next'
 import { Input } from '../ui/input'
+import type { OwnerSurrenderReason } from '@/types/models/ownerSurrenderReason'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
+
+defineProps<{
+  surrenderReasons: OwnerSurrenderReason[]
+  maxDocumentSize: number
+}>()
 
 const addImageInputRef = ref<HTMLInputElement | null>(null)
 

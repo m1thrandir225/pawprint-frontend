@@ -5,9 +5,9 @@
       {{ owner.firstName }} {{ owner.lastName }}
     </h1>
     <div class="flex items-center w-full space-x-4">
-      <MapPinHouse class="text-accent" />
+      <MapPinHouse class="text-secondary" />
       <p class="font-generalSans text-[16px]">
-        <span class="font-semibold text-accent">Contact Email: </span>
+        <span class="font-semibold text-secondary">Contact Email: </span>
         <span class="ml-2 text-foreground">{{ owner.email }}</span>
       </p>
     </div>

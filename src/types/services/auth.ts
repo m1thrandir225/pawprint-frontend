@@ -11,6 +11,16 @@ export type ApiRequestConfig = {
   data?: Record<string, unknown> | FormData
 }
 
+export type MultipartApiRequestConfig<T extends Record<string, unknown>> = {
+  url: string
+  method: string
+  data: T
+  headers?: Record<string, string>
+  protected?: boolean
+  params?: Record<string, string>
+  retry?: boolean
+}
+
 export type LoginRequest = {
   email: string
   password: string

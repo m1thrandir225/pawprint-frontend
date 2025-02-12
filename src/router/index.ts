@@ -81,13 +81,13 @@ const router = createRouter({
       path: '/create-shelter-listing',
       name: 'createShelterListing',
       component: CreateShelterPetListing,
-      meta: { layout: layouts.default, requiresAuth: true },
+      meta: { layout: layouts.default, requiresAuth: true, requiresShelter: true },
     },
     {
       path: '/create-owner-listing',
       name: 'createOwnerListing',
       component: CreateOwnerPetListing,
-      meta: { layout: layouts.default, requiresAuth: true },
+      meta: { layout: layouts.default, requiresAuth: true, requiresUser: true },
     },
     {
       path: '/my-listings',
@@ -105,7 +105,7 @@ const router = createRouter({
       path: '/my-listings/:id/edit',
       name: 'editMyListing',
       component: CreateShelterPetListing,
-      meta: { layout: layouts.default, requiresAuth: true },
+      meta: { layout: layouts.default, requiresAuth: true, requiresShelter: true },
     },
     {
       path: '/my-requests',
@@ -123,62 +123,62 @@ const router = createRouter({
       path: '/admin',
       name: 'admin.home',
       component: AdminHomeView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/pets',
       name: 'admin.pets',
       component: AdminPetsView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/pet-types',
       name: 'admin.petTypes',
       component: AdminPetTypesView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/pet-genders',
       name: 'admin.petGenders',
       component: AdminPetGendersView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/pet-sizes',
       name: 'admin.petSizes',
       component: AdminPetSizesView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/health-statuses',
       name: 'admin.healthStatuses',
       component: AdminHealthStatusesView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/adoption-statuses',
       name: 'admin.adoptionStatuses',
       component: AdminAdoptionStatusesView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
 
     {
       path: '/admin/shelters',
       name: 'admin.shelters',
       component: AdminSheltersView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/adopters',
       name: 'admin.adopters',
       component: AdminAdopterView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin/user-roles',
       name: 'admin.roles',
       component: AdminRolesView,
-      meta: { layout: layouts.admin, requiresAuth: true },
+      meta: { layout: layouts.admin, requiresAuth: true, requiresAdmin: true },
     },
   ],
 })
@@ -196,8 +196,8 @@ router.beforeEach((to, from, next) => {
     if (
       (to.name === 'login' ||
         to.name === 'register' ||
-        to.name === 'registerUser' ||
-        to.name === 'registerShelter') &&
+        to.name === 'register.adopter' ||
+        to.name === 'register.shelter') &&
       auth.isAuthenticated
     ) {
       next({ path: '/browse' })
@@ -206,6 +206,19 @@ router.beforeEach((to, from, next) => {
     if (to.name === 'home' && auth.isAuthenticated) {
       next({ path: '/browse' })
     }
+
+    if (to.meta.requiresAdmin && !auth.userIsAdmin) {
+      next({ path: '/browse' })
+    }
+
+    if (to.meta.requiresUser && auth.userType !== 'user') {
+      next({ path: '/browse' })
+    }
+
+    if (to.meta.requiresShelter && auth.userType !== 'shelter') {
+      next({ path: '/browse' })
+    }
+
     next()
   }
 })

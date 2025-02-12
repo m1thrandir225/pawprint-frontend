@@ -1,7 +1,11 @@
 <template>
-  <Card class="w-full rounded-none border-accent">
+  <Card class="w-full border rounded-lg border-outline">
     <CardHeader>
-      <img :src="item.pet.avatarImg" :alt="item.pet.name" class="w-full h-auto max-h-[300px]" />
+      <img
+        :src="constructImageUrl(item.pet.avatarImg)"
+        :alt="item.pet.name"
+        class="w-full h-auto max-h-[250px] object-cover rounded-md"
+      />
       <div class="flex flex-row items-center justify-between w-full">
         <div class="flex flex-col items-start gap-2">
           <CardTitle>
@@ -85,21 +89,28 @@ import {
 } from '../ui/dialog'
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import { toast } from 'vue-sonner'
+import { constructImageUrl } from '@/lib/utils'
 
 const props = defineProps<{
   item: OwnerPetListing | ShelterPetListing
   refetch: () => void
 }>()
 
-const { userType } = useAuthStore()
+const { userType, user } = useAuthStore()
 
 const { mutateAsync, isPending } = useMutation({
   mutationKey: ['deleteListing', props.item.id],
   mutationFn: () => {
     if (userType === 'shelter') {
-      return shelterListingService.deleteShelterListing(props.item.id)
+      return shelterListingService.deleteShelterListing({
+        id: props.item.id,
+        userId: user!.id,
+      })
     } else if (userType === 'user') {
-      return ownerPetListingService.deleteOwnerPetListing(props.item.id)
+      return ownerPetListingService.deleteOwnerPetListing({
+        id: props.item.id,
+        userId: user!.id,
+      })
     } else {
       throw new Error('Invalid user type')
     }

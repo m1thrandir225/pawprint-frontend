@@ -17,7 +17,7 @@
             e.preventDefault()
             validate()
             if (stepIndex === steps.length && meta.valid) {
-              onSubmit(values)
+              onSubmit(values as CreateOwnerListingDTO)
             }
           }
         "
@@ -76,18 +76,17 @@
               :sizes="sizes"
               :types="types"
               :health-statuses="healthStatuses"
+              :max-image-size="MAX_IMAGE_SIZE"
             />
           </template>
 
           <template v-if="stepIndex === 2">
-            <CreateMedicalRecordForm />
+            <CreateOwnerDocumentsForm
+              :surrender-reasons="ownerSurrenderReasons"
+              :max-document-size="MAX_FILE_SIZE"
+            />
           </template>
-
           <template v-if="stepIndex === 3">
-            <CreateOwnerDocumentsForm />
-          </template>
-
-          <template v-if="stepIndex === 4">
             <CreateFeeForm />
           </template>
         </div>
@@ -98,7 +97,7 @@
           </Button>
           <div class="flex items-center gap-3">
             <Button
-              v-if="stepIndex !== 4"
+              v-if="stepIndex !== 3"
               :type="meta.valid ? 'button' : 'submit'"
               :disabled="isNextDisabled"
               size="sm"
@@ -111,7 +110,10 @@
             >
               Next
             </Button>
-            <Button v-if="stepIndex === 4" size="sm" type="submit"> Submit </Button>
+            <Button v-if="stepIndex === 3" size="sm" type="submit" :disabled="isPending">
+              <Loader2 v-if="isPending" class="animate-spin" />
+              <span v-else>Submit</span>
+            </Button>
           </div>
         </div>
       </form>
@@ -134,17 +136,36 @@ import type { PetGender } from '@/types/models/petGender'
 import type { PetSize } from '@/types/models/petSize'
 import type { PetType } from '@/types/models/petType'
 
+import ownerPetListingService from '@/services/ownerPetListing-service'
+import type { CreateOwnerListingDTO } from '@/types/dto/CreateOwnerListingDTO'
 import type { HealthStatus } from '@/types/models/healthStatus'
+import type { OwnerSurrenderReason } from '@/types/models/ownerSurrenderReason'
+import { useMutation } from '@tanstack/vue-query'
 import { toTypedSchema } from '@vee-validate/zod'
-import { Check, Circle, Dot } from 'lucide-vue-next'
+import { Check, Circle, Dot, Loader2 } from 'lucide-vue-next'
 import { ref } from 'vue'
 import * as z from 'zod'
-import CreateMedicalRecordForm from './CreateMedicalRecordForm.vue'
+import CreateFeeForm from './CreateFeeForm.vue'
 import CreateOwnerDocumentsForm from './CreateOwnerDocumentsForm.vue'
 import CreatePetForm from './CreatePetForm.vue'
-import CreateFeeForm from './CreateFeeForm.vue'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
+
+defineProps<{
+  types: PetType[]
+  sizes: PetSize[]
+  genders: PetGender[]
+  healthStatuses: HealthStatus[]
+  ownerSurrenderReasons: OwnerSurrenderReason[]
+}>()
+
+const router = useRouter()
+
 const MAX_FILE_SIZE = 50000000
+const MAX_IMAGE_SIZE = 5000000
+
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+
 const ACCEPTED_FILE_TYPES = [
   'application/msword',
   'application/vnd.oasis.opendocument.text',
@@ -154,6 +175,7 @@ const ACCEPTED_FILE_TYPES = [
 ]
 
 const formSchema = [
+  //Pet object
   z.object({
     name: z.string().min(2).max(50).nonempty(),
     breed: z.string().min(2).max(50).nonempty(),
@@ -161,7 +183,7 @@ const formSchema = [
       .custom<File>()
       .refine((file) => file, 'An image is required.')
       .refine(
-        (file) => file && file.size <= MAX_FILE_SIZE,
+        (file) => file && file.size <= MAX_IMAGE_SIZE,
         `File must be less than or equal to 5MB.`,
       )
       .refine(
@@ -174,12 +196,15 @@ const formSchema = [
       .refine((files) => files && files?.length <= 10, 'You can upload a maximum of 10 files.')
       .refine((files) => {
         if (!files) return false
-        return Array.from(files).every((file) => file.size <= MAX_FILE_SIZE)
+        return Array.from(files).every((file) => file.size <= MAX_IMAGE_SIZE)
       }, `Each file must be less than or equal to 5MB.`)
-      .refine((files) => {
-        if (!files) return false
-        return Array.from(files).every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
-      }, 'Only .jpg, .jpeg, .png, and .webp files are accepted.'),
+      .refine(
+        (files) => {
+          if (!files) return false
+          return Array.from(files).every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
+        },
+        `Only ${ACCEPTED_IMAGE_TYPES.join(', ')} files are accepted.`,
+      ),
     ageYears: z.coerce.number().min(0).max(100),
     petTypeId: z.string(),
     petGenderId: z.string(),
@@ -188,46 +213,33 @@ const formSchema = [
     goodWithChildren: z.boolean().default(false),
     goodWithDogs: z.boolean().default(false),
     goodWithCats: z.boolean().default(false),
-    energyLevel: z.coerce.number().gt(0).lt(6),
+    energyLevel: z.coerce.number().min(1).max(5),
     specialRequirements: z.string().nullable().default(null),
     behaviorialNotes: z.string().nullable().default(null),
   }),
+  //Documents object
   z.object({
-    spayNeuterStatus: z.boolean(),
-    lastMedicalCheckup: z.string().max(15).nullable().default(null),
-    microchipNumber: z.string().nullable().default(null),
-    medicalConditions: z
-      .array(
-        z.object({
-          conditionName: z.string().min(2).max(100),
-          notes: z.string().nullable().default(null),
-        }),
-      )
-      .nullable(),
-    vaccinations: z.array(
-      z.object({
-        name: z.string().min(2).max(100),
-        date: z.string().min(2).max(100),
-      }),
-    ),
-  }),
-  z.object({
+    surrenderReasonId: z.string(),
     documents: z
       .custom<FileList>() // Use FileList for HTML file input
-      .refine((files) => files && files?.length > 0, 'At least one image is required.')
+      .refine((files) => files && files?.length > 0, 'At least one file is required.')
       .refine((files) => files && files?.length <= 20, 'You can upload a maximum of 20 files.')
       .refine((files) => {
         if (!files) return false
         return Array.from(files).every((file) => file.size <= MAX_FILE_SIZE)
-      }, `Each file must be less than or equal to 5MB.`)
-      .refine((files) => {
-        if (!files) return false
-        return Array.from(files).every(
-          (file) =>
-            ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_FILE_TYPES.includes(file.type),
-        )
-      }, 'Only .jpg, .jpeg, .png, and .webp files are accepted.'),
+      }, `Each file must be less than or equal to 50MB.`)
+      .refine(
+        (files) => {
+          if (!files) return false
+          return Array.from(files).every(
+            (file) =>
+              ACCEPTED_IMAGE_TYPES.includes(file.type) || ACCEPTED_FILE_TYPES.includes(file.type),
+          )
+        },
+        `Only ${ACCEPTED_IMAGE_TYPES.join(', ')} and ${ACCEPTED_FILE_TYPES.join(', ')} files are accepted.`,
+      ),
   }),
+  //Fee object
   z.object({
     fee: z.number().min(0),
     feeCurrency: z.string().min(3).max(3),
@@ -236,8 +248,12 @@ const formSchema = [
 
 const initialValues = {
   vaccinations: [],
-  medicalConditions: [],
   documents: [],
+  goodWithCats: false,
+  goodWithDogs: false,
+  goodWithChildren: false,
+  specialRequirements: null,
+  behaviorialNotes: null,
   fee: 0,
   feeCurrency: 'MKD',
 }
@@ -251,30 +267,29 @@ const steps = [
   },
   {
     step: 2,
-    title: 'Medical Record',
-    description: 'Enter your pet medical record',
+    title: 'Documents',
+    description: 'Documents related to the Pet you are trying to list.',
   },
   {
     step: 3,
-    title: 'Documents',
-    description: 'Add additional documents related to the listing.',
-  },
-  {
-    step: 4,
     title: 'Fee',
     description: 'Pricing Details',
   },
 ]
 
-defineProps<{
-  types: PetType[]
-  sizes: PetSize[]
-  genders: PetGender[]
-  healthStatuses: HealthStatus[]
-}>()
+const { mutateAsync, isPending } = useMutation({
+  mutationKey: ['createOwnerListing'],
+  mutationFn: (input: CreateOwnerListingDTO) => ownerPetListingService.createListing(input),
+  onSuccess: (data) => {
+    router.replace({ name: 'ownerListing', params: { id: data } })
+  },
+  onError: (error) => {
+    toast.error("Couldn't create the listing. Error: " + error.message)
+  },
+})
 
-function onSubmit(values: unknown) {
-  console.log(values)
+async function onSubmit(values: CreateOwnerListingDTO) {
+  await mutateAsync(values)
 }
 </script>
 
