@@ -13,13 +13,21 @@
           Your donation helps us continue to provide free resources to the community.
         </DialogDescription>
       </DialogHeader>
-      <DonationForm />
+      <DonationForm v-if="currentView === 'donation'" @success="() => setCurrentView('success')" />
+      <Vue3Lottie
+        v-else
+        :animationData="SuccessDonationLottie"
+        :height="300"
+        :loop="false"
+        autoplay
+      />
     </DialogContent>
   </Dialog>
   <div class="donation-container"></div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import DonationForm from '../Donation/DonationForm.vue'
 import { Button } from '../ui/button'
 import {
@@ -31,4 +39,12 @@ import {
   DialogTrigger,
 } from '../ui/dialog'
 import { HandCoins } from 'lucide-vue-next'
+import { Vue3Lottie } from 'vue3-lottie'
+import SuccessDonationLottie from '../../assets/donationSuccessLottie.json'
+
+const currentView = ref<'donation' | 'success'>('donation')
+
+const setCurrentView = (view: 'donation' | 'success') => {
+  currentView.value = view
+}
 </script>
