@@ -85,6 +85,8 @@ import { Button } from '../ui/button'
 import { Loader2 } from 'lucide-vue-next'
 import { useDark } from '@vueuse/core'
 
+const emits = defineEmits(['success'])
+
 const isDark = useDark()
 const amounts = ['250', '500', '1000', '1500', '2000', '5000']
 
@@ -154,6 +156,9 @@ onMounted(async () => {
 const { isPending, mutateAsync } = useMutation({
   mutationKey: ['donate'],
   mutationFn: (input: DonationDTO) => paymentService.payDonation(input),
+  onSuccess: () => {
+    emits('success')
+  },
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
@@ -171,11 +176,10 @@ const onSubmit = form.handleSubmit(async (values) => {
     throw new Error('Token creation failed')
   }
 
-  console.log('Donation values:', values, 'Token:', result.token?.id)
-  // await mutateAsync({
-  //   amount: values.amount,
-  //   email: values.email,
-  //   token: result.token?.id,
-  // })
+  await mutateAsync({
+    amount: values.amount,
+    email: values.email,
+    token: result.token.id,
+  })
 })
 </script>

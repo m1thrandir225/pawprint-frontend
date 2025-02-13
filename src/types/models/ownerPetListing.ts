@@ -13,4 +13,5 @@ export type OwnerPetListing = {
   submissionDate: string
   approvalStatus: number
   ownerPetListingDocuments: OwnerPetListingDocument[]
+  adoptionFee: number
 }
