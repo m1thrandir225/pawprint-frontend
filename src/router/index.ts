@@ -19,6 +19,7 @@ import MyListingView from '@/views/MyListingView.vue'
 import MyRequestsView from '@/views/MyRequestsView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import OwnerPetListingView from '@/views/OwnerPetListingView.vue'
+import PartnerFoodDeliverView from '@/views/PartnerFoodDeliverView.vue'
 import RegisterOverviewView from '@/views/RegisterOverviewView.vue'
 import RegisterShelterView from '@/views/RegisterShelterView.vue'
 import RegisterUserView from '@/views/RegisterUserView.vue'
@@ -33,6 +34,12 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: WelcomeView,
+      meta: { layout: layouts.welcome, requiresAuth: false },
+    },
+    {
+      path: '/partner-app',
+      name: 'partnerApp',
+      component: PartnerFoodDeliverView,
       meta: { layout: layouts.welcome, requiresAuth: false },
     },
     {
