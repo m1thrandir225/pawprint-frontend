@@ -11,5 +11,10 @@ const petService = {
       method: 'GET',
       protected: true,
     }),
+  exportPets: () =>
+    apiRequest<Blob>({
+      url: PET_API_URL + '/csv',
+      method: 'GET',
+    }),
 }
 export default petService
