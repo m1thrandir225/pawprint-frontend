@@ -19,7 +19,29 @@
     </div>
     <Vue3Lottie :animation-data="HeroLottie" />
   </div>
-
+  <div class="flex flex-col w-full h-full gap-8 my-8">
+    <h1 class="text-4xl font-bold text-center text-primary font-balooBahijaan">Donate</h1>
+    <div class="grid w-full grid-cols-1 md:grid-cols-2">
+      <div class="flex items-center justify-center w-full h-full p-8 rounded-xl">
+        <Vue3Lottie :animation-data="DonationLottie" :height="350" />
+      </div>
+      <div
+        class="flex flex-col justify-center w-full h-full gap-4 p-8 bg-primaryContainer rounded-xl"
+      >
+        <h1 class="text-3xl font-bold text-center lg:text-4xl font-balooBahijaan">
+          Support a Paw-sitive Future
+        </h1>
+        <p
+          class="text-lg prose text-center lg:text-md font-splieSans text-primaryContainer-foreground"
+        >
+          At PawPrint, we believe every pet deserves a chance at a better life. <br />Your donation
+          helps us rescue, care for, and rehome animals in need. <br />
+          Join us in creating a world where every paw print leads to a loving home.
+        </p>
+        <DefaultDontationBox class="self-start place-self-start" />
+      </div>
+    </div>
+  </div>
   <div class="flex flex-col w-full h-full gap-8 my-8">
     <h1 class="text-4xl font-bold text-center text-primary font-balooBahijaan">Register</h1>
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -66,10 +88,12 @@
 <script setup lang="ts">
 import { Vue3Lottie } from 'vue3-lottie'
 import WelcomeSponsorCarousel from '@/components/Welcome/WelcomeSponsorCarousel.vue'
+import DefaultDontationBox from '@/components/Global/DefaultDontationBox.vue'
 
 import AdopterLottie from '../assets/homeAdopterLottie.json'
 import ShelterLottie from '../assets/homeShelterLottie.json'
 import HeroLottie from '../assets/homeAlternativeLottie.json'
+import DonationLottie from '../assets/homeDonateLottie.json'
 </script>
 
 <style lang="css" scoped>
