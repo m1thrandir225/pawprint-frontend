@@ -19,6 +19,7 @@
     </div>
     <Vue3Lottie :animation-data="HeroLottie" />
   </div>
+
   <div class="flex flex-col w-full h-full gap-8 my-8">
     <h1 class="text-4xl font-bold text-center text-primary font-balooBahijaan">Register</h1>
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -54,10 +55,17 @@
       </RouterLink>
     </div>
   </div>
+  <div class="flex flex-col items-center gap-4 my-8">
+    <h1 class="text-4xl font-bold text-center text-primary font-balooBahijaan">
+      Checkout our sponsors
+    </h1>
+    <WelcomeSponsorCarousel />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { Vue3Lottie } from 'vue3-lottie'
+import WelcomeSponsorCarousel from '@/components/Welcome/WelcomeSponsorCarousel.vue'
 
 import AdopterLottie from '../assets/homeAdopterLottie.json'
 import ShelterLottie from '../assets/homeShelterLottie.json'
