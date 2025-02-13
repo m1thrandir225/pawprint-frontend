@@ -237,7 +237,7 @@ const vaccination = ref<string>('')
                         ]
                       : [
                           {
-                            condition: medicalCondition,
+                            conditionName: medicalCondition,
                             note: medicalConditionNote ? medicalConditionNote : null,
                           },
                         ],
@@ -255,7 +255,7 @@ const vaccination = ref<string>('')
           <div v-for="condition in value" :key="condition.medicalCondition">
             <div class="flex items-center justify-between w-full my-2">
               <div class="flex flex-col gap-1">
-                <p class="text-base font-semibold">{{ condition.condition }}</p>
+                <p class="text-base font-semibold">{{ condition.conditionName }}</p>
                 <p class="text-sm text-muted-foreground">{{ condition.note }}</p>
               </div>
               <Button

@@ -10,4 +10,5 @@ export type ShelterPetListing = {
   shelter: Shelter
   intakeDate: string | null
   approvalStatus: number
+  adoptionFee: number
 }
