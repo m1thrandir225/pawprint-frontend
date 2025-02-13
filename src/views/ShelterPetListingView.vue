@@ -10,6 +10,13 @@
     <div class="w-full h-full col-span-1">
       <div class="flex flex-col items-start w-full h-auto gap-4 p-4 border rounded-lg border-1">
         <PetDetailsShelter :shelter="data.shelter" />
+        <div class="flex flex-row items-center gap-4">
+          <div class="flex items-center gap-2 text-secondary">
+            <CircleDollarSign class="w-6 h-6" />
+            <span class="text-lg font-bold text-secondary">Fee:</span>
+          </div>
+          <p>{{ data.adoptionFee }}</p>
+        </div>
         <Button
           class="w-full"
           v-if="!ownedByUser"
@@ -37,7 +44,7 @@ import shelterListingService from '@/services/shelterListings-service'
 import useAuthStore from '@/stores/auth-store'
 import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import { Loader2 } from 'lucide-vue-next'
+import { CircleDollarSign, Loader2 } from 'lucide-vue-next'
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'

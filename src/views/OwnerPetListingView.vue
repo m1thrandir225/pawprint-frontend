@@ -11,6 +11,13 @@
     <div class="w-full h-full col-span-1">
       <div class="flex flex-col items-start w-full h-auto gap-4 p-4 border rounded-lg border-1">
         <PetDetailsOwner :owner="data.adopter" />
+        <div class="flex flex-row items-center gap-4">
+          <div class="flex items-center gap-2 text-secondary">
+            <CircleDollarSign class="w-6 h-6" />
+            <span class="text-lg font-bold text-secondary">Fee:</span>
+          </div>
+          <p>{{ data.adoptionFee }}</p>
+        </div>
         <Button
           class="w-full"
           v-if="!ownedByUser"

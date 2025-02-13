@@ -30,8 +30,17 @@
             </DialogHeader>
             <div class="flex flex-col items-start gap-4">
               <p class="text-[16px] font-bold">
-                Current Status: <span class="text-primary">{{ Approved[adoption.approved] }}</span>
+                Current Status:
+                <span
+                  class="text-primary"
+                  :class="{
+                    'text-destructive': adoption.approved == 2,
+                    'text-green-500': adoption.approved == 1,
+                  }"
+                  >{{ Approved[adoption.approved] }}</span
+                >
               </p>
+              <p>Fee: {{}}</p>
               <p class="text-[16px]">Counselor Notes: {{ adoption.counselorNotes ?? '/' }}</p>
               <p class="text-[16px">Follow Up Date: {{ adoption.followUpDate ?? 'TBA' }}</p>
               <p class="text-[16px">To take home date: {{ adoption.adoptionDate ?? 'TBA' }}</p>
