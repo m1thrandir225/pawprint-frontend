@@ -138,7 +138,7 @@ import type { PetType } from '@/types/models/petType'
 
 import { toTypedSchema } from '@vee-validate/zod'
 import { Check, Circle, Dot, Loader2 } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import * as z from 'zod'
 import CreatePetForm from './CreatePetForm.vue'
 import type { HealthStatus } from '@/types/models/healthStatus'
@@ -150,6 +150,7 @@ import shelterListingService from '@/services/shelterListings-service'
 import type { CreateShelterListingDTO } from '@/types/dto/CreateShelterListingDTO'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
+import type { ShelterPetListing } from '@/types/models/shelterPetListing'
 
 const router = useRouter()
 
@@ -240,15 +241,7 @@ const formSchema = [
   }),
 ]
 
-const initialValues = {
-  medicalConditions: [],
-  vaccinations: [],
-  veterinarianSpecializations: [],
-  fee: 0,
-  feeCurrency: 'MKD',
-}
-
-const stepIndex = ref(1)
+const stepIndex = ref(2)
 const steps = [
   {
     step: 1,
@@ -272,12 +265,67 @@ const steps = [
   },
 ]
 
-defineProps<{
+const props = defineProps<{
   types: PetType[]
   sizes: PetSize[]
   genders: PetGender[]
   healthStatuses: HealthStatus[]
+  initialListing?: ShelterPetListing
 }>()
+
+const initialValues = computed(() => {
+  if (props.initialListing) {
+    const listing = props.initialListing
+    const pet = listing.pet
+    const vaccinations = listing.medicalRecord.vaccinations.map((x) => ({
+      name: x.vaccineName,
+      date: x.vaccineDate,
+    }))
+    const medicalConditions = listing.medicalRecord.medicalConditions
+    const veterinarian = listing.medicalRecord.veterinarian
+    const veterinarianSpecializations = veterinarian.vetSpecializations.map((x) => x.specialization)
+    return {
+      name: pet.name,
+      breed: pet.breed,
+      avatarImg: null,
+      imageShowcase: null,
+      ageYears: pet.ageYears,
+      petTypeId: pet.petType.id,
+      petGenderId: pet.petGender.id,
+      petSizeId: pet.petSize.id,
+      healthStatusId: pet.healthStatus.id,
+      goodWithChildren: pet.goodWithChildren,
+      goodWithDogs: pet.goodWithDogs,
+      goodWithCats: pet.goodWithCats,
+      energyLevel: pet.energyLevel,
+      specialRequirements: pet.specialRequirements,
+      behaviorialNotes: pet.behaviorialNotes,
+      microchipNumber: listing.medicalRecord.microchipNumber || null,
+      spayNeuterStatus: listing.medicalRecord.spayNeuterStatus,
+      lastMedicalCheckup: listing.medicalRecord.lastMedicalCheckup || null,
+      veterinarianName: veterinarian.name,
+      veterinarianClinicName: veterinarian.clinicName,
+      veterinarianContactNumber: veterinarian.contactNumber,
+      veterinarianEmail: veterinarian.email,
+      medicalConditions: medicalConditions || [],
+      vaccinations: vaccinations || [],
+      veterinarianSpecializations: veterinarianSpecializations || [],
+      fee: 0,
+      feeCurrency: 'MKD',
+    }
+  }
+  return {
+    medicalConditions: [],
+    vaccinations: [],
+    veterinarianSpecializations: [],
+    spayNeuterStatus: false,
+    goodWithCats: false,
+    goodWithChildren: false,
+    goodWithDogs: false,
+    fee: 0,
+    feeCurrency: 'MKD',
+  }
+})
 
 async function onSubmit(values: CreateShelterListingDTO) {
   await mutateAsync(values)

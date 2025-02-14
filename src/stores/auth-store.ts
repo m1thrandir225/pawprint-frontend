@@ -56,9 +56,6 @@ const useAuthStore = defineStore('auth', () => {
       refreshToken: tokens.value.refreshToken,
       refreshTokenExpirationTime: tokens.value.refreshTokenExpirationTime,
     }
-
-    console.log(tokens.value)
-    console.log(accessToken.value)
   }
 
   function setUser(newUser: ShelterDTO | UserDTO | null) {
@@ -80,7 +77,6 @@ const useAuthStore = defineStore('auth', () => {
       shelter,
     } = response
 
-    console.log('login', response)
     setTokens({ accessToken, accessTokenExpirationTime, refreshToken, refreshTokenExpirationTime })
     if (user) {
       setUser(user)
