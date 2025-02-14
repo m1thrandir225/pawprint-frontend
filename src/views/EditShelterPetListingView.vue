@@ -1,3 +1,22 @@
+<template>
+  <DefaultLoader v-if="queries.isPending" />
+  <DefaultError v-else-if="queries.isError" :error="queries.error?.error?.message" />
+  <CreateShelterListingForm
+    v-else-if="
+      queries.data.healthStatuses &&
+      queries.data.petTypes &&
+      queries.data.petSizes &&
+      queries.data.petGenders &&
+      queries.data.listing
+    "
+    :types="queries.data.petTypes"
+    :sizes="queries.data.petSizes"
+    :genders="queries.data.petGenders"
+    :healthStatuses="queries.data.healthStatuses"
+    :initial-listing="queries.data.listing"
+  />
+</template>
+
 <script setup lang="ts">
 import CreateShelterListingForm from '@/components/CreatePetListing/CreateShelterListingForm.vue'
 import DefaultError from '@/components/Global/DefaultError.vue'
@@ -6,17 +25,11 @@ import healthStatusService from '@/services/healthStatus-service'
 import petGendersService from '@/services/petGender-service'
 import petSizesService from '@/services/petSizes-service'
 import petTypesService from '@/services/petTypes-service'
-import useAuthStore from '@/stores/auth-store'
+import shelterListingService from '@/services/shelterListings-service'
 import { useQueries } from '@tanstack/vue-query'
-import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
-const router = useRouter()
-
-const authStore = useAuthStore()
-
-if (authStore.userType === 'user') {
-  router.replace({ name: 'createOwnerListing' })
-}
+const route = useRoute()
 
 const queries = useQueries({
   queries: [
@@ -36,6 +49,10 @@ const queries = useQueries({
       queryKey: ['healthStatuses'],
       queryFn: healthStatusService.getHealthStatuses,
     },
+    {
+      queryKey: ['shelterPetListing', route.params.id],
+      queryFn: ({ queryKey }) => shelterListingService.getShelterListing(queryKey[1] as string),
+    },
   ],
   combine: (result) => {
     return {
@@ -44,6 +61,7 @@ const queries = useQueries({
         petGenders: result[1].data,
         petSizes: result[2].data,
         healthStatuses: result[3].data,
+        listing: result[4].data,
       },
       isPending: result.some((r) => r.isPending),
       isError: result.find((r) => r.isError),
@@ -52,20 +70,3 @@ const queries = useQueries({
   },
 })
 </script>
-
-<template>
-  <DefaultLoader v-if="queries.isPending" />
-  <DefaultError v-else-if="queries.isError" :error="queries.error?.error?.message" />
-  <CreateShelterListingForm
-    v-else-if="
-      queries.data.healthStatuses &&
-      queries.data.petTypes &&
-      queries.data.petSizes &&
-      queries.data.petGenders
-    "
-    :types="queries.data.petTypes"
-    :sizes="queries.data.petSizes"
-    :genders="queries.data.petGenders"
-    :healthStatuses="queries.data.healthStatuses"
-  />
-</template>

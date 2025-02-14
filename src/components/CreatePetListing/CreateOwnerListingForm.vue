@@ -150,6 +150,7 @@ import CreateOwnerDocumentsForm from './CreateOwnerDocumentsForm.vue'
 import CreatePetForm from './CreatePetForm.vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
+import type { OwnerPetListing } from '@/types/models/ownerPetListing'
 
 defineProps<{
   types: PetType[]
@@ -157,6 +158,7 @@ defineProps<{
   genders: PetGender[]
   healthStatuses: HealthStatus[]
   ownerSurrenderReasons: OwnerSurrenderReason[]
+  listing?: OwnerPetListing
 }>()
 
 const router = useRouter()
