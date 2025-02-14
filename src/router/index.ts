@@ -13,6 +13,7 @@ import AdminHomeView from '@/views/admin/AdminHomeView.vue'
 import AvaliableListingsView from '@/views/AvaliableListingsView.vue'
 import CreateOwnerPetListing from '@/views/CreateOwnerPetListing.vue'
 import CreateShelterPetListing from '@/views/CreateShelterPetListing.vue'
+import EditShelterPetListingView from '@/views/EditShelterPetListingView.vue'
 import LoginView from '@/views/LoginView.vue'
 import MyListingsView from '@/views/MyListingsView.vue'
 import MyListingView from '@/views/MyListingView.vue'
@@ -70,7 +71,7 @@ const router = createRouter({
       path: '/browse',
       name: 'avaliableListings',
       component: AvaliableListingsView,
-      meta: { layout: layouts.default, requiresAuth: true },
+      meta: { layout: layouts.default, requiresAuth: true, requiresUser: true },
     },
     {
       path: '/listing/:id',
@@ -110,15 +111,21 @@ const router = createRouter({
     },
     {
       path: '/my-listings/:id/edit',
-      name: 'editMyListing',
-      component: CreateShelterPetListing,
+      name: 'editListing.shelter',
+      component: EditShelterPetListingView,
       meta: { layout: layouts.default, requiresAuth: true, requiresShelter: true },
+    },
+    {
+      path: '/my-listings/:id/edit',
+      name: 'editListing.user',
+      component: CreateShelterPetListing,
+      meta: { layout: layouts.default, requiresAuth: true, requiresUser: true },
     },
     {
       path: '/my-requests',
       name: 'myRequests',
       component: MyRequestsView,
-      meta: { layout: layouts.default, requiresAuth: true },
+      meta: { layout: layouts.default, requiresAuth: true, requiresUser: true },
     },
     {
       path: '/:pathMatch(.*)*',
@@ -219,7 +226,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.requiresUser && auth.userType !== 'user') {
-      next({ path: '/browse' })
+      next({ name: 'myListings' })
     }
 
     if (to.meta.requiresShelter && auth.userType !== 'shelter') {

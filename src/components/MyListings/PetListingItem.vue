@@ -21,7 +21,12 @@
             </RouterLink>
           </Button>
           <Button as-child variant="secondary">
-            <RouterLink :to="{ name: 'editMyListing', params: { id: props.item.id } }">
+            <RouterLink
+              :to="{
+                name: listingType == 'owner' ? 'editListing.user' : 'editListing.shelter',
+                params: { id: props.item.id },
+              }"
+            >
               <span class="sr-only"> Edit </span>
               <Edit2 class="w-6 h-6" />
             </RouterLink>
@@ -90,6 +95,7 @@ import {
 import ownerPetListingService from '@/services/ownerPetListing-service'
 import { toast } from 'vue-sonner'
 import { constructImageUrl } from '@/lib/utils'
+import { computed } from 'vue'
 
 const props = defineProps<{
   item: OwnerPetListing | ShelterPetListing
@@ -97,6 +103,10 @@ const props = defineProps<{
 }>()
 
 const { userType, user } = useAuthStore()
+
+const listingType = computed(() => {
+  return props.item.hasOwnProperty('ownerId') ? 'owner' : 'shelter'
+})
 
 const { mutateAsync, isPending } = useMutation({
   mutationKey: ['deleteListing', props.item.id],

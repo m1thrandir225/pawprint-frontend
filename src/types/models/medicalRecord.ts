@@ -9,6 +9,6 @@ export type MedicalRecord = {
   microchipNumber: string | null
   createdAt: string
   veterinarian: Veterinarian
-  medicalConditions: MedicalCondition[]
+  medicalConditions?: MedicalCondition[]
   vaccinations: Vaccination[]
 }

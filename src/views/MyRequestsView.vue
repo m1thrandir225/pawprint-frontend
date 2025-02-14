@@ -2,7 +2,7 @@
   <DefaultTitle text="My Requests" />
   <DefaultLoader v-if="isPending" />
   <DefaultError v-else-if="isError" :error="error?.message" />
-  <ScrollArea v-else-if="data" class="w-full h-[650px] my-4">
+  <ScrollArea v-else-if="data && data.length > 0" class="w-full h-[650px] my-4">
     <div
       v-for="adoption in data"
       :key="adoption.id"
@@ -50,6 +50,9 @@
       </div>
     </div>
   </ScrollArea>
+  <div v-else>
+    <p class="text-lg text-secondary font-splieSans">No adoption requests found.</p>
+  </div>
 </template>
 
 <script setup lang="ts">
