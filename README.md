@@ -1,6 +1,6 @@
 # PawPrint Frontend
 
-The frontend part of the [PawPrint]() application built using:
+The frontend part of the [PawPrint](https://github.com/m1thrandir225/pawprint) application built using:
 
 - Typescript
 - Vue3
