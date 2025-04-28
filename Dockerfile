@@ -15,6 +15,11 @@ RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
+#Build args from 
+ARG VITE_GOOGLE_MAPS_API_KEY
+ARG VITE_APP_ENVIROMENT
+ARG VITE_STRIPE_PUBLIC_KEY
+ARG VITE_BACKEND_URL
 
 # Build the application
 RUN pnpm build
@@ -26,7 +31,7 @@ FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Copy custom Nginx configuration if needed
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
